@@ -1,4 +1,4 @@
-﻿# 🌀 M.A.I Climate — HACS Integration
+# 🌀 M.A.I Climate — HACS Integration
 
 Quản lý quạt thông minh trong Home Assistant: hẹn giờ, chỉ số oi bức, tự động bật, giải nhiệt vận động. Hỗ trợ **nhiều quạt độc lập** — mỗi quạt một lần cài đặt qua UI.
 
@@ -52,11 +52,11 @@ Lặp lại Bước 3 cho mỗi quạt mới — mỗi quạt sẽ có bộ enti
 Với mỗi quạt, integration tự tạo 4 entity:
 
 ```
-sensor.tên_quạt_chỉ_số_oi_bức          # Heat Index hiện tại (°C)
-sensor.tên_quạt_timer_còn_lại           # Giây còn lại của timer
-switch.tên_quạt_giải_nhiệt_vận_động     # Bật/tắt chế độ 30 phút
-number.tên_quạt_ngưỡng_tự_động_bật     # Ngưỡng auto-on (25-60°C)
-select.tên_quạt_hẹn_giờ_tắt            # Chọn preset timer
+sensor.tên_quạt_muggy_index            # Heat Index hiện tại (°C)
+sensor.tên_quạt_timer_remaining        # Giây còn lại của timer
+switch.tên_quạt_cooldown_mode          # Bật/tắt chế độ 30 phút
+number.tên_quạt_auto_on_threshold      # Ngưỡng auto-on (25-60°C)
+select.tên_quạt_timer_preset           # Chọn preset timer
 ```
 
 ---
@@ -83,7 +83,7 @@ automation:
         at: "08:00:00"
     condition:
       - condition: numeric_state
-        entity_id: sensor.quạt_phòng_làm_việc_chỉ_số_oi_bức
+        entity_id: sensor.quạt_phòng_làm_việc_muggy_index
         above: 35
     action:
       - service: mai_climate.set_timer

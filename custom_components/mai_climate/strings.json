@@ -9,11 +9,13 @@
           "fan_entity": "Fan entity (fan.*)",
           "temp_sensor": "Temperature sensor",
           "humidity_sensor": "Humidity sensor (optional)",
+          "ac_entity": "Air Conditioner (optional)",
           "auto_on_threshold": "Auto-on heat index threshold (°C HI)"
         },
         "data_description": {
           "fan_name": "Display name, e.g. Work desk fan",
           "humidity_sensor": "Used for accurate heat index calculation. Defaults to 70% if not set.",
+          "ac_entity": "Link an AC to this fan for smart climate synergy features.",
           "auto_on_threshold": "Fan turns on automatically when heat index exceeds this value. Default: 38°C"
         }
       }
@@ -34,6 +36,7 @@
           "fan_entity": "Fan entity",
           "temp_sensor": "Temperature sensor",
           "humidity_sensor": "Humidity sensor",
+          "ac_entity": "Air Conditioner",
           "auto_on_threshold": "Auto-on threshold"
         }
       }

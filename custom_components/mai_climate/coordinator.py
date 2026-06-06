@@ -17,12 +17,15 @@ from .const import (
     CONF_FAN_ENTITY,
     CONF_TEMP_SENSOR,
     CONF_HUMIDITY_SENSOR,
+    CONF_AC_ENTITY,
     CONF_AUTO_ON_THRESHOLD,
     DEFAULT_AUTO_ON_THRESHOLD,
     DEFAULT_SCAN_INTERVAL,
     MODE_TIMER,
     MODE_COOLDOWN,
     MODE_AUTO,
+    MODE_AC_HANDOFF,
+    MODE_ECO_COOLING,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -46,6 +49,7 @@ class SmartFanCoordinator(DataUpdateCoordinator):
         self.fan_entity: str = entry.data[CONF_FAN_ENTITY]
         self.temp_sensor: str = entry.data[CONF_TEMP_SENSOR]
         self.humidity_sensor: str = entry.data.get(CONF_HUMIDITY_SENSOR, "")
+        self.ac_entity: str = entry.data.get(CONF_AC_ENTITY, "")
         self.auto_on_threshold: float = entry.data.get(
             CONF_AUTO_ON_THRESHOLD, DEFAULT_AUTO_ON_THRESHOLD
         )
@@ -224,6 +228,41 @@ class SmartFanCoordinator(DataUpdateCoordinator):
                 self.hass, entities_to_watch, _sensor_changed
             )
         )
+
+        # Lắng nghe thay đổi từ điều hòa (nếu có)
+        if self.ac_entity:
+            @callback
+            def _ac_state_changed(event):
+                old_state = event.data.get("old_state")
+                new_state = event.data.get("new_state")
+                if not old_state or not new_state:
+                    return
+
+                old_val = old_state.state
+                new_val = new_state.state
+
+                if old_val == new_val:
+                    return
+
+                # AC Handoff: Điều hòa tắt
+                if old_val != "off" and new_val == "off":
+                    _LOGGER.info("AC turned off. Bật quạt luân chuyển gió (AC Handoff) 30 phút.")
+                    self.hass.async_create_task(
+                        self.async_set_timer(minutes=30, mode=MODE_AC_HANDOFF)
+                    )
+
+                # Eco-Cooling: Điều hòa bật
+                elif old_val == "off" and new_val != "off":
+                    _LOGGER.info("AC turned on. Bật quạt trộn khí (Eco-Cooling) 15 phút.")
+                    self.hass.async_create_task(
+                        self.async_set_timer(minutes=15, mode=MODE_ECO_COOLING)
+                    )
+
+            self._unsub_listeners.append(
+                async_track_state_change_event(
+                    self.hass, [self.ac_entity], _ac_state_changed
+                )
+            )
 
     async def async_unload(self) -> None:
         """Dọn dẹp khi unload entry."""

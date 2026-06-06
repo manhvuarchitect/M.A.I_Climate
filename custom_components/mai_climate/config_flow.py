@@ -12,6 +12,7 @@ from .const import (
     CONF_FAN_ENTITY,
     CONF_TEMP_SENSOR,
     CONF_HUMIDITY_SENSOR,
+    CONF_AC_ENTITY,
     CONF_AUTO_ON_THRESHOLD,
     CONF_FAN_NAME,
     DEFAULT_AUTO_ON_THRESHOLD,
@@ -58,6 +59,16 @@ def _fan_schema(defaults: dict = None) -> vol.Schema:
     else:
         schema[vol.Optional(CONF_HUMIDITY_SENSOR)] = selector.EntitySelector(
             selector.EntitySelectorConfig(domain="sensor", device_class="humidity")
+        )
+
+    ac_entity = defaults.get(CONF_AC_ENTITY)
+    if ac_entity:
+        schema[vol.Optional(CONF_AC_ENTITY, default=ac_entity)] = selector.EntitySelector(
+            selector.EntitySelectorConfig(domain="climate")
+        )
+    else:
+        schema[vol.Optional(CONF_AC_ENTITY)] = selector.EntitySelector(
+            selector.EntitySelectorConfig(domain="climate")
         )
 
     auto_on_threshold = defaults.get(CONF_AUTO_ON_THRESHOLD, DEFAULT_AUTO_ON_THRESHOLD)

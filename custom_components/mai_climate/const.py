@@ -6,6 +6,7 @@ DOMAIN = "mai_climate"
 CONF_FAN_ENTITY = "fan_entity"
 CONF_TEMP_SENSOR = "temp_sensor"
 CONF_HUMIDITY_SENSOR = "humidity_sensor"
+CONF_AC_ENTITY = "ac_entity"
 CONF_AUTO_ON_THRESHOLD = "auto_on_threshold"
 CONF_FAN_NAME = "fan_name"
 
@@ -37,6 +38,8 @@ SERVICE_SET_MODE = "set_mode"
 MODE_TIMER = "timer"
 MODE_COOLDOWN = "cooldown"   # Giải nhiệt vận động
 MODE_AUTO = "auto"
+MODE_AC_HANDOFF = "ac_handoff" # Quạt luân chuyển khí khi tắt điều hòa
+MODE_ECO_COOLING = "eco_cooling" # Trộn gió 15p khi bật điều hòa
 
 # Entity suffixes
 SUFFIX_MUGGY_SENSOR = "_muggy_index"

@@ -9,11 +9,13 @@
           "fan_entity": "Entity quạt (fan.*)",
           "temp_sensor": "Cảm biến nhiệt độ",
           "humidity_sensor": "Cảm biến độ ẩm (tùy chọn)",
+          "ac_entity": "Điều hòa (tùy chọn)",
           "auto_on_threshold": "Ngưỡng chỉ số oi bức tự động bật (°C Heat Index)"
         },
         "data_description": {
           "fan_name": "Tên hiển thị, ví dụ: Quạt phòng làm việc",
           "humidity_sensor": "Để tính chỉ số oi bức chính xác hơn. Nếu bỏ trống sẽ dùng 70% mặc định.",
+          "ac_entity": "Liên kết điều hòa để quạt tự động luân chuyển gió khi bật/tắt máy lạnh.",
           "auto_on_threshold": "Khi chỉ số oi bức vượt ngưỡng này, quạt tự bật. Mặc định: 38°C"
         }
       }
@@ -34,6 +36,7 @@
           "fan_entity": "Entity quạt",
           "temp_sensor": "Cảm biến nhiệt độ",
           "humidity_sensor": "Cảm biến độ ẩm",
+          "ac_entity": "Điều hòa",
           "auto_on_threshold": "Ngưỡng tự động bật"
         }
       }

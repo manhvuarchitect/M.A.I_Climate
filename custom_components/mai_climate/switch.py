@@ -6,6 +6,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
+from homeassistant.util import slugify
 
 from .const import DOMAIN, ICON_COOLDOWN, SUFFIX_COOLDOWN_SWITCH, SUFFIX_AUTO_ON_SWITCH
 from .coordinator import SmartFanCoordinator
@@ -34,6 +35,8 @@ class CooldownModeSwitch(CoordinatorEntity, SwitchEntity):
         self._attr_unique_id = f"{entry.entry_id}{SUFFIX_COOLDOWN_SWITCH}"
         self._attr_has_entity_name = True
         self._attr_translation_key = "cooldown_mode"
+        slug_name = slugify(entry.data.get("fan_name", "fan")).replace("_", "")
+        self.entity_id = f"switch.maic_{slug_name}_{self._attr_translation_key}"
 
     @property
     def device_info(self):
@@ -76,6 +79,8 @@ class AutoOnSwitch(CoordinatorEntity, SwitchEntity):
         self._attr_unique_id = f"{entry.entry_id}{SUFFIX_AUTO_ON_SWITCH}"
         self._attr_has_entity_name = True
         self._attr_translation_key = "auto_on_enabled"
+        slug_name = slugify(entry.data.get("fan_name", "fan")).replace("_", "")
+        self.entity_id = f"switch.maic_{slug_name}_{self._attr_translation_key}"
 
     @property
     def device_info(self):

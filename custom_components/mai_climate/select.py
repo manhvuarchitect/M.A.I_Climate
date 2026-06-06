@@ -6,6 +6,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
+from homeassistant.util import slugify
 
 from .const import DOMAIN, ICON_TIMER, SUFFIX_TIMER_SELECT, TIMER_PRESETS
 from .coordinator import SmartFanCoordinator
@@ -38,6 +39,8 @@ class TimerPresetSelect(CoordinatorEntity, SelectEntity):
         self._attr_unique_id = f"{entry.entry_id}{SUFFIX_TIMER_SELECT}"
         self._attr_has_entity_name = True
         self._attr_translation_key = "timer_preset"
+        slug_name = slugify(entry.data.get("fan_name", "fan")).replace("_", "")
+        self.entity_id = f"select.maic_{slug_name}_{self._attr_translation_key}"
         self._attr_options = [OPTION_NONE] + list(TIMER_PRESETS.keys())
 
     @property

@@ -6,6 +6,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
+from homeassistant.util import slugify
 
 from .const import (
     DOMAIN,
@@ -66,6 +67,8 @@ class MuggyIndexSensor(SmartFanSensorBase):
         self._attr_unique_id = f"{entry.entry_id}{SUFFIX_MUGGY_SENSOR}"
         self._attr_has_entity_name = True
         self._attr_translation_key = "muggy_index"
+        slug_name = slugify(entry.data.get("fan_name", "fan")).replace("_", "")
+        self.entity_id = f"sensor.maic_{slug_name}_{self._attr_translation_key}"
 
     @property
     def native_value(self) -> float | None:
@@ -108,6 +111,8 @@ class TimerRemainingSensor(SmartFanSensorBase):
         self._attr_unique_id = f"{entry.entry_id}{SUFFIX_TIMER_SENSOR}"
         self._attr_has_entity_name = True
         self._attr_translation_key = "timer_remaining"
+        slug_name = slugify(entry.data.get("fan_name", "fan")).replace("_", "")
+        self.entity_id = f"sensor.maic_{slug_name}_{self._attr_translation_key}"
 
     @property
     def native_value(self) -> int | None:

@@ -32,12 +32,22 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     hass.data.setdefault(DOMAIN, {})
 
     if not hass.data[DOMAIN]:
-        # Chỉ register path một lần
-        hass.http.register_static_path(
-            "/mai_climate_card",
-            hass.config.path("custom_components/mai_climate/www"),
-            True
-        )
+        # Register path tương thích với cả bản HA cũ và mới
+        if hasattr(hass.http, "async_register_static_paths"):
+            from homeassistant.components.http import StaticPathConfig
+            hass.http.async_register_static_paths([
+                StaticPathConfig(
+                    "/mai_climate_card",
+                    hass.config.path("custom_components/mai_climate/www"),
+                    cache_headers=True
+                )
+            ])
+        else:
+            hass.http.register_static_path(
+                "/mai_climate_card",
+                hass.config.path("custom_components/mai_climate/www"),
+                True
+            )
 
     coordinator = SmartFanCoordinator(hass, entry)
 

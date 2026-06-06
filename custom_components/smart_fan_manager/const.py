@@ -15,12 +15,12 @@ DEFAULT_SCAN_INTERVAL = 30       # Giây
 
 # Timer presets (phút)
 TIMER_PRESETS = {
-    "15 phút": 15,
-    "30 phút": 30,
-    "45 phút": 45,
-    "60 phút": 60,
-    "90 phút": 90,
-    "120 phút": 120,
+    "15 minutes": 15,
+    "30 minutes": 30,
+    "45 minutes": 45,
+    "60 minutes": 60,
+    "90 minutes": 90,
+    "120 minutes": 120,
 }
 
 # Muggy index thresholds

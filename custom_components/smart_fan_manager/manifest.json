@@ -1,7 +1,7 @@
 {
   "domain": "smart_fan_manager",
   "name": "M.A.I Fan Manager",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "documentation": "https://github.com/manhvuarchitect/M.A.I-Fan-Manager",
   "issue_tracker": "https://github.com/manhvuarchitect/M.A.I-Fan-Manager/issues",
   "requirements": [],

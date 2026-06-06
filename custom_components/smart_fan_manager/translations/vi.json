@@ -62,12 +62,12 @@
       "timer_preset": {
         "name": "Hẹn giờ tắt",
         "state": {
-          "15 phút": "15 phút",
-          "30 phút": "30 phút",
-          "45 phút": "45 phút",
-          "60 phút": "60 phút",
-          "90 phút": "90 phút",
-          "120 phút": "120 phút"
+          "15 minutes": "15 phút",
+          "30 minutes": "30 phút",
+          "45 minutes": "45 phút",
+          "60 minutes": "60 phút",
+          "90 minutes": "90 phút",
+          "120 minutes": "120 phút"
         }
       }
     }

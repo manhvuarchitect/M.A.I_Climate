@@ -1,14 +1,10 @@
 set_timer:
   name: Đặt hẹn giờ tắt quạt
   description: Bật quạt và đặt timer tắt sau N phút. Timer cũ sẽ bị hủy.
+  target:
+    entity:
+      domain: fan
   fields:
-    entry_id:
-      name: ID cấu hình quạt
-      description: entry_id của quạt (Settings > Devices > Smart Fan Manager)
-      required: true
-      example: "abc123def456"
-      selector:
-        text:
     minutes:
       name: Số phút
       description: Quạt sẽ tự tắt sau số phút này
@@ -34,26 +30,18 @@ set_timer:
 cancel_timer:
   name: Hủy hẹn giờ
   description: Hủy timer đang chạy. Quạt vẫn tiếp tục bật, chỉ hủy lịch tắt.
-  fields:
-    entry_id:
-      name: ID cấu hình quạt
-      description: entry_id của quạt cần hủy timer
-      required: true
-      example: "abc123def456"
-      selector:
-        text:
+  target:
+    entity:
+      domain: fan
+  fields: {}
 
 set_mode:
   name: Đặt chế độ hoạt động
   description: Chuyển chế độ và bật quạt
+  target:
+    entity:
+      domain: fan
   fields:
-    entry_id:
-      name: ID cấu hình quạt
-      description: entry_id của quạt
-      required: true
-      example: "abc123def456"
-      selector:
-        text:
     mode:
       name: Chế độ
       description: cooldown = giải nhiệt 30 phút, timer = hẹn giờ tùy chỉnh

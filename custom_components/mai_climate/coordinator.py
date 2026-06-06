@@ -45,12 +45,13 @@ class SmartFanCoordinator(DataUpdateCoordinator):
         self.entry = entry
         self.hass = hass
 
-        # Config
-        self.fan_entity: str = entry.data[CONF_FAN_ENTITY]
-        self.temp_sensor: str = entry.data[CONF_TEMP_SENSOR]
-        self.humidity_sensor: str = entry.data.get(CONF_HUMIDITY_SENSOR, "")
-        self.ac_entity: str = entry.data.get(CONF_AC_ENTITY, "")
-        self.auto_on_threshold: float = entry.data.get(
+        # Config - Ưu tiên lấy từ options nếu đã chỉnh sửa
+        config = {**entry.data, **entry.options}
+        self.fan_entity: str = config[CONF_FAN_ENTITY]
+        self.temp_sensor: str = config[CONF_TEMP_SENSOR]
+        self.humidity_sensor: str = config.get(CONF_HUMIDITY_SENSOR, "")
+        self.ac_entity: str = config.get(CONF_AC_ENTITY, "")
+        self.auto_on_threshold: float = config.get(
             CONF_AUTO_ON_THRESHOLD, DEFAULT_AUTO_ON_THRESHOLD
         )
 

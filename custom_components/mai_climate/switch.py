@@ -8,7 +8,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.util import slugify
 
-from .const import DOMAIN, ICON_COOLDOWN, SUFFIX_COOLDOWN_SWITCH, SUFFIX_AUTO_ON_SWITCH
+from .const import DOMAIN, ICON_COOLDOWN, SUFFIX_COOLDOWN_SWITCH, SUFFIX_AUTO_ON_SWITCH, SUFFIX_AC_SYNC_SWITCH
 from .coordinator import SmartFanCoordinator
 
 

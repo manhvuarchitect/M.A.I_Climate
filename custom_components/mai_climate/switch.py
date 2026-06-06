@@ -8,7 +8,17 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.util import slugify
 
-from .const import DOMAIN, ICON_COOLDOWN, SUFFIX_COOLDOWN_SWITCH, SUFFIX_AUTO_ON_SWITCH, SUFFIX_AC_SYNC_SWITCH
+from .const import (
+    DOMAIN, 
+    ICON_COOLDOWN, 
+    SUFFIX_COOLDOWN_SWITCH, 
+    SUFFIX_AUTO_ON_SWITCH,
+    SUFFIX_SMART_SPEED_SWITCH,
+    SUFFIX_SLEEP_MODE_SWITCH,
+    SUFFIX_NATURAL_WIND_SWITCH,
+    SUFFIX_QUIET_HOURS_SWITCH,
+    SUFFIX_AC_SYNC_SWITCH,
+)
 from .coordinator import SmartFanCoordinator
 
 
@@ -21,6 +31,10 @@ async def async_setup_entry(
     async_add_entities([
         CooldownModeSwitch(coordinator, entry),
         AutoOnSwitch(coordinator, entry),
+        SmartSpeedSwitch(coordinator, entry),
+        SleepModeSwitch(coordinator, entry),
+        NaturalWindSwitch(coordinator, entry),
+        QuietHoursSwitch(coordinator, entry),
         ACSyncSwitch(coordinator, entry)
     ])
 
@@ -111,6 +125,129 @@ class AutoOnSwitch(CoordinatorEntity, SwitchEntity):
             "mô_tả": "Bật/Tắt chế độ tự động bật quạt khi quá nóng hoặc có người",
         }
 
+class SmartSpeedSwitch(CoordinatorEntity, SwitchEntity):
+    _attr_icon = "mdi:fan-speed-3"
+
+    def __init__(self, coordinator: SmartFanCoordinator, entry: ConfigEntry) -> None:
+        super().__init__(coordinator)
+        self.entry = entry
+        self._attr_unique_id = f"{entry.entry_id}{SUFFIX_SMART_SPEED_SWITCH}"
+        self._attr_has_entity_name = True
+        self._attr_translation_key = "smart_speed_enabled"
+        slug_name = slugify(entry.data.get("fan_name", "fan")).replace("_", "")
+        self.entity_id = f"switch.maic_{slug_name}_{self._attr_translation_key}"
+
+    @property
+    def device_info(self):
+        return {
+            "identifiers": {(DOMAIN, self.entry.entry_id)},
+            "name": self.entry.data.get("fan_name", "Smart Fan"),
+            "manufacturer": "Smart Fan Manager",
+            "model": "Fan Controller",
+        }
+
+    @property
+    def is_on(self) -> bool:
+        return self.coordinator.data.get("smart_speed_enabled", False)
+
+    async def async_turn_on(self, **kwargs) -> None:
+        await self.coordinator.async_set_smart_speed_enabled(True)
+
+    async def async_turn_off(self, **kwargs) -> None:
+        await self.coordinator.async_set_smart_speed_enabled(False)
+
+class SleepModeSwitch(CoordinatorEntity, SwitchEntity):
+    _attr_icon = "mdi:sleep"
+
+    def __init__(self, coordinator: SmartFanCoordinator, entry: ConfigEntry) -> None:
+        super().__init__(coordinator)
+        self.entry = entry
+        self._attr_unique_id = f"{entry.entry_id}{SUFFIX_SLEEP_MODE_SWITCH}"
+        self._attr_has_entity_name = True
+        self._attr_translation_key = "sleep_mode_enabled"
+        slug_name = slugify(entry.data.get("fan_name", "fan")).replace("_", "")
+        self.entity_id = f"switch.maic_{slug_name}_{self._attr_translation_key}"
+
+    @property
+    def device_info(self):
+        return {
+            "identifiers": {(DOMAIN, self.entry.entry_id)},
+            "name": self.entry.data.get("fan_name", "Smart Fan"),
+            "manufacturer": "Smart Fan Manager",
+            "model": "Fan Controller",
+        }
+
+    @property
+    def is_on(self) -> bool:
+        return self.coordinator.data.get("sleep_mode_enabled", False)
+
+    async def async_turn_on(self, **kwargs) -> None:
+        await self.coordinator.async_set_sleep_mode_enabled(True)
+
+    async def async_turn_off(self, **kwargs) -> None:
+        await self.coordinator.async_set_sleep_mode_enabled(False)
+
+class NaturalWindSwitch(CoordinatorEntity, SwitchEntity):
+    _attr_icon = "mdi:weather-windy"
+
+    def __init__(self, coordinator: SmartFanCoordinator, entry: ConfigEntry) -> None:
+        super().__init__(coordinator)
+        self.entry = entry
+        self._attr_unique_id = f"{entry.entry_id}{SUFFIX_NATURAL_WIND_SWITCH}"
+        self._attr_has_entity_name = True
+        self._attr_translation_key = "natural_wind_enabled"
+        slug_name = slugify(entry.data.get("fan_name", "fan")).replace("_", "")
+        self.entity_id = f"switch.maic_{slug_name}_{self._attr_translation_key}"
+
+    @property
+    def device_info(self):
+        return {
+            "identifiers": {(DOMAIN, self.entry.entry_id)},
+            "name": self.entry.data.get("fan_name", "Smart Fan"),
+            "manufacturer": "Smart Fan Manager",
+            "model": "Fan Controller",
+        }
+
+    @property
+    def is_on(self) -> bool:
+        return self.coordinator.data.get("natural_wind_enabled", False)
+
+    async def async_turn_on(self, **kwargs) -> None:
+        await self.coordinator.async_set_natural_wind_enabled(True)
+
+    async def async_turn_off(self, **kwargs) -> None:
+        await self.coordinator.async_set_natural_wind_enabled(False)
+
+class QuietHoursSwitch(CoordinatorEntity, SwitchEntity):
+    _attr_icon = "mdi:volume-off"
+
+    def __init__(self, coordinator: SmartFanCoordinator, entry: ConfigEntry) -> None:
+        super().__init__(coordinator)
+        self.entry = entry
+        self._attr_unique_id = f"{entry.entry_id}{SUFFIX_QUIET_HOURS_SWITCH}"
+        self._attr_has_entity_name = True
+        self._attr_translation_key = "quiet_hours_enabled"
+        slug_name = slugify(entry.data.get("fan_name", "fan")).replace("_", "")
+        self.entity_id = f"switch.maic_{slug_name}_{self._attr_translation_key}"
+
+    @property
+    def device_info(self):
+        return {
+            "identifiers": {(DOMAIN, self.entry.entry_id)},
+            "name": self.entry.data.get("fan_name", "Smart Fan"),
+            "manufacturer": "Smart Fan Manager",
+            "model": "Fan Controller",
+        }
+
+    @property
+    def is_on(self) -> bool:
+        return self.coordinator.data.get("quiet_hours_enabled", False)
+
+    async def async_turn_on(self, **kwargs) -> None:
+        await self.coordinator.async_set_quiet_hours_enabled(True)
+
+    async def async_turn_off(self, **kwargs) -> None:
+        await self.coordinator.async_set_quiet_hours_enabled(False)
 
 class ACSyncSwitch(CoordinatorEntity, SwitchEntity):
     """Switch bật/tắt đồng bộ điều hòa."""

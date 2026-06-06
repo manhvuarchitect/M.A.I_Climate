@@ -31,6 +31,14 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Thiết lập integration từ một config entry (một quạt)."""
     hass.data.setdefault(DOMAIN, {})
 
+    if not hass.data[DOMAIN]:
+        # Chỉ register path một lần
+        hass.http.register_static_path(
+            "/mai_climate_card",
+            hass.config.path("custom_components/mai_climate/www"),
+            True
+        )
+
     coordinator = SmartFanCoordinator(hass, entry)
 
     try:

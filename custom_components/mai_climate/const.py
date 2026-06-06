@@ -12,6 +12,12 @@ CONF_PRESENCE_SENSOR = "presence_sensor"
 CONF_AUTO_ON_THRESHOLD = "auto_on_threshold"
 CONF_AUTO_ON_ENABLED = "auto_on_enabled"
 CONF_FAN_NAME = "fan_name"
+CONF_SMART_SPEED_ENABLED = "smart_speed_enabled"
+CONF_SLEEP_MODE_ENABLED = "sleep_mode_enabled"
+CONF_NATURAL_WIND_ENABLED = "natural_wind_enabled"
+CONF_QUIET_HOURS_ENABLED = "quiet_hours_enabled"
+CONF_QUIET_HOURS_START = "quiet_hours_start"
+CONF_QUIET_HOURS_END = "quiet_hours_end"
 
 # Default values
 DEFAULT_AUTO_ON_THRESHOLD = 38  # Chỉ số oi bức tự động bật quạt
@@ -52,6 +58,10 @@ SUFFIX_AUTO_ON_SWITCH = "_auto_on"
 SUFFIX_AC_SYNC_SWITCH = "_ac_sync"
 SUFFIX_THRESHOLD_NUMBER = "_auto_on_threshold"
 SUFFIX_TIMER_SELECT = "_timer_preset"
+SUFFIX_SMART_SPEED_SWITCH = "_smart_speed"
+SUFFIX_SLEEP_MODE_SWITCH = "_sleep_mode"
+SUFFIX_NATURAL_WIND_SWITCH = "_natural_wind"
+SUFFIX_QUIET_HOURS_SWITCH = "_quiet_hours"
 
 # Attributes
 ATTR_MINUTES = "minutes"

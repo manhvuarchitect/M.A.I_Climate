@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import random
 from datetime import datetime, timedelta
 from typing import Any
 
@@ -29,6 +30,12 @@ from .const import (
     MODE_AUTO,
     MODE_AC_HANDOFF,
     MODE_ECO_COOLING,
+    CONF_SMART_SPEED_ENABLED,
+    CONF_SLEEP_MODE_ENABLED,
+    CONF_NATURAL_WIND_ENABLED,
+    CONF_QUIET_HOURS_ENABLED,
+    CONF_QUIET_HOURS_START,
+    CONF_QUIET_HOURS_END,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -60,6 +67,12 @@ class SmartFanCoordinator(DataUpdateCoordinator):
         self.auto_on_threshold: float = config.get(
             CONF_AUTO_ON_THRESHOLD, DEFAULT_AUTO_ON_THRESHOLD
         )
+        self.smart_speed_enabled: bool = config.get(CONF_SMART_SPEED_ENABLED, False)
+        self.sleep_mode_enabled: bool = config.get(CONF_SLEEP_MODE_ENABLED, False)
+        self.natural_wind_enabled: bool = config.get(CONF_NATURAL_WIND_ENABLED, False)
+        self.quiet_hours_enabled: bool = config.get(CONF_QUIET_HOURS_ENABLED, False)
+        self.quiet_hours_start: str = config.get(CONF_QUIET_HOURS_START, "23:00:00")
+        self.quiet_hours_end: str = config.get(CONF_QUIET_HOURS_END, "06:00:00")
 
         # State
         self.muggy_index: float = 0.0
@@ -68,11 +81,13 @@ class SmartFanCoordinator(DataUpdateCoordinator):
         self.cooldown_active: bool = False
         self._timer_cancel = None
         self._unsub_listeners: list = []
+        self._sleep_mode_start_time = None
 
     async def _async_update_data(self) -> dict[str, Any]:
         """Cập nhật dữ liệu định kỳ."""
         self._calculate_muggy_index()
         await self._check_auto_on()
+        await self._apply_advanced_modes()
         return self._build_state()
 
     def _calculate_muggy_index(self) -> None:
@@ -174,6 +189,10 @@ class SmartFanCoordinator(DataUpdateCoordinator):
             "cooldown_active": self.cooldown_active,
             "auto_on_threshold": self.auto_on_threshold,
             "auto_on_enabled": self.auto_on_enabled,
+            "smart_speed_enabled": self.smart_speed_enabled,
+            "sleep_mode_enabled": self.sleep_mode_enabled,
+            "natural_wind_enabled": self.natural_wind_enabled,
+            "quiet_hours_enabled": self.quiet_hours_enabled,
             "ac_sync_enabled": self.ac_sync_enabled,
         }
 
@@ -254,6 +273,87 @@ class SmartFanCoordinator(DataUpdateCoordinator):
             await self._check_auto_on()
         await self.async_refresh()
 
+    async def async_set_smart_speed_enabled(self, enabled: bool) -> None:
+        self.smart_speed_enabled = enabled
+        self.hass.config_entries.async_update_entry(
+            self.entry, options={**self.entry.options, CONF_SMART_SPEED_ENABLED: enabled}
+        )
+        await self.async_refresh()
+
+    async def async_set_sleep_mode_enabled(self, enabled: bool) -> None:
+        self.sleep_mode_enabled = enabled
+        self.hass.config_entries.async_update_entry(
+            self.entry, options={**self.entry.options, CONF_SLEEP_MODE_ENABLED: enabled}
+        )
+        if not enabled:
+            self._sleep_mode_start_time = None
+        await self.async_refresh()
+
+    async def async_set_natural_wind_enabled(self, enabled: bool) -> None:
+        self.natural_wind_enabled = enabled
+        self.hass.config_entries.async_update_entry(
+            self.entry, options={**self.entry.options, CONF_NATURAL_WIND_ENABLED: enabled}
+        )
+        await self.async_refresh()
+
+    async def async_set_quiet_hours_enabled(self, enabled: bool) -> None:
+        self.quiet_hours_enabled = enabled
+        self.hass.config_entries.async_update_entry(
+            self.entry, options={**self.entry.options, CONF_QUIET_HOURS_ENABLED: enabled}
+        )
+        await self.async_refresh()
+
+    def _is_quiet_hours(self) -> bool:
+        try:
+            now = datetime.now().time()
+            start = datetime.strptime(self.quiet_hours_start, "%H:%M:%S").time()
+            end = datetime.strptime(self.quiet_hours_end, "%H:%M:%S").time()
+            if start <= end:
+                return start <= now <= end
+            else:
+                return start <= now or now <= end
+        except Exception:
+            return False
+
+    async def _apply_advanced_modes(self):
+        fan_state = self.hass.states.get(self.fan_entity)
+        is_fan_on = fan_state is not None and fan_state.state != "off"
+        if not is_fan_on:
+            self._sleep_mode_start_time = None
+            return
+
+        current_pct = fan_state.attributes.get("percentage")
+        target_pct = None
+
+        if self.natural_wind_enabled:
+            # Cứ mỗi ~30s update sẽ random nếu nằm trong 15s đầu của mỗi phút
+            if int(utcnow().timestamp()) % 60 < 30:
+                target_pct = random.choice([33, 66, 100])
+        elif self.smart_speed_enabled:
+            if self.muggy_index < 35:
+                target_pct = 33
+            elif self.muggy_index < 40:
+                target_pct = 66
+            else:
+                target_pct = 100
+
+        if self.sleep_mode_enabled:
+            if self._sleep_mode_start_time is None:
+                self._sleep_mode_start_time = utcnow()
+            hours_passed = (utcnow() - self._sleep_mode_start_time).total_seconds() / 3600
+            reduction = int(hours_passed) * 10
+            base_pct = target_pct if target_pct is not None else (current_pct or 100)
+            target_pct = max(10, base_pct - reduction)
+
+        if self.quiet_hours_enabled and self._is_quiet_hours():
+            target_pct = 10
+
+        if target_pct is not None and target_pct != current_pct:
+            await self.hass.services.async_call(
+                "fan", "set_percentage", 
+                {"entity_id": self.fan_entity, "percentage": target_pct}
+            )
+
     async def async_set_ac_sync_enabled(self, enabled: bool) -> None:
         """Bật/tắt tính năng đồng bộ điều hòa."""
         self.ac_sync_enabled = enabled
@@ -262,7 +362,6 @@ class SmartFanCoordinator(DataUpdateCoordinator):
             options={**self.entry.options, CONF_AC_SYNC_ENABLED: enabled},
         )
         await self.async_refresh()
-
     async def async_setup(self) -> None:
         """Thiết lập listeners theo dõi thay đổi sensor."""
 

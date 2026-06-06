@@ -19,6 +19,8 @@ from .const import (
     CONF_AUTO_ON_THRESHOLD,
     CONF_FAN_NAME,
     DEFAULT_AUTO_ON_THRESHOLD,
+    CONF_QUIET_HOURS_START,
+    CONF_QUIET_HOURS_END,
 )
 
 
@@ -94,6 +96,12 @@ def _fan_schema(defaults: dict = None) -> vol.Schema:
     schema[vol.Optional(CONF_AUTO_ON_THRESHOLD, default=auto_on_threshold)] = selector.NumberSelector(
         selector.NumberSelectorConfig(min=25, max=60, step=0.5, unit_of_measurement="°C (HI)")
     )
+
+    quiet_hours_start = defaults.get(CONF_QUIET_HOURS_START, "23:00:00")
+    schema[vol.Optional(CONF_QUIET_HOURS_START, default=quiet_hours_start)] = selector.TimeSelector()
+
+    quiet_hours_end = defaults.get(CONF_QUIET_HOURS_END, "06:00:00")
+    schema[vol.Optional(CONF_QUIET_HOURS_END, default=quiet_hours_end)] = selector.TimeSelector()
 
     return vol.Schema(schema)
 

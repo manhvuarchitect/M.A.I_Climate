@@ -30,7 +30,8 @@ class CooldownModeSwitch(CoordinatorEntity, SwitchEntity):
         super().__init__(coordinator)
         self.entry = entry
         self._attr_unique_id = f"{entry.entry_id}{SUFFIX_COOLDOWN_SWITCH}"
-        self._attr_name = f"{entry.data.get('fan_name', 'Fan')} — Giải nhiệt vận động"
+        self._attr_has_entity_name = True
+        self._attr_translation_key = "cooldown_mode"
 
     @property
     def device_info(self):

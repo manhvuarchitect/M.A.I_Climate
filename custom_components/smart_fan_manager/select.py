@@ -36,7 +36,8 @@ class TimerPresetSelect(CoordinatorEntity, SelectEntity):
         super().__init__(coordinator)
         self.entry = entry
         self._attr_unique_id = f"{entry.entry_id}{SUFFIX_TIMER_SELECT}"
-        self._attr_name = f"{entry.data.get('fan_name', 'Fan')} — Hẹn giờ tắt"
+        self._attr_has_entity_name = True
+        self._attr_translation_key = "timer_preset"
         self._attr_options = [OPTION_NONE] + list(TIMER_PRESETS.keys())
 
     @property

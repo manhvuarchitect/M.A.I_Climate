@@ -35,7 +35,8 @@ class AutoOnThresholdNumber(CoordinatorEntity, NumberEntity):
         super().__init__(coordinator)
         self.entry = entry
         self._attr_unique_id = f"{entry.entry_id}{SUFFIX_THRESHOLD_NUMBER}"
-        self._attr_name = f"{entry.data.get('fan_name', 'Fan')} — Ngưỡng tự động bật"
+        self._attr_has_entity_name = True
+        self._attr_translation_key = "auto_on_threshold"
 
     @property
     def device_info(self):

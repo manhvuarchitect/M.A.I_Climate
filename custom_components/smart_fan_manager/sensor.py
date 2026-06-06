@@ -64,7 +64,8 @@ class MuggyIndexSensor(SmartFanSensorBase):
     def __init__(self, coordinator: SmartFanCoordinator, entry: ConfigEntry) -> None:
         super().__init__(coordinator, entry)
         self._attr_unique_id = f"{entry.entry_id}{SUFFIX_MUGGY_SENSOR}"
-        self._attr_name = f"{entry.data.get('fan_name', 'Fan')} — Chỉ số oi bức"
+        self._attr_has_entity_name = True
+        self._attr_translation_key = "muggy_index"
 
     @property
     def native_value(self) -> float | None:
@@ -105,7 +106,8 @@ class TimerRemainingSensor(SmartFanSensorBase):
     def __init__(self, coordinator: SmartFanCoordinator, entry: ConfigEntry) -> None:
         super().__init__(coordinator, entry)
         self._attr_unique_id = f"{entry.entry_id}{SUFFIX_TIMER_SENSOR}"
-        self._attr_name = f"{entry.data.get('fan_name', 'Fan')} — Timer còn lại"
+        self._attr_has_entity_name = True
+        self._attr_translation_key = "timer_remaining"
 
     @property
     def native_value(self) -> int | None:

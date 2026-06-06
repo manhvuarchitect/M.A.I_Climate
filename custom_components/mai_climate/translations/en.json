@@ -10,6 +10,7 @@
           "temp_sensor": "Temperature sensor",
           "humidity_sensor": "Humidity sensor (optional)",
           "presence_sensor": "Presence/Motion sensor (optional)",
+          "ac_sync_enabled": "—— AC SYNC —— (Enable/Disable)",
           "ac_entity": "Air conditioner (optional)",
           "auto_on_threshold": "Auto-on heat index threshold (°C HI)",
           "auto_on_enabled": "—— AUTO-ON BY TEMPERATURE —— (Enable/Disable)"
@@ -18,6 +19,7 @@
           "fan_name": "Display name, e.g. Work desk fan",
           "humidity_sensor": "Used for accurate heat index calculation. Defaults to 70% if not set.",
           "presence_sensor": "Only auto-turn on when someone is present.",
+          "ac_sync_enabled": "Quick toggle to enable or disable AC sync behavior.",
           "ac_entity": "Link an AC to this fan for smart climate synergy features.",
           "auto_on_threshold": "Fan turns on automatically when heat index exceeds this value. Default: 38°C",
           "auto_on_enabled": "Quick toggle to enable or disable the auto-on behavior."
@@ -41,6 +43,7 @@
           "temp_sensor": "Temperature sensor",
           "humidity_sensor": "Humidity sensor",
           "presence_sensor": "Presence/Motion sensor",
+          "ac_sync_enabled": "—— AC SYNC —— (Enable/Disable)",
           "ac_entity": "Air conditioner",
           "auto_on_threshold": "Auto-on threshold",
           "auto_on_enabled": "—— AUTO-ON BY TEMPERATURE —— (Enable/Disable)"
@@ -55,7 +58,8 @@
     },
     "switch": {
       "cooldown_mode": { "name": "Cooldown mode" },
-      "auto_on_enabled": { "name": "Auto-on Fan" }
+      "auto_on_enabled": { "name": "Auto-on Fan" },
+      "ac_sync_enabled": { "name": "AC Sync" }
     },
     "number": {
       "auto_on_threshold": { "name": "Auto-on threshold" }

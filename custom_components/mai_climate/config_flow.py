@@ -63,6 +63,9 @@ def _fan_schema(defaults: dict = None) -> vol.Schema:
             selector.EntitySelectorConfig(domain="sensor", device_class="humidity")
         )
 
+    ac_sync_enabled = defaults.get(CONF_AC_SYNC_ENABLED, True)
+    schema[vol.Optional(CONF_AC_SYNC_ENABLED, default=ac_sync_enabled)] = selector.BooleanSelector()
+
     ac_entity = defaults.get(CONF_AC_ENTITY)
     if ac_entity:
         schema[vol.Optional(CONF_AC_ENTITY, default=ac_entity)] = selector.EntitySelector(

@@ -3,7 +3,7 @@
     "step": {
       "user": {
         "title": "Thêm quạt mới",
-        "description": "Cấu hình Smart Fan Manager cho quạt của bạn. Mỗi quạt là một thiết bị độc lập.",
+        "description": "Cấu hình M.A.I Climate cho quạt của bạn. Mỗi quạt là một thiết bị độc lập.",
         "data": {
           "fan_name": "Tên quạt",
           "fan_entity": "Entity quạt (fan.*)",
@@ -22,7 +22,7 @@
       "entity_not_found": "Không tìm thấy entity quạt trong hệ thống"
     },
     "abort": {
-      "already_configured": "Quạt này đã được thêm vào Smart Fan Manager"
+      "already_configured": "Quạt này đã được thêm vào M.A.I Climate"
     }
   },
   "options": {

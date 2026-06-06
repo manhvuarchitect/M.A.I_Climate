@@ -1,4 +1,4 @@
-"""Smart Fan Manager — HACS Custom Integration.
+"""M.A.I Climate — HACS Custom Integration.
 
 Quản lý quạt thông minh: timer, chỉ số oi bức, auto-on, giải nhiệt vận động.
 Hỗ trợ nhiều quạt độc lập qua Config Flow.
@@ -51,7 +51,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     # Lắng nghe thay đổi options
     entry.async_on_unload(entry.add_update_listener(async_reload_entry))
 
-    _LOGGER.info("Smart Fan Manager đã khởi tạo cho: %s", entry.data.get("fan_name"))
+    _LOGGER.info("M.A.I Climate đã khởi tạo cho: %s", entry.data.get("fan_name"))
     return True
 
 

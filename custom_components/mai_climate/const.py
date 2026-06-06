@@ -1,6 +1,6 @@
 """Constants for Smart Fan Manager."""
 
-DOMAIN = "smart_fan_manager"
+DOMAIN = "mai_climate"
 
 # Config entry keys
 CONF_FAN_ENTITY = "fan_entity"

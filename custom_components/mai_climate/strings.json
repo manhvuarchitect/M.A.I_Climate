@@ -3,7 +3,7 @@
     "step": {
       "user": {
         "title": "Add Fan",
-        "description": "Configure Smart Fan Manager for your fan. Each fan is an independent device you can manage separately.",
+        "description": "Configure M.A.I Climate for your fan. Each fan is an independent device you can manage separately.",
         "data": {
           "fan_name": "Fan name",
           "fan_entity": "Fan entity (fan.*)",
@@ -22,7 +22,7 @@
       "entity_not_found": "Fan entity not found in your system"
     },
     "abort": {
-      "already_configured": "This fan is already managed by Smart Fan Manager"
+      "already_configured": "This fan is already managed by M.A.I Climate"
     }
   },
   "options": {

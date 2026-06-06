@@ -5,12 +5,12 @@
         "title": "Step 1/4: Basic Setup",
         "description": "Configure M.A.I Climate for your fan. Assign discrete speed buttons if your fan uses IR/RF.",
         "data": {
-          "fan_name": "Fan Name",
-          "fan_entity": "Fan Entity (fan.*)",
-          "speed_1_entity": "Speed 1 Button (optional)",
-          "speed_2_entity": "Speed 2 Button (optional)",
-          "speed_3_entity": "Speed 3 Button (optional)",
-          "speed_4_entity": "Speed 4 Button (optional)"
+          "fan_name": "Enter fan name (e.g. Work desk fan)",
+          "fan_entity": "Select fan",
+          "speed_1_entity": "Select Speed 1 Button (optional)",
+          "speed_2_entity": "Select Speed 2 Button (optional)",
+          "speed_3_entity": "Select Speed 3 Button (optional)",
+          "speed_4_entity": "Select Speed 4 Button (optional)"
         },
         "data_description": {
           "fan_name": "Display name, e.g. Work desk fan",
@@ -21,11 +21,11 @@
         "title": "Step 2/4: Auto-On by Temperature",
         "description": "Automatically turn the fan on/off based on the heat index.",
         "data": {
-          "temp_sensor": "Temperature sensor",
-          "humidity_sensor": "Humidity sensor (optional)",
-          "presence_sensor": "Presence/Motion sensor (optional)",
+          "temp_sensor": "Select temperature sensor",
+          "humidity_sensor": "Select humidity sensor (optional)",
+          "presence_sensor": "Select presence/motion sensor (optional)",
           "auto_on_threshold": "Auto-on heat index threshold (°C HI)",
-          "auto_on_enabled": "—— ENABLE AUTO-ON BY TEMPERATURE ——"
+          "auto_on_enabled": "Enable auto-on by temperature"
         },
         "data_description": {
           "humidity_sensor": "Used for accurate heat index calculation. Defaults to 70% if not set.",
@@ -73,7 +73,7 @@
   "options": {
     "step": {
       "user": {
-        "title": "Edit: Basic Setup",
+        "title": "Step 1/4: Basic Setup",
         "data": {
           "fan_name": "Fan Name",
           "fan_entity": "Fan Entity (fan.*)",
@@ -84,17 +84,17 @@
         }
       },
       "auto_on": {
-        "title": "Edit: Auto-On by Temperature",
+        "title": "Step 2/4: Auto-On by Temperature",
         "data": {
-          "temp_sensor": "Temperature sensor",
-          "humidity_sensor": "Humidity sensor (optional)",
-          "presence_sensor": "Presence/Motion sensor (optional)",
+          "temp_sensor": "Select temperature sensor",
+          "humidity_sensor": "Select humidity sensor (optional)",
+          "presence_sensor": "Select presence/motion sensor (optional)",
           "auto_on_threshold": "Auto-on threshold (°C HI)",
-          "auto_on_enabled": "—— ENABLE AUTO-ON BY TEMPERATURE ——"
+          "auto_on_enabled": "Enable auto-on by temperature"
         }
       },
       "advanced": {
-        "title": "Edit: Smart Features",
+        "title": "Step 3/4: Smart Features",
         "data": {
           "smart_speed_enabled": "—— ENABLE SMART SPEED ——",
           "sleep_mode_enabled": "—— ENABLE SLEEP MODE ——",
@@ -105,7 +105,7 @@
         }
       },
       "ac_sync": {
-        "title": "Edit: AC Sync",
+        "title": "Step 4/4: AC Sync",
         "data": {
           "ac_sync_enabled": "—— ENABLE AC SYNC ——",
           "ac_entity": "Air conditioner (optional)"

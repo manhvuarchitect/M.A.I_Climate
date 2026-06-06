@@ -17,6 +17,7 @@ from .const import (
     SUFFIX_SLEEP_MODE_SWITCH,
     SUFFIX_NATURAL_WIND_SWITCH,
     SUFFIX_QUIET_HOURS_SWITCH,
+    SUFFIX_AC_SYNC_SWITCH,
 )
 from .coordinator import SmartFanCoordinator
 
@@ -34,6 +35,7 @@ async def async_setup_entry(
         SleepModeSwitch(coordinator, entry),
         NaturalWindSwitch(coordinator, entry),
         QuietHoursSwitch(coordinator, entry),
+        ACSyncSwitch(coordinator, entry)
     ])
 
 
@@ -246,3 +248,45 @@ class QuietHoursSwitch(CoordinatorEntity, SwitchEntity):
 
     async def async_turn_off(self, **kwargs) -> None:
         await self.coordinator.async_set_quiet_hours_enabled(False)
+
+class ACSyncSwitch(CoordinatorEntity, SwitchEntity):
+    """Switch bật/tắt đồng bộ điều hòa."""
+
+    _attr_icon = "mdi:air-conditioner"
+
+    def __init__(self, coordinator: SmartFanCoordinator, entry: ConfigEntry) -> None:
+        super().__init__(coordinator)
+        self.entry = entry
+        self._attr_unique_id = f"{entry.entry_id}{SUFFIX_AC_SYNC_SWITCH}"
+        self._attr_has_entity_name = True
+        self._attr_translation_key = "ac_sync_enabled"
+        slug_name = slugify(entry.data.get("fan_name", "fan")).replace("_", "")
+        self.entity_id = f"switch.maic_{slug_name}_{self._attr_translation_key}"
+
+    @property
+    def device_info(self):
+        return {
+            "identifiers": {(DOMAIN, self.entry.entry_id)},
+            "name": self.entry.data.get("fan_name", "Smart Fan"),
+            "manufacturer": "Smart Fan Manager",
+            "model": "Fan Controller",
+        }
+
+    @property
+    def is_on(self) -> bool:
+        """Trạng thái hiện tại của nút."""
+        return self.coordinator.data.get("ac_sync_enabled", True)
+
+    async def async_turn_on(self, **kwargs) -> None:
+        """Bật tính năng."""
+        await self.coordinator.async_set_ac_sync_enabled(True)
+
+    async def async_turn_off(self, **kwargs) -> None:
+        """Tắt tính năng."""
+        await self.coordinator.async_set_ac_sync_enabled(False)
+
+    @property
+    def extra_state_attributes(self) -> dict:
+        return {
+            "mô_tả": "Bật/Tắt tính năng đồng bộ thông minh với Điều hòa",
+        }

@@ -19,6 +19,7 @@ from .const import (
     CONF_TEMP_SENSOR,
     CONF_HUMIDITY_SENSOR,
     CONF_AC_ENTITY,
+    CONF_AC_SYNC_ENABLED,
     CONF_PRESENCE_SENSOR,
     CONF_AUTO_ON_THRESHOLD,
     CONF_AUTO_ON_ENABLED,
@@ -61,6 +62,7 @@ class SmartFanCoordinator(DataUpdateCoordinator):
         self.humidity_sensor: str = config.get(CONF_HUMIDITY_SENSOR, "")
         self.ac_entity: str = config.get(CONF_AC_ENTITY, "")
         self.presence_sensor: str = config.get(CONF_PRESENCE_SENSOR, "")
+        self.ac_sync_enabled: bool = config.get(CONF_AC_SYNC_ENABLED, True)
         self.auto_on_enabled: bool = config.get(CONF_AUTO_ON_ENABLED, True)
         self.auto_on_threshold: float = config.get(
             CONF_AUTO_ON_THRESHOLD, DEFAULT_AUTO_ON_THRESHOLD
@@ -191,6 +193,7 @@ class SmartFanCoordinator(DataUpdateCoordinator):
             "sleep_mode_enabled": self.sleep_mode_enabled,
             "natural_wind_enabled": self.natural_wind_enabled,
             "quiet_hours_enabled": self.quiet_hours_enabled,
+            "ac_sync_enabled": self.ac_sync_enabled,
         }
 
     async def async_set_timer(self, minutes: int, mode: str = MODE_TIMER) -> None:
@@ -351,6 +354,14 @@ class SmartFanCoordinator(DataUpdateCoordinator):
                 {"entity_id": self.fan_entity, "percentage": target_pct}
             )
 
+    async def async_set_ac_sync_enabled(self, enabled: bool) -> None:
+        """Bật/tắt tính năng đồng bộ điều hòa."""
+        self.ac_sync_enabled = enabled
+        self.hass.config_entries.async_update_entry(
+            self.entry,
+            options={**self.entry.options, CONF_AC_SYNC_ENABLED: enabled},
+        )
+        await self.async_refresh()
     async def async_setup(self) -> None:
         """Thiết lập listeners theo dõi thay đổi sensor."""
 
@@ -386,6 +397,9 @@ class SmartFanCoordinator(DataUpdateCoordinator):
         if self.ac_entity:
             @callback
             def _ac_state_changed(event):
+                if not self.ac_sync_enabled:
+                    return
+
                 old_state = event.data.get("old_state")
                 new_state = event.data.get("new_state")
                 if not old_state or not new_state:

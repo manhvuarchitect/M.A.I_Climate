@@ -13,7 +13,9 @@ from .const import (
     CONF_TEMP_SENSOR,
     CONF_HUMIDITY_SENSOR,
     CONF_AC_ENTITY,
+    CONF_AC_SYNC_ENABLED,
     CONF_PRESENCE_SENSOR,
+    CONF_AUTO_ON_ENABLED,
     CONF_AUTO_ON_THRESHOLD,
     CONF_FAN_NAME,
     DEFAULT_AUTO_ON_THRESHOLD,
@@ -64,6 +66,9 @@ def _fan_schema(defaults: dict = None) -> vol.Schema:
             selector.EntitySelectorConfig(domain="sensor", device_class="humidity")
         )
 
+    ac_sync_enabled = defaults.get(CONF_AC_SYNC_ENABLED, True)
+    schema[vol.Optional(CONF_AC_SYNC_ENABLED, default=ac_sync_enabled)] = selector.BooleanSelector()
+
     ac_entity = defaults.get(CONF_AC_ENTITY)
     if ac_entity:
         schema[vol.Optional(CONF_AC_ENTITY, default=ac_entity)] = selector.EntitySelector(
@@ -73,6 +78,9 @@ def _fan_schema(defaults: dict = None) -> vol.Schema:
         schema[vol.Optional(CONF_AC_ENTITY)] = selector.EntitySelector(
             selector.EntitySelectorConfig(domain="climate")
         )
+
+    auto_on_enabled = defaults.get(CONF_AUTO_ON_ENABLED, True)
+    schema[vol.Optional(CONF_AUTO_ON_ENABLED, default=auto_on_enabled)] = selector.BooleanSelector()
 
     presence_sensor = defaults.get(CONF_PRESENCE_SENSOR)
     if presence_sensor:

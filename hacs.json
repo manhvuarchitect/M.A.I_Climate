@@ -1,5 +1,6 @@
 {
   "name": "M.A.I Climate",
   "content_in_root": false,
-  "render_readme": true
+  "render_readme": true,
+  "filename": "mai_climate"
 }

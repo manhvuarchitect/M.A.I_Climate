@@ -1,0 +1,234 @@
+"""Coordinator for Smart Fan Manager - handles all logic."""
+from __future__ import annotations
+
+import asyncio
+import logging
+from datetime import datetime, timedelta
+from typing import Any
+
+from homeassistant.config_entries import ConfigEntry
+from homeassistant.core import HomeAssistant, callback
+from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
+from homeassistant.helpers.event import async_track_state_change_event, async_call_later
+from homeassistant.util.dt import utcnow
+
+from .const import (
+    DOMAIN,
+    CONF_FAN_ENTITY,
+    CONF_TEMP_SENSOR,
+    CONF_HUMIDITY_SENSOR,
+    CONF_AUTO_ON_THRESHOLD,
+    DEFAULT_AUTO_ON_THRESHOLD,
+    DEFAULT_SCAN_INTERVAL,
+    MODE_TIMER,
+    MODE_COOLDOWN,
+    MODE_AUTO,
+)
+
+_LOGGER = logging.getLogger(__name__)
+
+
+class SmartFanCoordinator(DataUpdateCoordinator):
+    """Quản lý toàn bộ logic cho một quạt."""
+
+    def __init__(self, hass: HomeAssistant, entry: ConfigEntry) -> None:
+        """Khởi tạo coordinator."""
+        super().__init__(
+            hass,
+            _LOGGER,
+            name=f"{DOMAIN}_{entry.entry_id}",
+            update_interval=timedelta(seconds=DEFAULT_SCAN_INTERVAL),
+        )
+        self.entry = entry
+        self.hass = hass
+
+        # Config
+        self.fan_entity: str = entry.data[CONF_FAN_ENTITY]
+        self.temp_sensor: str = entry.data[CONF_TEMP_SENSOR]
+        self.humidity_sensor: str = entry.data.get(CONF_HUMIDITY_SENSOR, "")
+        self.auto_on_threshold: float = entry.data.get(
+            CONF_AUTO_ON_THRESHOLD, DEFAULT_AUTO_ON_THRESHOLD
+        )
+
+        # State
+        self.muggy_index: float = 0.0
+        self.timer_end: datetime | None = None
+        self.current_mode: str | None = None
+        self.cooldown_active: bool = False
+        self._timer_cancel = None
+        self._unsub_listeners: list = []
+
+    async def _async_update_data(self) -> dict[str, Any]:
+        """Cập nhật dữ liệu định kỳ."""
+        self._calculate_muggy_index()
+        await self._check_auto_on()
+        return self._build_state()
+
+    def _calculate_muggy_index(self) -> None:
+        """Tính chỉ số oi bức từ nhiệt độ và độ ẩm.
+
+        Công thức Heat Index (Steadman 1979, đơn vị Celsius):
+        HI = -8.78 + 1.61*T + 2.34*RH - 0.146*T*RH
+             - 0.012*T² - 0.016*RH² + 0.00221*T²*RH
+             + 0.00072*T*RH² - 0.000003583*T²*RH²
+        """
+        temp_state = self.hass.states.get(self.temp_sensor)
+        if not temp_state or temp_state.state in ("unknown", "unavailable"):
+            return
+
+        try:
+            T = float(temp_state.state)
+        except ValueError:
+            return
+
+        # Nếu không có cảm biến độ ẩm, ước tính 70%
+        RH = 70.0
+        if self.humidity_sensor:
+            hum_state = self.hass.states.get(self.humidity_sensor)
+            if hum_state and hum_state.state not in ("unknown", "unavailable"):
+                try:
+                    RH = float(hum_state.state)
+                except ValueError:
+                    pass
+
+        if T < 27:
+            # Dưới ngưỡng này heat index không áp dụng, dùng trực tiếp
+            self.muggy_index = T
+            return
+
+        HI = (
+            -8.78
+            + 1.61 * T
+            + 2.34 * RH
+            - 0.146 * T * RH
+            - 0.012 * T**2
+            - 0.016 * RH**2
+            + 0.00221 * T**2 * RH
+            + 0.00072 * T * RH**2
+            - 0.000003583 * T**2 * RH**2
+        )
+        self.muggy_index = round(HI, 1)
+
+    async def _check_auto_on(self) -> None:
+        """Tự động bật quạt nếu chỉ số oi bức vượt ngưỡng."""
+        if self.muggy_index >= self.auto_on_threshold:
+            fan_state = self.hass.states.get(self.fan_entity)
+            if fan_state and fan_state.state == "off":
+                _LOGGER.info(
+                    "Muggy index %.1f >= threshold %.1f — tự động bật %s",
+                    self.muggy_index,
+                    self.auto_on_threshold,
+                    self.fan_entity,
+                )
+                await self.hass.services.async_call(
+                    "fan", "turn_on", {"entity_id": self.fan_entity}
+                )
+
+    def _build_state(self) -> dict[str, Any]:
+        """Tổng hợp state hiện tại."""
+        remaining = None
+        if self.timer_end:
+            delta = (self.timer_end - utcnow()).total_seconds()
+            remaining = max(0, int(delta))
+            if remaining == 0:
+                self.timer_end = None
+                self.current_mode = None
+
+        return {
+            "muggy_index": self.muggy_index,
+            "timer_remaining": remaining,
+            "current_mode": self.current_mode,
+            "cooldown_active": self.cooldown_active,
+            "auto_on_threshold": self.auto_on_threshold,
+        }
+
+    async def async_set_timer(self, minutes: int, mode: str = MODE_TIMER) -> None:
+        """Bật quạt và đặt timer tắt sau N phút."""
+        # Hủy timer cũ nếu có
+        await self.async_cancel_timer()
+
+        # Bật quạt
+        await self.hass.services.async_call(
+            "fan", "turn_on", {"entity_id": self.fan_entity}
+        )
+
+        self.timer_end = utcnow() + timedelta(minutes=minutes)
+        self.current_mode = mode
+        _LOGGER.info("Timer đặt: %d phút, mode: %s", minutes, mode)
+
+        # Đặt callback tắt quạt sau đúng thời gian
+        delay = minutes * 60
+
+        @callback
+        def _timer_expired(_now):
+            self.hass.async_create_task(self._async_timer_expired())
+
+        self._timer_cancel = async_call_later(self.hass, delay, _timer_expired)
+        await self.async_refresh()
+
+    async def _async_timer_expired(self) -> None:
+        """Callback khi timer hết giờ."""
+        _LOGGER.info("Timer hết giờ — tắt %s", self.fan_entity)
+        await self.hass.services.async_call(
+            "fan", "turn_off", {"entity_id": self.fan_entity}
+        )
+        self.timer_end = None
+        self.current_mode = None
+        self._timer_cancel = None
+        await self.async_refresh()
+
+    async def async_cancel_timer(self) -> None:
+        """Hủy timer đang chạy."""
+        if self._timer_cancel:
+            self._timer_cancel()
+            self._timer_cancel = None
+        self.timer_end = None
+        self.current_mode = None
+        await self.async_refresh()
+
+    async def async_set_cooldown_mode(self, active: bool) -> None:
+        """Bật/tắt chế độ giải nhiệt vận động (30 phút)."""
+        self.cooldown_active = active
+        if active:
+            await self.async_set_timer(minutes=30, mode=MODE_COOLDOWN)
+        else:
+            await self.async_cancel_timer()
+            await self.hass.services.async_call(
+                "fan", "turn_off", {"entity_id": self.fan_entity}
+            )
+
+    async def async_update_threshold(self, threshold: float) -> None:
+        """Cập nhật ngưỡng auto-on."""
+        self.auto_on_threshold = threshold
+        # Lưu vào options để persist
+        self.hass.config_entries.async_update_entry(
+            self.entry,
+            data={**self.entry.data, CONF_AUTO_ON_THRESHOLD: threshold},
+        )
+        await self.async_refresh()
+
+    async def async_setup(self) -> None:
+        """Thiết lập listeners theo dõi thay đổi sensor."""
+
+        @callback
+        def _sensor_changed(event):
+            self.hass.async_create_task(self.async_refresh())
+
+        # Lắng nghe thay đổi từ sensor nhiệt độ & độ ẩm
+        entities_to_watch = [self.temp_sensor]
+        if self.humidity_sensor:
+            entities_to_watch.append(self.humidity_sensor)
+
+        self._unsub_listeners.append(
+            async_track_state_change_event(
+                self.hass, entities_to_watch, _sensor_changed
+            )
+        )
+
+    async def async_unload(self) -> None:
+        """Dọn dẹp khi unload entry."""
+        for unsub in self._unsub_listeners:
+            unsub()
+        self._unsub_listeners.clear()
+        if self._timer_cancel:
+            self._timer_cancel()

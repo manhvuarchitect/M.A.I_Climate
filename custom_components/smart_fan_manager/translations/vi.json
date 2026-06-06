@@ -1,0 +1,123 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Thêm quạt mới",
+        "description": "Cấu hình Smart Fan Manager cho quạt của bạn. Mỗi quạt là một thiết bị độc lập.",
+        "data": {
+          "fan_name": "Tên quạt",
+          "fan_entity": "Entity quạt (fan.*)",
+          "temp_sensor": "Cảm biến nhiệt độ",
+          "humidity_sensor": "Cảm biến độ ẩm (tùy chọn)",
+          "auto_on_threshold": "Ngưỡng chỉ số oi bức tự động bật (°C Heat Index)"
+        },
+        "data_description": {
+          "fan_name": "Tên hiển thị, ví dụ: Quạt phòng làm việc",
+          "humidity_sensor": "Để tính chỉ số oi bức chính xác hơn. Nếu bỏ trống sẽ dùng 70% mặc định.",
+          "auto_on_threshold": "Khi chỉ số oi bức vượt ngưỡng này, quạt tự bật. Mặc định: 38°C"
+        }
+      }
+    },
+    "error": {
+      "entity_not_found": "Không tìm thấy entity quạt trong hệ thống"
+    },
+    "abort": {
+      "already_configured": "Quạt này đã được thêm vào Smart Fan Manager"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Chỉnh sửa cấu hình quạt",
+        "data": {
+          "fan_name": "Tên quạt",
+          "fan_entity": "Entity quạt",
+          "temp_sensor": "Cảm biến nhiệt độ",
+          "humidity_sensor": "Cảm biến độ ẩm",
+          "auto_on_threshold": "Ngưỡng tự động bật"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "muggy_index": {
+        "name": "Chỉ số oi bức"
+      },
+      "timer_remaining": {
+        "name": "Timer còn lại"
+      }
+    },
+    "switch": {
+      "cooldown_mode": {
+        "name": "Giải nhiệt vận động"
+      }
+    },
+    "number": {
+      "auto_on_threshold": {
+        "name": "Ngưỡng tự động bật"
+      }
+    },
+    "select": {
+      "timer_preset": {
+        "name": "Hẹn giờ tắt",
+        "state": {
+          "15 phút": "15 phút",
+          "30 phút": "30 phút",
+          "45 phút": "45 phút",
+          "60 phút": "60 phút",
+          "90 phút": "90 phút",
+          "120 phút": "120 phút"
+        }
+      }
+    }
+  },
+  "services": {
+    "set_timer": {
+      "name": "Đặt hẹn giờ tắt quạt",
+      "description": "Bật quạt và đặt timer tắt sau N phút",
+      "fields": {
+        "entry_id": {
+          "name": "ID cấu hình quạt",
+          "description": "entry_id của quạt cần điều khiển"
+        },
+        "minutes": {
+          "name": "Số phút",
+          "description": "Quạt sẽ tắt sau số phút này (1-480)"
+        },
+        "mode": {
+          "name": "Chế độ",
+          "description": "timer = hẹn giờ thường, cooldown = giải nhiệt vận động"
+        }
+      }
+    },
+    "cancel_timer": {
+      "name": "Hủy hẹn giờ",
+      "description": "Hủy timer đang chạy (quạt vẫn bật)",
+      "fields": {
+        "entry_id": {
+          "name": "ID cấu hình quạt",
+          "description": "entry_id của quạt cần hủy timer"
+        }
+      }
+    },
+    "set_mode": {
+      "name": "Đặt chế độ hoạt động",
+      "description": "Chuyển chế độ và bật quạt",
+      "fields": {
+        "entry_id": {
+          "name": "ID cấu hình quạt",
+          "description": "entry_id của quạt"
+        },
+        "mode": {
+          "name": "Chế độ",
+          "description": "cooldown = giải nhiệt 30 phút, timer = hẹn giờ tùy chỉnh"
+        },
+        "minutes": {
+          "name": "Số phút (cho chế độ timer)",
+          "description": "Chỉ dùng khi mode = timer"
+        }
+      }
+    }
+  }
+}

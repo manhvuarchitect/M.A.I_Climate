@@ -1,0 +1,125 @@
+# ===========================================================================
+# BUBBLE CARD TEMPLATE — Smart Fan Manager
+# Thay ENTRY_ID bằng entry_id thực tế của quạt (xem Developer Tools > States)
+# Thay FAN_ENTITY bằng entity_id quạt, ví dụ: fan.modul_homelab_switch_3
+# ===========================================================================
+#
+# Cách tìm ENTRY_ID:
+#   Settings > Devices & Services > Smart Fan Manager > [Tên quạt] > Entry ID
+#
+# Cách dùng cho nhiều quạt:
+#   Copy toàn bộ block này, chỉ thay ENTRY_ID và FAN_ENTITY
+
+type: custom:bubble-card
+card_type: pop-up
+hash: "#popup_fan_ENTRY_ID"
+entity: FAN_ENTITY
+name: Quản lý Quạt
+button_type: state
+show_previous_button: true
+buttons_position: right
+sub_button:
+  - name: Tắt ngay
+    icon: mdi:fan-off
+    tap_action:
+      action: call-service
+      service: fan.turn_off
+      data:
+        entity_id: FAN_ENTITY
+cards:
+  - type: vertical-stack
+    cards:
+      # 1. Biểu đồ chỉ số oi bức — lấy từ sensor tự động tạo bởi integration
+      - type: custom:mini-graph-card
+        name: Chỉ số oi bức
+        icon: mdi:thermometer-alert
+        entities:
+          - entity: sensor.TÊN_QUẠT_chỉ_số_oi_bức
+            name: Heat Index
+        line_color: "#2196F3"
+        line_width: 4
+        font_size: 75
+        show:
+          fill: fade
+          extrema: true
+        color_thresholds:
+          - value: 30
+            color: "#4CAF50"
+          - value: 43
+            color: "#FF9800"
+          - value: 48
+            color: "#F44336"
+
+      # 2. Chips trạng thái
+      - type: custom:mushroom-chips-card
+        alignment: center
+        chips:
+          # Timer còn lại
+          - type: entity
+            entity: sensor.TÊN_QUẠT_timer_còn_lại
+            content_info: state
+            icon: mdi:timer-outline
+          # Chỉ số oi bức
+          - type: entity
+            entity: sensor.TÊN_QUẠT_chỉ_số_oi_bức
+            icon: mdi:weather-sunny
+            icon_color: orange
+          # Trạng thái quạt
+          - type: template
+            content: >
+              {% if is_state('FAN_ENTITY', 'on') %} Đang quay {%
+              else %} Đang nghỉ {% endif %}
+            icon: mdi:fan
+            icon_color: "{{ 'blue' if is_state('FAN_ENTITY', 'on') else 'grey' }}"
+
+      # 3. Chọn preset timer (entity từ integration)
+      - type: custom:mushroom-select-card
+        entity: select.TÊN_QUẠT_hẹn_giờ_tắt
+        name: Hẹn giờ tắt
+        icon: mdi:fan-clock
+        fill_container: true
+
+      # 4. Điều chỉnh ngưỡng auto-on
+      - type: custom:mushroom-number-card
+        entity: number.TÊN_QUẠT_ngưỡng_tự_động_bật
+        name: Ngưỡng tự động bật (°C)
+        icon: mdi:thermometer-chevron-up
+        display_mode: slider
+
+      # 5. Nút tắt và Giải nhiệt vận động
+      - type: grid
+        columns: 2
+        square: false
+        cards:
+          # Chế độ Giải nhiệt vận động
+          - type: custom:mushroom-entity-card
+            entity: switch.TÊN_QUẠT_giải_nhiệt_vận_động
+            name: Giải nhiệt
+            icon: mdi:run-fast
+            tap_action:
+              action: toggle
+
+          # Tắt quạt & hủy timer
+          - type: custom:mushroom-template-card
+            primary: Dừng hết
+            icon: mdi:stop-circle
+            icon_color: red
+            tap_action:
+              action: call-service
+              service: fan.turn_off
+              target:
+                entity_id: FAN_ENTITY
+            hold_action:
+              action: call-service
+              service: smart_fan_manager.cancel_timer
+              data:
+                entry_id: ENTRY_ID
+
+styles: |
+  .bubble-icon-container {
+    animation: ${state === 'on' ? 'spin 2s linear infinite' : 'none'} !important;
+  }
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }

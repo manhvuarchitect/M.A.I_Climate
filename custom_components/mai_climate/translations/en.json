@@ -1,0 +1,70 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Add Fan",
+        "description": "Configure M.A.I Climate for your fan. Each fan is an independent device you can manage separately.",
+        "data": {
+          "fan_name": "Fan name",
+          "fan_entity": "Fan entity (fan.*)",
+          "temp_sensor": "Temperature sensor",
+          "humidity_sensor": "Humidity sensor (optional)",
+          "ac_entity": "Air Conditioner (optional)",
+          "auto_on_threshold": "Auto-on heat index threshold (°C HI)"
+        },
+        "data_description": {
+          "fan_name": "Display name, e.g. Work desk fan",
+          "humidity_sensor": "Used for accurate heat index calculation. Defaults to 70% if not set.",
+          "ac_entity": "Link an AC to this fan for smart climate synergy features.",
+          "auto_on_threshold": "Fan turns on automatically when heat index exceeds this value. Default: 38°C"
+        }
+      }
+    },
+    "error": {
+      "entity_not_found": "Fan entity not found in your system"
+    },
+    "abort": {
+      "already_configured": "This fan is already managed by M.A.I Climate"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Edit fan settings",
+        "data": {
+          "fan_name": "Fan name",
+          "fan_entity": "Fan entity",
+          "temp_sensor": "Temperature sensor",
+          "humidity_sensor": "Humidity sensor",
+          "ac_entity": "Air Conditioner",
+          "auto_on_threshold": "Auto-on threshold"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "muggy_index": { "name": "Heat index" },
+      "timer_remaining": { "name": "Timer remaining" }
+    },
+    "switch": {
+      "cooldown_mode": { "name": "Cooldown mode" }
+    },
+    "number": {
+      "auto_on_threshold": { "name": "Auto-on threshold" }
+    },
+    "select": {
+      "timer_preset": {
+        "name": "Shutdown timer",
+        "state": {
+          "15 phút": "15 minutes",
+          "30 phút": "30 minutes",
+          "45 phút": "45 minutes",
+          "60 phút": "60 minutes",
+          "90 phút": "90 minutes",
+          "120 phút": "120 minutes"
+        }
+      }
+    }
+  }
+}

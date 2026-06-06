@@ -1,89 +1,89 @@
-﻿# ðŸŒ€ M.A.I Climate â€” HACS Integration
+﻿# 🌀 M.A.I Climate — HACS Integration
 
-Quáº£n lÃ½ quáº¡t thÃ´ng minh trong Home Assistant: háº¹n giá», chá»‰ sá»‘ oi bá»©c, tá»± Ä‘á»™ng báº­t, giáº£i nhiá»‡t váº­n Ä‘á»™ng. Há»— trá»£ **nhiá»u quáº¡t Ä‘á»™c láº­p** â€” má»—i quáº¡t má»™t láº§n cÃ i Ä‘áº·t qua UI.
+Quản lý quạt thông minh trong Home Assistant: hẹn giờ, chỉ số oi bức, tự động bật, giải nhiệt vận động. Hỗ trợ **nhiều quạt độc lập** — mỗi quạt một lần cài đặt qua UI.
 
 ---
 
-## TÃ­nh nÄƒng
+## Tính năng
 
-| TÃ­nh nÄƒng | MÃ´ táº£ |
+| Tính năng | Mô tả |
 |-----------|-------|
-| ðŸŒ¡ï¸ Chá»‰ sá»‘ oi bá»©c | TÃ­nh Heat Index tá»« nhiá»‡t Ä‘á»™ + Ä‘á»™ áº©m, hiá»ƒn thá»‹ qua sensor |
-| â±ï¸ Háº¹n giá» thÃ´ng minh | Preset 15/30/45/60/90/120 phÃºt, chá»n qua UI dropdown |
-| ðŸ”„ Auto-on | Tá»± báº­t quáº¡t khi chá»‰ sá»‘ oi bá»©c vÆ°á»£t ngÆ°á»¡ng tÃ¹y chá»‰nh |
-| ðŸƒ Giáº£i nhiá»‡t váº­n Ä‘á»™ng | Báº­t quáº¡t 30 phÃºt sau khi táº­p thá»ƒ dá»¥c, tá»± táº¯t |
-| ðŸ“± Bubble Card | Template card sáºµn sÃ ng dÃ¹ng vá»›i Bubble Card |
-| ðŸ” NhÃ¢n rá»™ng | ThÃªm bao nhiÃªu quáº¡t cÅ©ng Ä‘Æ°á»£c, khÃ´ng cáº§n viáº¿t code |
+| 🌡️ Chỉ số oi bức | Tính Heat Index từ nhiệt độ + độ ẩm, hiển thị qua sensor |
+| ⏱️ Hẹn giờ thông minh | Preset 15/30/45/60/90/120 phút, chọn qua UI dropdown |
+| 🔄 Auto-on | Tự bật quạt khi chỉ số oi bức vượt ngưỡng tùy chỉnh |
+| 🏃 Giải nhiệt vận động | Bật quạt 30 phút sau khi tập thể dục, tự tắt |
+| 📱 Bubble Card | Template card sẵn sàng dùng với Bubble Card |
+| 🔁 Nhân rộng | Thêm bao nhiêu quạt cũng được, không cần viết code |
 
 ---
 
-## CÃ i Ä‘áº·t qua HACS
+## Cài đặt qua HACS
 
-### BÆ°á»›c 1: ThÃªm repository vÃ o HACS
+### Bước 1: Thêm repository vào HACS
 
-1. Má»Ÿ HACS â†’ **Integrations** â†’ dáº¥u **â‹®** â†’ **Custom repositories**
-2. Nháº­p URL: `https://github.com/manhvuarchitect/M.A.I-Climate`
-3. Category: **Integration** â†’ **Add**
+1. Mở HACS → **Integrations** → dấu **⋮** → **Custom repositories**
+2. Nhập URL: `https://github.com/manhvuarchitect/M.A.I-Climate`
+3. Category: **Integration** → **Add**
 
-### BÆ°á»›c 2: CÃ i Ä‘áº·t integration
+### Bước 2: Cài đặt integration
 
-1. TÃ¬m **M.A.I Climate** trong HACS â†’ **Download**
-2. Khá»Ÿi Ä‘á»™ng láº¡i Home Assistant
+1. Tìm **M.A.I Climate** trong HACS → **Download**
+2. Khởi động lại Home Assistant
 
-### BÆ°á»›c 3: ThÃªm quáº¡t Ä‘áº§u tiÃªn
+### Bước 3: Thêm quạt đầu tiên
 
-1. **Settings** â†’ **Devices & Services** â†’ **Add Integration**
-2. TÃ¬m **M.A.I Climate**
-3. Äiá»n thÃ´ng tin:
-   - **TÃªn quáº¡t**: Quáº¡t phÃ²ng lÃ m viá»‡c
-   - **Entity quáº¡t**: `fan.modul_homelab_switch_3`
-   - **Cáº£m biáº¿n nhiá»‡t Ä‘á»™**: `sensor.nhiet_do_phong`
-   - **Cáº£m biáº¿n Ä‘á»™ áº©m**: `sensor.do_am_phong` *(tÃ¹y chá»n)*
-   - **NgÆ°á»¡ng tá»± Ä‘á»™ng báº­t**: `38` (Heat Index Â°C)
+1. **Settings** → **Devices & Services** → **Add Integration**
+2. Tìm **M.A.I Climate**
+3. Điền thông tin:
+   - **Tên quạt**: Quạt phòng làm việc
+   - **Entity quạt**: `fan.modul_homelab_switch_3`
+   - **Cảm biến nhiệt độ**: `sensor.nhiet_do_phong`
+   - **Cảm biến độ ẩm**: `sensor.do_am_phong` *(tùy chọn)*
+   - **Ngưỡng tự động bật**: `38` (Heat Index °C)
 
-### BÆ°á»›c 4: ThÃªm quáº¡t tiáº¿p theo
+### Bước 4: Thêm quạt tiếp theo
 
-Láº·p láº¡i BÆ°á»›c 3 cho má»—i quáº¡t má»›i â€” má»—i quáº¡t sáº½ cÃ³ bá»™ entity riÃªng.
+Lặp lại Bước 3 cho mỗi quạt mới — mỗi quạt sẽ có bộ entity riêng.
 
 ---
 
-## Entities Ä‘Æ°á»£c táº¡o tá»± Ä‘á»™ng
+## Entities được tạo tự động
 
-Vá»›i má»—i quáº¡t, integration tá»± táº¡o 4 entity:
+Với mỗi quạt, integration tự tạo 4 entity:
 
 ```
-sensor.tÃªn_quáº¡t_chá»‰_sá»‘_oi_bá»©c          # Heat Index hiá»‡n táº¡i (Â°C)
-sensor.tÃªn_quáº¡t_timer_cÃ²n_láº¡i           # GiÃ¢y cÃ²n láº¡i cá»§a timer
-switch.tÃªn_quáº¡t_giáº£i_nhiá»‡t_váº­n_Ä‘á»™ng     # Báº­t/táº¯t cháº¿ Ä‘á»™ 30 phÃºt
-number.tÃªn_quáº¡t_ngÆ°á»¡ng_tá»±_Ä‘á»™ng_báº­t     # NgÆ°á»¡ng auto-on (25-60Â°C)
-select.tÃªn_quáº¡t_háº¹n_giá»_táº¯t            # Chá»n preset timer
+sensor.tên_quạt_chỉ_số_oi_bức          # Heat Index hiện tại (°C)
+sensor.tên_quạt_timer_còn_lại           # Giây còn lại của timer
+switch.tên_quạt_giải_nhiệt_vận_động     # Bật/tắt chế độ 30 phút
+number.tên_quạt_ngưỡng_tự_động_bật     # Ngưỡng auto-on (25-60°C)
+select.tên_quạt_hẹn_giờ_tắt            # Chọn preset timer
 ```
 
 ---
 
-## Sá»­ dá»¥ng Bubble Card Template
+## Sử dụng Bubble Card Template
 
-1. Má»Ÿ file `blueprints/bubble_card_template.yaml`
-2. Thay tháº¿ cÃ¡c placeholder:
-   - `ENTRY_ID` â†’ entry_id thá»±c táº¿ *(Settings > Devices > M.A.I Climate > tÃªn quáº¡t > Entry ID)*
-   - `FAN_ENTITY` â†’ entity quáº¡t, vÃ­ dá»¥ `fan.modul_homelab_switch_3`
-   - `TÃŠN_QUáº T` â†’ prefix cá»§a entity, vÃ­ dá»¥ `quáº¡t_phÃ²ng_lÃ m_viá»‡c`
+1. Mở file `blueprints/bubble_card_template.yaml`
+2. Thay thế các placeholder:
+   - `ENTRY_ID` → entry_id thực tế *(Settings > Devices > M.A.I Climate > tên quạt > Entry ID)*
+   - `FAN_ENTITY` → entity quạt, ví dụ `fan.modul_homelab_switch_3`
+   - `TÊN_QUẠT` → prefix của entity, ví dụ `quạt_phòng_làm_việc`
 
 ---
 
-## Automation vÃ­ dá»¥
+## Automation ví dụ
 
-### Tá»± Ä‘á»™ng báº­t quáº¡t trÆ°á»›c giá» lÃ m viá»‡c
+### Tự động bật quạt trước giờ làm việc
 
 ```yaml
 automation:
-  - alias: Báº­t quáº¡t trÆ°á»›c giá» lÃ m
+  - alias: Bật quạt trước giờ làm
     trigger:
       - platform: time
         at: "08:00:00"
     condition:
       - condition: numeric_state
-        entity_id: sensor.quáº¡t_phÃ²ng_lÃ m_viá»‡c_chá»‰_sá»‘_oi_bá»©c
+        entity_id: sensor.quạt_phòng_làm_việc_chỉ_số_oi_bức
         above: 35
     action:
       - service: mai_climate.set_timer
@@ -93,11 +93,11 @@ automation:
           mode: timer
 ```
 
-### Giáº£i nhiá»‡t sau khi táº­p
+### Giải nhiệt sau khi tập
 
 ```yaml
 automation:
-  - alias: Giáº£i nhiá»‡t sau workout
+  - alias: Giải nhiệt sau workout
     trigger:
       - platform: state
         entity_id: input_boolean.dang_tap_the_duc
@@ -117,7 +117,7 @@ automation:
 ```yaml
 service: mai_climate.set_timer
 data:
-  entry_id: "abc123..."   # entry_id cá»§a quáº¡t
+  entry_id: "abc123..."   # entry_id của quạt
   minutes: 45             # 1-480
   mode: timer             # timer | cooldown
 ```
@@ -135,33 +135,32 @@ service: mai_climate.set_mode
 data:
   entry_id: "abc123..."
   mode: cooldown          # cooldown | timer
-  minutes: 30             # chá»‰ dÃ¹ng khi mode: timer
+  minutes: 30             # chỉ dùng khi mode: timer
 ```
 
 ---
 
-## CÃ´ng thá»©c chá»‰ sá»‘ oi bá»©c
+## Công thức chỉ số oi bức
 
-Heat Index (Steadman 1979) â€” pháº£n Ã¡nh cáº£m giÃ¡c nÃ³ng thá»±c táº¿ khi cÃ³ Ä‘á»™ áº©m:
+Heat Index (Steadman 1979) — phản ánh cảm giác nóng thực tế khi có độ ẩm:
 
 ```
-HI = -8.78 + 1.61T + 2.34RH - 0.146TÃ—RH - 0.012TÂ² - 0.016RHÂ²
-     + 0.00221TÂ²Ã—RH + 0.00072TÃ—RHÂ² - 0.000003583TÂ²Ã—RHÂ²
+HI = -8.78 + 1.61T + 2.34RH - 0.146T×RH - 0.012T² - 0.016RH²
+     + 0.00221T²×RH + 0.00072T×RH² - 0.000003583T²×RH²
 ```
 
-Náº¿u khÃ´ng cÃ³ cáº£m biáº¿n Ä‘á»™ áº©m, máº·c Ä‘á»‹nh RH = 70%.
+Nếu không có cảm biến độ ẩm, mặc định RH = 70%.
 
-| Chá»‰ sá»‘ | Má»©c Ä‘á»™ |
+| Chỉ số | Mức độ |
 |--------|--------|
-| < 30Â°C | Dá»… chá»‹u |
-| 30â€“43Â°C | HÆ¡i oi |
-| 43â€“48Â°C | Oi bá»©c |
-| > 48Â°C | Ráº¥t oi bá»©c |
+| < 30°C | Dễ chịu |
+| 30–43°C | Hơi oi |
+| 43–48°C | Oi bức |
+| > 48°C | Rất oi bức |
 
 ---
 
-## ÄÃ³ng gÃ³p & BÃ¡o lá»—i
+## Đóng góp & Báo lỗi
 
 - Issues: https://github.com/manhvuarchitect/M.A.I-Climate/issues
 - Discussions: https://github.com/manhvuarchitect/M.A.I-Climate/discussions
-

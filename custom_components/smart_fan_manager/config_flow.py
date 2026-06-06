@@ -105,22 +105,21 @@ class SmartFanManagerConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     @callback
     def async_get_options_flow(config_entry):
         """Trả về options flow để chỉnh sửa sau khi cài đặt."""
-        return SmartFanManagerOptionsFlow(config_entry)
+        return SmartFanManagerOptionsFlow()
 
 
 class SmartFanManagerOptionsFlow(config_entries.OptionsFlow):
     """Options Flow — chỉnh sửa cấu hình quạt đã thêm."""
 
-    def __init__(self, config_entry: config_entries.ConfigEntry) -> None:
-        """Khởi tạo với entry hiện tại."""
-        self.config_entry = config_entry
+    def __init__(self) -> None:
+        """Khởi tạo."""
+        pass
 
     async def async_step_init(self, user_input=None):
         """Hiển thị form chỉnh sửa."""
         errors = {}
 
         if user_input is not None:
-            # Lưu user_input vào options
             return self.async_create_entry(title="", data=user_input)
 
         # Lấy dữ liệu hiện tại (ưu tiên options nếu đã từng sửa, nếu không dùng data ban đầu)

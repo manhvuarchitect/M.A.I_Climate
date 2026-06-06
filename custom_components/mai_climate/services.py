@@ -63,6 +63,7 @@ def _get_coordinators_by_entities(hass: HomeAssistant, entity_ids: list[str]):
                 break
         if not found:
             _LOGGER.warning("Không tìm thấy cấu hình M.A.I Climate cho quạt: %s", entity_id)
+            raise ValueError(f"Quạt '{entity_id}' chưa được cấu hình trong M.A.I Climate. Vui lòng vào Thiết bị & Dịch vụ để thêm quạt này!")
     return matched
 
 

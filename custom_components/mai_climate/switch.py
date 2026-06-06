@@ -7,7 +7,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from .const import DOMAIN, ICON_COOLDOWN, SUFFIX_COOLDOWN_SWITCH
+from .const import DOMAIN, ICON_COOLDOWN, SUFFIX_COOLDOWN_SWITCH, SUFFIX_AUTO_ON_SWITCH
 from .coordinator import SmartFanCoordinator
 
 
@@ -16,9 +16,11 @@ async def async_setup_entry(
     entry: ConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
-    """Tạo switch entity Giải nhiệt vận động."""
     coordinator: SmartFanCoordinator = hass.data[DOMAIN][entry.entry_id]
-    async_add_entities([CooldownModeSwitch(coordinator, entry)])
+    async_add_entities([
+        CooldownModeSwitch(coordinator, entry),
+        AutoOnSwitch(coordinator, entry)
+    ])
 
 
 class CooldownModeSwitch(CoordinatorEntity, SwitchEntity):
@@ -60,4 +62,45 @@ class CooldownModeSwitch(CoordinatorEntity, SwitchEntity):
         return {
             "mô_tả": "Bật quạt 30 phút để giải nhiệt sau khi vận động",
             "chế_độ_hiện_tại": self.coordinator.data.get("current_mode"),
+        }
+
+
+class AutoOnSwitch(CoordinatorEntity, SwitchEntity):
+    """Switch bật/tắt tính năng tự động bật quạt theo nhiệt độ/hiện diện."""
+
+    _attr_icon = "mdi:fan-auto"
+
+    def __init__(self, coordinator: SmartFanCoordinator, entry: ConfigEntry) -> None:
+        super().__init__(coordinator)
+        self.entry = entry
+        self._attr_unique_id = f"{entry.entry_id}{SUFFIX_AUTO_ON_SWITCH}"
+        self._attr_has_entity_name = True
+        self._attr_translation_key = "auto_on_enabled"
+
+    @property
+    def device_info(self):
+        return {
+            "identifiers": {(DOMAIN, self.entry.entry_id)},
+            "name": self.entry.data.get("fan_name", "Smart Fan"),
+            "manufacturer": "Smart Fan Manager",
+            "model": "Fan Controller",
+        }
+
+    @property
+    def is_on(self) -> bool:
+        """Trả về True nếu tính năng tự động bật đang hoạt động."""
+        return self.coordinator.data.get("auto_on_enabled", True)
+
+    async def async_turn_on(self, **kwargs) -> None:
+        """Bật tính năng Auto-on."""
+        await self.coordinator.async_set_auto_on_enabled(True)
+
+    async def async_turn_off(self, **kwargs) -> None:
+        """Tắt tính năng Auto-on."""
+        await self.coordinator.async_set_auto_on_enabled(False)
+
+    @property
+    def extra_state_attributes(self) -> dict:
+        return {
+            "mô_tả": "Bật/Tắt chế độ tự động bật quạt khi quá nóng hoặc có người",
         }

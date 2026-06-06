@@ -18,7 +18,9 @@ from .const import (
     CONF_TEMP_SENSOR,
     CONF_HUMIDITY_SENSOR,
     CONF_AC_ENTITY,
+    CONF_PRESENCE_SENSOR,
     CONF_AUTO_ON_THRESHOLD,
+    CONF_AUTO_ON_ENABLED,
     DEFAULT_AUTO_ON_THRESHOLD,
     DEFAULT_SCAN_INTERVAL,
     MODE_TIMER,
@@ -51,6 +53,8 @@ class SmartFanCoordinator(DataUpdateCoordinator):
         self.temp_sensor: str = config[CONF_TEMP_SENSOR]
         self.humidity_sensor: str = config.get(CONF_HUMIDITY_SENSOR, "")
         self.ac_entity: str = config.get(CONF_AC_ENTITY, "")
+        self.presence_sensor: str = config.get(CONF_PRESENCE_SENSOR, "")
+        self.auto_on_enabled: bool = config.get(CONF_AUTO_ON_ENABLED, True)
         self.auto_on_threshold: float = config.get(
             CONF_AUTO_ON_THRESHOLD, DEFAULT_AUTO_ON_THRESHOLD
         )
@@ -115,18 +119,40 @@ class SmartFanCoordinator(DataUpdateCoordinator):
         self.muggy_index = round(HI, 1)
 
     async def _check_auto_on(self) -> None:
-        """Tự động bật quạt nếu chỉ số oi bức vượt ngưỡng."""
-        if self.muggy_index >= self.auto_on_threshold:
-            fan_state = self.hass.states.get(self.fan_entity)
-            if fan_state and fan_state.state == "off":
+        """Tự động bật/tắt quạt theo chỉ số oi bức và cảm biến hiện diện."""
+        if not self.auto_on_enabled:
+            return
+
+        fan_state = self.hass.states.get(self.fan_entity)
+        is_fan_on = fan_state is not None and fan_state.state != "off"
+
+        # Kiểm tra cảm biến hiện diện
+        presence = True
+        if self.presence_sensor:
+            p_state = self.hass.states.get(self.presence_sensor)
+            if p_state and p_state.state == "off":
+                presence = False
+
+        if self.muggy_index >= self.auto_on_threshold and presence:
+            if not is_fan_on:
                 _LOGGER.info(
-                    "Muggy index %.1f >= threshold %.1f — tự động bật %s",
+                    "Auto-on: Nhiệt độ %.1f >= %.1f và Có người -> Bật %s",
                     self.muggy_index,
                     self.auto_on_threshold,
                     self.fan_entity,
                 )
                 await self.hass.services.async_call(
                     "fan", "turn_on", {"entity_id": self.fan_entity}
+                )
+        elif not presence:
+            if is_fan_on:
+                _LOGGER.info(
+                    "Auto-off: Không có người -> Tắt %s", self.fan_entity
+                )
+                # Xoá timer nếu có
+                await self.async_cancel_timer()
+                await self.hass.services.async_call(
+                    "fan", "turn_off", {"entity_id": self.fan_entity}
                 )
 
     def _build_state(self) -> dict[str, Any]:
@@ -145,6 +171,7 @@ class SmartFanCoordinator(DataUpdateCoordinator):
             "current_mode": self.current_mode,
             "cooldown_active": self.cooldown_active,
             "auto_on_threshold": self.auto_on_threshold,
+            "auto_on_enabled": self.auto_on_enabled,
         }
 
     async def async_set_timer(self, minutes: int, mode: str = MODE_TIMER) -> None:
@@ -208,8 +235,20 @@ class SmartFanCoordinator(DataUpdateCoordinator):
         # Lưu vào options để persist
         self.hass.config_entries.async_update_entry(
             self.entry,
-            data={**self.entry.data, CONF_AUTO_ON_THRESHOLD: threshold},
+            options={**self.entry.options, CONF_AUTO_ON_THRESHOLD: threshold},
         )
+        await self.async_refresh()
+
+    async def async_set_auto_on_enabled(self, enabled: bool) -> None:
+        """Bật/tắt tính năng Auto-on."""
+        self.auto_on_enabled = enabled
+        self.hass.config_entries.async_update_entry(
+            self.entry,
+            options={**self.entry.options, CONF_AUTO_ON_ENABLED: enabled},
+        )
+        if enabled:
+            # Check ngay lập tức
+            await self._check_auto_on()
         await self.async_refresh()
 
     async def async_setup(self) -> None:
@@ -229,6 +268,19 @@ class SmartFanCoordinator(DataUpdateCoordinator):
                 self.hass, entities_to_watch, _sensor_changed
             )
         )
+
+        # Lắng nghe thay đổi cảm biến hiện diện
+        if self.presence_sensor:
+            @callback
+            def _presence_changed(event):
+                # Trigger cập nhật ngay lập tức để xử lý bật/tắt
+                self.hass.async_create_task(self.async_refresh())
+
+            self._unsub_listeners.append(
+                async_track_state_change_event(
+                    self.hass, [self.presence_sensor], _presence_changed
+                )
+            )
 
         # Lắng nghe thay đổi từ điều hòa (nếu có)
         if self.ac_entity:

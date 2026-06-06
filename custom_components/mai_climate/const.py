@@ -7,7 +7,9 @@ CONF_FAN_ENTITY = "fan_entity"
 CONF_TEMP_SENSOR = "temp_sensor"
 CONF_HUMIDITY_SENSOR = "humidity_sensor"
 CONF_AC_ENTITY = "ac_entity"
+CONF_PRESENCE_SENSOR = "presence_sensor"
 CONF_AUTO_ON_THRESHOLD = "auto_on_threshold"
+CONF_AUTO_ON_ENABLED = "auto_on_enabled"
 CONF_FAN_NAME = "fan_name"
 
 # Default values
@@ -45,6 +47,7 @@ MODE_ECO_COOLING = "eco_cooling" # Trộn gió 15p khi bật điều hòa
 SUFFIX_MUGGY_SENSOR = "_muggy_index"
 SUFFIX_TIMER_SENSOR = "_timer_remaining"
 SUFFIX_COOLDOWN_SWITCH = "_cooldown_mode"
+SUFFIX_AUTO_ON_SWITCH = "_auto_on_mode"
 SUFFIX_THRESHOLD_NUMBER = "_auto_on_threshold"
 SUFFIX_TIMER_SELECT = "_timer_preset"
 

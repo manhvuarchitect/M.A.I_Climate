@@ -73,6 +73,9 @@ def _fan_schema(defaults: dict = None) -> vol.Schema:
             selector.EntitySelectorConfig(domain="climate")
         )
 
+    auto_on_enabled = defaults.get(CONF_AUTO_ON_ENABLED, True)
+    schema[vol.Optional(CONF_AUTO_ON_ENABLED, default=auto_on_enabled)] = selector.BooleanSelector()
+
     presence_sensor = defaults.get(CONF_PRESENCE_SENSOR)
     if presence_sensor:
         schema[vol.Optional(CONF_PRESENCE_SENSOR, default=presence_sensor)] = selector.EntitySelector(
@@ -87,9 +90,6 @@ def _fan_schema(defaults: dict = None) -> vol.Schema:
     schema[vol.Optional(CONF_AUTO_ON_THRESHOLD, default=auto_on_threshold)] = selector.NumberSelector(
         selector.NumberSelectorConfig(min=25, max=60, step=0.5, unit_of_measurement="°C (HI)")
     )
-
-    auto_on_enabled = defaults.get(CONF_AUTO_ON_ENABLED, True)
-    schema[vol.Optional(CONF_AUTO_ON_ENABLED, default=auto_on_enabled)] = selector.BooleanSelector()
 
     return vol.Schema(schema)
 

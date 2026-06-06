@@ -12,7 +12,7 @@
           "presence_sensor": "Cảm biến hiện diện/chuyển động (tùy chọn)",
           "ac_entity": "Điều hòa (tùy chọn)",
           "auto_on_threshold": "Ngưỡng chỉ số oi bức tự động bật (°C Heat Index)",
-          "auto_on_enabled": "Bật/Tắt tính năng Tự động bật"
+          "auto_on_enabled": "—— TỰ ĐỘNG BẬT THEO NHIỆT ĐỘ —— (Bật/Tắt)"
         },
         "data_description": {
           "fan_name": "Tên hiển thị, ví dụ: Quạt phòng làm việc",
@@ -43,7 +43,7 @@
           "presence_sensor": "Cảm biến hiện diện/chuyển động",
           "ac_entity": "Điều hòa",
           "auto_on_threshold": "Ngưỡng tự động bật",
-          "auto_on_enabled": "Tự động bật quạt"
+          "auto_on_enabled": "—— TỰ ĐỘNG BẬT THEO NHIỆT ĐỘ —— (Bật/Tắt)"
         }
       }
     }

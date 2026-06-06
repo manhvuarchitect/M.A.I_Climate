@@ -12,7 +12,7 @@
           "presence_sensor": "Presence/Motion sensor (optional)",
           "ac_entity": "Air conditioner (optional)",
           "auto_on_threshold": "Auto-on heat index threshold (°C HI)",
-          "auto_on_enabled": "Enable Auto-on feature"
+          "auto_on_enabled": "—— AUTO-ON BY TEMPERATURE —— (Enable/Disable)"
         },
         "data_description": {
           "fan_name": "Display name, e.g. Work desk fan",
@@ -43,7 +43,7 @@
           "presence_sensor": "Presence/Motion sensor",
           "ac_entity": "Air conditioner",
           "auto_on_threshold": "Auto-on threshold",
-          "auto_on_enabled": "Auto-on Fan"
+          "auto_on_enabled": "—— AUTO-ON BY TEMPERATURE —— (Enable/Disable)"
         }
       }
     }

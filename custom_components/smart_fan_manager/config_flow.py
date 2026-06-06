@@ -18,33 +18,54 @@ from .const import (
 )
 
 
-def _fan_schema(defaults: dict = {}) -> vol.Schema:
+def _fan_schema(defaults: dict = None) -> vol.Schema:
     """Tạo schema form cấu hình quạt."""
-    return vol.Schema(
-        {
-            vol.Required(
-                CONF_FAN_NAME,
-                default=defaults.get(CONF_FAN_NAME, "Quạt phòng làm việc"),
-            ): str,
-            vol.Required(CONF_FAN_ENTITY): selector.EntitySelector(
-                selector.EntitySelectorConfig(domain="fan")
-            ),
-            vol.Required(CONF_TEMP_SENSOR): selector.EntitySelector(
-                selector.EntitySelectorConfig(domain="sensor", device_class="temperature")
-            ),
-            vol.Optional(CONF_HUMIDITY_SENSOR): selector.EntitySelector(
-                selector.EntitySelectorConfig(domain="sensor", device_class="humidity")
-            ),
-            vol.Optional(
-                CONF_AUTO_ON_THRESHOLD,
-                default=defaults.get(CONF_AUTO_ON_THRESHOLD, DEFAULT_AUTO_ON_THRESHOLD),
-            ): selector.NumberSelector(
-                selector.NumberSelectorConfig(
-                    min=25, max=60, step=0.5, unit_of_measurement="°C (HI)"
-                )
-            ),
-        }
+    if defaults is None:
+        defaults = {}
+
+    schema = {
+        vol.Required(
+            CONF_FAN_NAME,
+            default=defaults.get(CONF_FAN_NAME, "Quạt phòng làm việc"),
+        ): str,
+    }
+
+    fan_entity = defaults.get(CONF_FAN_ENTITY)
+    if fan_entity:
+        schema[vol.Required(CONF_FAN_ENTITY, default=fan_entity)] = selector.EntitySelector(
+            selector.EntitySelectorConfig(domain="fan")
+        )
+    else:
+        schema[vol.Required(CONF_FAN_ENTITY)] = selector.EntitySelector(
+            selector.EntitySelectorConfig(domain="fan")
+        )
+
+    temp_sensor = defaults.get(CONF_TEMP_SENSOR)
+    if temp_sensor:
+        schema[vol.Required(CONF_TEMP_SENSOR, default=temp_sensor)] = selector.EntitySelector(
+            selector.EntitySelectorConfig(domain="sensor", device_class="temperature")
+        )
+    else:
+        schema[vol.Required(CONF_TEMP_SENSOR)] = selector.EntitySelector(
+            selector.EntitySelectorConfig(domain="sensor", device_class="temperature")
+        )
+
+    humidity_sensor = defaults.get(CONF_HUMIDITY_SENSOR)
+    if humidity_sensor:
+        schema[vol.Optional(CONF_HUMIDITY_SENSOR, default=humidity_sensor)] = selector.EntitySelector(
+            selector.EntitySelectorConfig(domain="sensor", device_class="humidity")
+        )
+    else:
+        schema[vol.Optional(CONF_HUMIDITY_SENSOR)] = selector.EntitySelector(
+            selector.EntitySelectorConfig(domain="sensor", device_class="humidity")
+        )
+
+    auto_on_threshold = defaults.get(CONF_AUTO_ON_THRESHOLD, DEFAULT_AUTO_ON_THRESHOLD)
+    schema[vol.Optional(CONF_AUTO_ON_THRESHOLD, default=auto_on_threshold)] = selector.NumberSelector(
+        selector.NumberSelectorConfig(min=25, max=60, step=0.5, unit_of_measurement="°C (HI)")
     )
+
+    return vol.Schema(schema)
 
 
 class SmartFanManagerConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
@@ -99,10 +120,14 @@ class SmartFanManagerOptionsFlow(config_entries.OptionsFlow):
         errors = {}
 
         if user_input is not None:
+            # Lưu user_input vào options
             return self.async_create_entry(title="", data=user_input)
+
+        # Lấy dữ liệu hiện tại (ưu tiên options nếu đã từng sửa, nếu không dùng data ban đầu)
+        current_config = {**self.config_entry.data, **self.config_entry.options}
 
         return self.async_show_form(
             step_id="init",
-            data_schema=_fan_schema(defaults=self.config_entry.data),
+            data_schema=_fan_schema(defaults=current_config),
             errors=errors,
         )

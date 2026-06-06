@@ -11,14 +11,16 @@
           "humidity_sensor": "Cảm biến độ ẩm (tùy chọn)",
           "presence_sensor": "Cảm biến hiện diện/chuyển động (tùy chọn)",
           "ac_entity": "Điều hòa (tùy chọn)",
-          "auto_on_threshold": "Ngưỡng chỉ số oi bức tự động bật (°C Heat Index)"
+          "auto_on_threshold": "Ngưỡng chỉ số oi bức tự động bật (°C Heat Index)",
+          "auto_on_enabled": "Bật/Tắt tính năng Tự động bật"
         },
         "data_description": {
           "fan_name": "Tên hiển thị, ví dụ: Quạt phòng làm việc",
           "humidity_sensor": "Để tính chỉ số oi bức chính xác hơn. Nếu bỏ trống sẽ dùng 70% mặc định.",
           "presence_sensor": "Chỉ tự động bật quạt khi phát hiện có người ở nhà.",
           "ac_entity": "Liên kết điều hòa để quạt tự động luân chuyển gió khi bật/tắt máy lạnh.",
-          "auto_on_threshold": "Khi chỉ số oi bức vượt ngưỡng này, quạt tự bật. Mặc định: 38°C"
+          "auto_on_threshold": "Khi chỉ số oi bức vượt ngưỡng này, quạt tự bật. Mặc định: 38°C",
+          "auto_on_enabled": "Công tắc nhanh để bật hoặc vô hiệu hóa tính năng tự động bật/tắt."
         }
       }
     },
@@ -40,7 +42,8 @@
           "humidity_sensor": "Cảm biến độ ẩm",
           "presence_sensor": "Cảm biến hiện diện/chuyển động",
           "ac_entity": "Điều hòa",
-          "auto_on_threshold": "Ngưỡng tự động bật"
+          "auto_on_threshold": "Ngưỡng tự động bật",
+          "auto_on_enabled": "Tự động bật quạt"
         }
       }
     }

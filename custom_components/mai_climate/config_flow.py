@@ -14,6 +14,7 @@ from .const import (
     CONF_HUMIDITY_SENSOR,
     CONF_AC_ENTITY,
     CONF_PRESENCE_SENSOR,
+    CONF_AUTO_ON_ENABLED,
     CONF_AUTO_ON_THRESHOLD,
     CONF_FAN_NAME,
     DEFAULT_AUTO_ON_THRESHOLD,
@@ -86,6 +87,9 @@ def _fan_schema(defaults: dict = None) -> vol.Schema:
     schema[vol.Optional(CONF_AUTO_ON_THRESHOLD, default=auto_on_threshold)] = selector.NumberSelector(
         selector.NumberSelectorConfig(min=25, max=60, step=0.5, unit_of_measurement="°C (HI)")
     )
+
+    auto_on_enabled = defaults.get(CONF_AUTO_ON_ENABLED, True)
+    schema[vol.Optional(CONF_AUTO_ON_ENABLED, default=auto_on_enabled)] = selector.BooleanSelector()
 
     return vol.Schema(schema)
 

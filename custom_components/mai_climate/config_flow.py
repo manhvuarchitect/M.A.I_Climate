@@ -21,6 +21,10 @@ from .const import (
     DEFAULT_AUTO_ON_THRESHOLD,
     CONF_QUIET_HOURS_START,
     CONF_QUIET_HOURS_END,
+    CONF_SMART_SPEED_ENABLED,
+    CONF_SLEEP_MODE_ENABLED,
+    CONF_NATURAL_WIND_ENABLED,
+    CONF_QUIET_HOURS_ENABLED,
 )
 
 
@@ -96,6 +100,18 @@ def _fan_schema(defaults: dict = None) -> vol.Schema:
     schema[vol.Optional(CONF_AUTO_ON_THRESHOLD, default=auto_on_threshold)] = selector.NumberSelector(
         selector.NumberSelectorConfig(min=25, max=60, step=0.5, unit_of_measurement="°C (HI)")
     )
+
+    smart_speed_enabled = defaults.get(CONF_SMART_SPEED_ENABLED, False)
+    schema[vol.Optional(CONF_SMART_SPEED_ENABLED, default=smart_speed_enabled)] = selector.BooleanSelector()
+
+    sleep_mode_enabled = defaults.get(CONF_SLEEP_MODE_ENABLED, False)
+    schema[vol.Optional(CONF_SLEEP_MODE_ENABLED, default=sleep_mode_enabled)] = selector.BooleanSelector()
+
+    natural_wind_enabled = defaults.get(CONF_NATURAL_WIND_ENABLED, False)
+    schema[vol.Optional(CONF_NATURAL_WIND_ENABLED, default=natural_wind_enabled)] = selector.BooleanSelector()
+
+    quiet_hours_enabled = defaults.get(CONF_QUIET_HOURS_ENABLED, False)
+    schema[vol.Optional(CONF_QUIET_HOURS_ENABLED, default=quiet_hours_enabled)] = selector.BooleanSelector()
 
     quiet_hours_start = defaults.get(CONF_QUIET_HOURS_START, "23:00:00")
     schema[vol.Optional(CONF_QUIET_HOURS_START, default=quiet_hours_start)] = selector.TimeSelector()

@@ -13,7 +13,13 @@
           "ac_sync_enabled": "—— AC SYNC —— (Enable/Disable)",
           "ac_entity": "Air conditioner (optional)",
           "auto_on_threshold": "Auto-on heat index threshold (°C HI)",
-          "auto_on_enabled": "—— AUTO-ON BY TEMPERATURE —— (Enable/Disable)"
+          "auto_on_enabled": "—— AUTO-ON BY TEMPERATURE —— (Enable/Disable)",
+          "smart_speed_enabled": "—— SMART SPEED —— (Enable/Disable)",
+          "sleep_mode_enabled": "—— SLEEP MODE —— (Enable/Disable)",
+          "natural_wind_enabled": "—— NATURAL WIND —— (Enable/Disable)",
+          "quiet_hours_enabled": "—— QUIET HOURS —— (Enable/Disable)",
+          "quiet_hours_start": "Quiet hours start time",
+          "quiet_hours_end": "Quiet hours end time"
         },
         "data_description": {
           "fan_name": "Display name, e.g. Work desk fan",
@@ -22,7 +28,13 @@
           "ac_sync_enabled": "Quick toggle to enable or disable AC sync behavior.",
           "ac_entity": "Link an AC to this fan for smart climate synergy features.",
           "auto_on_threshold": "Fan turns on automatically when heat index exceeds this value. Default: 38°C",
-          "auto_on_enabled": "Quick toggle to enable or disable the auto-on behavior."
+          "auto_on_enabled": "Quick toggle to enable or disable the auto-on behavior.",
+          "smart_speed_enabled": "Automatically adjust fan speed based on heat index.",
+          "sleep_mode_enabled": "Gradually reduce fan speed (10% per hour) during sleep.",
+          "natural_wind_enabled": "Simulate natural wind by varying fan speed randomly.",
+          "quiet_hours_enabled": "Run fan at lowest speed during sleep hours.",
+          "quiet_hours_start": "Time when quiet hours begin",
+          "quiet_hours_end": "Time when quiet hours end"
         }
       }
     },
@@ -46,7 +58,13 @@
           "ac_sync_enabled": "—— AC SYNC —— (Enable/Disable)",
           "ac_entity": "Air conditioner",
           "auto_on_threshold": "Auto-on threshold",
-          "auto_on_enabled": "—— AUTO-ON BY TEMPERATURE —— (Enable/Disable)"
+          "auto_on_enabled": "—— AUTO-ON BY TEMPERATURE —— (Enable/Disable)",
+          "smart_speed_enabled": "—— SMART SPEED —— (Enable/Disable)",
+          "sleep_mode_enabled": "—— SLEEP MODE —— (Enable/Disable)",
+          "natural_wind_enabled": "—— NATURAL WIND —— (Enable/Disable)",
+          "quiet_hours_enabled": "—— QUIET HOURS —— (Enable/Disable)",
+          "quiet_hours_start": "Quiet hours start time",
+          "quiet_hours_end": "Quiet hours end time"
         }
       }
     }

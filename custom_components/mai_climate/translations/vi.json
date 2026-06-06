@@ -13,7 +13,13 @@
           "ac_sync_enabled": "—— ĐỒNG BỘ ĐIỀU HÒA —— (Bật/Tắt)",
           "ac_entity": "Điều hòa (tùy chọn)",
           "auto_on_threshold": "Ngưỡng chỉ số oi bức tự động bật (°C Heat Index)",
-          "auto_on_enabled": "—— TỰ ĐỘNG BẬT THEO NHIỆT ĐỘ —— (Bật/Tắt)"
+          "auto_on_enabled": "—— TỰ ĐỘNG BẬT THEO NHIỆT ĐỘ —— (Bật/Tắt)",
+          "smart_speed_enabled": "—— TỐC ĐỘ THÔNG MINH —— (Bật/Tắt)",
+          "sleep_mode_enabled": "—— CHẾ ĐỘ NGỦ —— (Bật/Tắt)",
+          "natural_wind_enabled": "—— GIÓ TỰ NHIÊN —— (Bật/Tắt)",
+          "quiet_hours_enabled": "—— KHUNG GIỜ YÊN TĨNH —— (Bật/Tắt)",
+          "quiet_hours_start": "Giờ bắt đầu yên tĩnh",
+          "quiet_hours_end": "Giờ kết thúc yên tĩnh"
         },
         "data_description": {
           "fan_name": "Tên hiển thị, ví dụ: Quạt phòng làm việc",
@@ -22,7 +28,13 @@
           "ac_sync_enabled": "Công tắc nhanh để bật hoặc vô hiệu hóa tính năng đồng bộ điều hòa.",
           "ac_entity": "Liên kết điều hòa để quạt tự động luân chuyển gió khi bật/tắt máy lạnh.",
           "auto_on_threshold": "Khi chỉ số oi bức vượt ngưỡng này, quạt tự bật. Mặc định: 38°C",
-          "auto_on_enabled": "Công tắc nhanh để bật hoặc vô hiệu hóa tính năng tự động bật/tắt."
+          "auto_on_enabled": "Công tắc nhanh để bật hoặc vô hiệu hóa tính năng tự động bật/tắt.",
+          "smart_speed_enabled": "Tự động điều chỉnh tốc độ quạt theo độ oi bức.",
+          "sleep_mode_enabled": "Giảm dần tốc độ quạt (10% mỗi giờ) để tránh lạnh về đêm.",
+          "natural_wind_enabled": "Mô phỏng luồng gió tự nhiên bằng cách thay đổi tốc độ ngẫu nhiên.",
+          "quiet_hours_enabled": "Chạy quạt ở mức gió nhẹ nhất trong thời gian ngủ.",
+          "quiet_hours_start": "Thời gian bắt đầu giờ yên tĩnh",
+          "quiet_hours_end": "Thời gian kết thúc giờ yên tĩnh"
         }
       }
     },
@@ -46,7 +58,13 @@
           "ac_sync_enabled": "—— ĐỒNG BỘ ĐIỀU HÒA —— (Bật/Tắt)",
           "ac_entity": "Điều hòa",
           "auto_on_threshold": "Ngưỡng tự động bật",
-          "auto_on_enabled": "—— TỰ ĐỘNG BẬT THEO NHIỆT ĐỘ —— (Bật/Tắt)"
+          "auto_on_enabled": "—— TỰ ĐỘNG BẬT THEO NHIỆT ĐỘ —— (Bật/Tắt)",
+          "smart_speed_enabled": "—— TỐC ĐỘ THÔNG MINH —— (Bật/Tắt)",
+          "sleep_mode_enabled": "—— CHẾ ĐỘ NGỦ —— (Bật/Tắt)",
+          "natural_wind_enabled": "—— GIÓ TỰ NHIÊN —— (Bật/Tắt)",
+          "quiet_hours_enabled": "—— KHUNG GIỜ YÊN TĨNH —— (Bật/Tắt)",
+          "quiet_hours_start": "Giờ bắt đầu yên tĩnh",
+          "quiet_hours_end": "Giờ kết thúc yên tĩnh"
         }
       }
     }

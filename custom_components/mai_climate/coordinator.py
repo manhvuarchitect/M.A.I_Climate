@@ -36,6 +36,10 @@ from .const import (
     CONF_QUIET_HOURS_ENABLED,
     CONF_QUIET_HOURS_START,
     CONF_QUIET_HOURS_END,
+    CONF_SPEED_1_ENTITY,
+    CONF_SPEED_2_ENTITY,
+    CONF_SPEED_3_ENTITY,
+    CONF_SPEED_4_ENTITY,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -73,6 +77,10 @@ class SmartFanCoordinator(DataUpdateCoordinator):
         self.quiet_hours_enabled: bool = config.get(CONF_QUIET_HOURS_ENABLED, False)
         self.quiet_hours_start: str = config.get(CONF_QUIET_HOURS_START, "23:00:00")
         self.quiet_hours_end: str = config.get(CONF_QUIET_HOURS_END, "06:00:00")
+        self.speed_1_entity: str | None = config.get(CONF_SPEED_1_ENTITY)
+        self.speed_2_entity: str | None = config.get(CONF_SPEED_2_ENTITY)
+        self.speed_3_entity: str | None = config.get(CONF_SPEED_3_ENTITY)
+        self.speed_4_entity: str | None = config.get(CONF_SPEED_4_ENTITY)
 
         # State
         self.muggy_index: float = 0.0
@@ -349,9 +357,33 @@ class SmartFanCoordinator(DataUpdateCoordinator):
             target_pct = 10
 
         if target_pct is not None and target_pct != current_pct:
+            await self._async_set_fan_speed(target_pct)
+
+    async def _async_set_fan_speed(self, percentage: int) -> None:
+        """Quy đổi % tốc độ ra nút bấm tương ứng nếu có."""
+        target_entity = None
+        
+        # Chọn nút bấm dựa trên %
+        if percentage < 35:
+            target_entity = self.speed_1_entity
+        elif percentage < 65:
+            target_entity = self.speed_2_entity
+        elif percentage < 85:
+            target_entity = self.speed_3_entity
+        else:
+            target_entity = self.speed_4_entity if self.speed_4_entity else self.speed_3_entity
+
+        if target_entity:
+            # Nếu có gán entity nút bấm, gọi homeassistant.turn_on
+            _LOGGER.info("Gán tốc độ quạt: gọi entity %s thay vì set_percentage", target_entity)
+            await self.hass.services.async_call(
+                "homeassistant", "turn_on", {"entity_id": target_entity}
+            )
+        else:
+            # Nếu không gán nút, gọi fan.set_percentage
             await self.hass.services.async_call(
                 "fan", "set_percentage", 
-                {"entity_id": self.fan_entity, "percentage": target_pct}
+                {"entity_id": self.fan_entity, "percentage": percentage}
             )
 
     async def async_set_ac_sync_enabled(self, enabled: bool) -> None:

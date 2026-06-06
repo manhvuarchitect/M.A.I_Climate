@@ -12,7 +12,11 @@ Quản lý quạt thông minh trong Home Assistant: hẹn giờ, chỉ số oi b
 | ⏱️ Hẹn giờ thông minh | Preset 15/30/45/60/90/120 phút, chọn qua UI dropdown |
 | 🔄 Auto-on | Tự bật quạt khi chỉ số oi bức vượt ngưỡng tùy chỉnh |
 | 🏃 Giải nhiệt vận động | Bật quạt 30 phút sau khi tập thể dục, tự tắt |
-| 📱 Bubble Card | Template card sẵn sàng dùng với Bubble Card |
+| 🎛️ Tốc độ thông minh | Tự thay đổi % tốc độ quạt theo độ oi bức (>40°C: 100%, <35°C: 33%) |
+| 🌙 Chế độ ngủ | Tự động giảm tốc độ 10% mỗi giờ để tránh cảm lạnh ban đêm |
+| 🍃 Gió tự nhiên | Tạo luồng gió ngẫu nhiên tốt cho sức khỏe |
+| 🤫 Khung giờ yên tĩnh | Quạt chỉ bật mức thấp nhất trong thời gian ngủ |
+| 📱 Custom Card | Có sẵn Lovelace card riêng biệt (`mai-climate-card`) cực đẹp |
 | 🔁 Nhân rộng | Thêm bao nhiêu quạt cũng được, không cần viết code |
 
 ---
@@ -55,8 +59,34 @@ Với mỗi quạt, integration tự tạo 4 entity:
 sensor.tên_quạt_muggy_index            # Heat Index hiện tại (°C)
 sensor.tên_quạt_timer_remaining        # Giây còn lại của timer
 switch.tên_quạt_cooldown_mode          # Bật/tắt chế độ 30 phút
+switch.tên_quạt_auto_on_mode           # Bật/tắt chế độ tự động bật
+switch.tên_quạt_smart_speed_enabled    # Tốc độ thông minh (Auto Speed)
+switch.tên_quạt_sleep_mode_enabled     # Chế độ ngủ (Sleep Mode)
+switch.tên_quạt_natural_wind_enabled   # Gió tự nhiên (Natural Wind)
+switch.tên_quạt_quiet_hours_enabled    # Khung giờ yên tĩnh (Quiet Hours)
 number.tên_quạt_auto_on_threshold      # Ngưỡng auto-on (25-60°C)
 select.tên_quạt_timer_preset           # Chọn preset timer
+```
+
+---
+
+## 🎨 Hướng dẫn sử dụng Custom Card (`mai-climate-card`)
+
+M.A.I Climate đi kèm một giao diện Custom Card tích hợp sẵn, không cần tải thêm qua HACS Frontend.
+
+**Bước 1: Thêm Resource vào Lovelace**
+1. Mở Home Assistant -> **Settings** -> **Dashboards**
+2. Nhấn vào dấu **⋮** ở góc trên -> chọn **Resources**
+3. Nhấn **Add Resource**
+4. URL: `/mai_climate_card/mai-climate-card.js`
+5. Resource Type: `JavaScript Module` -> Lưu lại.
+
+**Bước 2: Thêm thẻ vào Dashboard**
+1. Mở Dashboard -> **Edit Dashboard** -> **Add Card** -> **Manual**
+2. Nhập code sau:
+```yaml
+type: custom:mai-climate-card
+entity: fan.ten_quat_cua_ban
 ```
 
 ---

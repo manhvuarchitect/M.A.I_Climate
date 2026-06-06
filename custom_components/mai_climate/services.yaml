@@ -1,10 +1,14 @@
 set_timer:
   name: Đặt hẹn giờ tắt quạt
   description: Bật quạt và đặt timer tắt sau N phút. Timer cũ sẽ bị hủy.
-  target:
-    entity:
-      domain: fan
   fields:
+    entity_id:
+      name: Quạt (Fan)
+      description: Chọn entity quạt của bạn
+      required: true
+      selector:
+        entity:
+          domain: fan
     minutes:
       name: Số phút
       description: Quạt sẽ tự tắt sau số phút này
@@ -30,18 +34,26 @@ set_timer:
 cancel_timer:
   name: Hủy hẹn giờ
   description: Hủy timer đang chạy. Quạt vẫn tiếp tục bật, chỉ hủy lịch tắt.
-  target:
-    entity:
-      domain: fan
-  fields: {}
+  fields:
+    entity_id:
+      name: Quạt (Fan)
+      description: Chọn entity quạt cần hủy timer
+      required: true
+      selector:
+        entity:
+          domain: fan
 
 set_mode:
   name: Đặt chế độ hoạt động
   description: Chuyển chế độ và bật quạt
-  target:
-    entity:
-      domain: fan
   fields:
+    entity_id:
+      name: Quạt (Fan)
+      description: Chọn entity quạt
+      required: true
+      selector:
+        entity:
+          domain: fan
     mode:
       name: Chế độ
       description: cooldown = giải nhiệt 30 phút, timer = hẹn giờ tùy chỉnh

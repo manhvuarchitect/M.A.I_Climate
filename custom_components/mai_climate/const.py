@@ -45,6 +45,15 @@ CONF_AUTO_BOOST_ENABLED = "auto_boost_enabled"
 CONF_KITCHEN_SYNC_ENABLED = "kitchen_sync_enabled"
 CONF_STRICT_QUIET_HOURS_ENABLED = "strict_quiet_hours_enabled"
 
+# Ventilator specific keys
+CONF_VENT_NAME = "vent_name"
+CONF_VENT_ENTITY = "vent_entity"
+CONF_BATHROOM_SENSOR = "bathroom_sensor"
+CONF_VENT_HUMIDITY_SENSOR = "vent_humidity_sensor"
+CONF_ODOR_CONTROL_ENABLED = "odor_control_enabled"
+CONF_VENT_AUTO_DRY_ENABLED = "vent_auto_dry_enabled"
+CONF_ROUTINE_AIR_SYNC_ENABLED = "routine_air_sync_enabled"
+
 # Default values
 DEFAULT_AUTO_ON_THRESHOLD = 38  # Chỉ số oi bức tự động bật quạt
 DEFAULT_AUTO_OFF_THRESHOLD = 37.0

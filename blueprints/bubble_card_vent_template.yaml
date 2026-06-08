@@ -1,0 +1,79 @@
+# ===========================================================================
+# BUBBLE CARD TEMPLATE — Quạt thông gió (M.A.I Climate)
+# Thay ENTRY_ID bằng entry_id thực tế của quạt thông gió (xem Developer Tools > States)
+# Thay VENT_ENTITY bằng entity_id quạt, ví dụ: fan.quat_hut_mui_phong_tam
+# ===========================================================================
+
+type: custom:bubble-card
+card_type: pop-up
+hash: "#popup_vent_ENTRY_ID"
+entity: VENT_ENTITY
+name: Quạt thông gió
+button_type: state
+show_previous_button: true
+buttons_position: right
+sub_button:
+  - name: Tắt ngay
+    icon: mdi:power
+    tap_action:
+      action: call-service
+      service: fan.turn_off
+      data:
+        entity_id: VENT_ENTITY
+cards:
+  - type: vertical-stack
+    cards:
+      # 1. Điều khiển tốc độ (nếu có)
+      - type: custom:mushroom-fan-card
+        entity: VENT_ENTITY
+        show_percentage_control: true
+        layout: horizontal
+
+      # 2. Chips trạng thái
+      - type: custom:mushroom-chips-card
+        alignment: center
+        chips:
+          # Trạng thái quạt
+          - type: template
+            content: >
+              {% if is_state('VENT_ENTITY', 'off') %} Đã tắt {%
+              else %} Đang thông gió {% endif %}
+            icon: mdi:fan-chevron-up
+            icon_color: "{{ 'cyan' if not is_state('VENT_ENTITY', 'off') else 'grey' }}"
+
+      # 3. Tính năng thông minh (Công tắc)
+      - type: grid
+        columns: 2
+        square: false
+        cards:
+          # Khử mùi phòng tắm
+          - type: custom:mushroom-entity-card
+            entity: switch.TÊN_QUẠT_THÔNG_GIÓ_odor_control
+            name: Khử mùi phòng tắm
+            icon: mdi:air-purifier
+            tap_action:
+              action: toggle
+
+          # Hút ẩm tự động
+          - type: custom:mushroom-entity-card
+            entity: switch.TÊN_QUẠT_THÔNG_GIÓ_auto_dry
+            name: Hút ẩm tự động
+            icon: mdi:water-percent
+            tap_action:
+              action: toggle
+
+          # Lưu thông khí định kỳ
+          - type: custom:mushroom-entity-card
+            entity: switch.TÊN_QUẠT_THÔNG_GIÓ_routine_sync
+            name: Lưu thông định kỳ
+            icon: mdi:clock-outline
+            tap_action:
+              action: toggle
+
+styles: |
+  .bubble-icon-container {
+    animation: ${state !== 'off' ? 'spin 2s linear infinite' : 'none'} !important;
+  }
+  @keyframes spin {
+    100% { transform: rotate(360deg); }
+  }

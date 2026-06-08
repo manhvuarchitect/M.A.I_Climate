@@ -19,6 +19,7 @@ from .const import (
     DEVICE_TYPE_FAN,
     DEVICE_TYPE_AC,
     DEVICE_TYPE_PURIFIER,
+    DEVICE_TYPE_VENTILATOR,
     ICON_COOLDOWN, 
     SUFFIX_COOLDOWN_SWITCH, 
     SUFFIX_AUTO_ON_SWITCH,
@@ -77,6 +78,17 @@ async def async_setup_entry(
             AutoBoostSwitch(coordinator, entry),
             KitchenSyncSwitch(coordinator, entry),
             StrictQuietHoursSwitch(coordinator, entry),
+        ])
+    elif device_type == DEVICE_TYPE_VENTILATOR:
+        from .switch_vent import (
+            OdorControlSwitch,
+            VentAutoDrySwitch,
+            RoutineAirSyncSwitch,
+        )
+        switches.extend([
+            OdorControlSwitch(coordinator, entry),
+            VentAutoDrySwitch(coordinator, entry),
+            RoutineAirSyncSwitch(coordinator, entry),
         ])
 
     if switches:

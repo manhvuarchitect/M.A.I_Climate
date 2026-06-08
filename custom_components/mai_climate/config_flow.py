@@ -49,6 +49,13 @@ from .const import (
     CONF_AUTO_BOOST_ENABLED,
     CONF_KITCHEN_SYNC_ENABLED,
     CONF_STRICT_QUIET_HOURS_ENABLED,
+    CONF_VENT_NAME,
+    CONF_VENT_ENTITY,
+    CONF_BATHROOM_SENSOR,
+    CONF_VENT_HUMIDITY_SENSOR,
+    CONF_ODOR_CONTROL_ENABLED,
+    CONF_VENT_AUTO_DRY_ENABLED,
+    CONF_ROUTINE_AIR_SYNC_ENABLED,
     DEVICE_TYPE_FAN,
     DEVICE_TYPE_AC,
     DEVICE_TYPE_PURIFIER,
@@ -88,7 +95,7 @@ class SmartFanManagerConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             elif user_input[CONF_DEVICE_TYPE] == DEVICE_TYPE_PURIFIER:
                 return await self.async_step_purifier_setup()
             elif user_input[CONF_DEVICE_TYPE] == DEVICE_TYPE_VENTILATOR:
-                errors["base"] = "not_implemented_yet"
+                return await self.async_step_vent_setup()
 
             if not errors:
                 return await self.async_step_fan_setup()
@@ -352,6 +359,58 @@ class SmartFanManagerConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             errors=errors,
         )
 
+    # --- SETUP FLOW CHO QUẠT THÔNG GIÓ (VENTILATOR) ---
+    async def async_step_vent_setup(self, user_input=None):
+        """Bước 1/2 (Quạt thông gió): Thiết lập cơ bản & Cảm biến."""
+        errors = {}
+
+        if user_input is not None:
+            vent_state = self.hass.states.get(user_input[CONF_VENT_ENTITY])
+            if vent_state is None:
+                errors[CONF_VENT_ENTITY] = "entity_not_found"
+            else:
+                await self.async_set_unique_id(user_input[CONF_VENT_ENTITY])
+                self._abort_if_unique_id_configured()
+
+                self._setup_data.update(user_input)
+                return await self.async_step_vent_advanced()
+
+        schema = {
+            vol.Required(CONF_VENT_NAME, default="Quạt thông gió"): str,
+            vol.Required(CONF_VENT_ENTITY): get_entity_selector("fan"),
+            vol.Optional(CONF_BATHROOM_SENSOR): get_entity_selector("binary_sensor", "motion"),
+            vol.Optional(CONF_VENT_HUMIDITY_SENSOR): get_entity_selector("sensor", "humidity"),
+        }
+
+        return self.async_show_form(
+            step_id="vent_setup",
+            data_schema=vol.Schema(schema),
+            errors=errors,
+        )
+
+    async def async_step_vent_advanced(self, user_input=None):
+        """Bước 2/2 (Quạt thông gió): Tính năng thông minh."""
+        errors = {}
+
+        if user_input is not None:
+            self._setup_data.update(user_input)
+            return self.async_create_entry(
+                title=self._setup_data[CONF_VENT_NAME],
+                data=self._setup_data,
+            )
+
+        schema = {
+            vol.Optional(CONF_ODOR_CONTROL_ENABLED, default=True): selector.BooleanSelector(),
+            vol.Optional(CONF_VENT_AUTO_DRY_ENABLED, default=True): selector.BooleanSelector(),
+            vol.Optional(CONF_ROUTINE_AIR_SYNC_ENABLED, default=False): selector.BooleanSelector(),
+        }
+
+        return self.async_show_form(
+            step_id="vent_advanced",
+            data_schema=vol.Schema(schema),
+            errors=errors,
+        )
+
     @staticmethod
     @callback
     def async_get_options_flow(config_entry):
@@ -371,6 +430,8 @@ class SmartFanManagerOptionsFlow(config_entries.OptionsFlow):
             return await self.async_step_ac_setup()
         elif device_type == DEVICE_TYPE_PURIFIER:
             return await self.async_step_purifier_setup()
+        elif device_type == DEVICE_TYPE_VENTILATOR:
+            return await self.async_step_vent_setup()
         return await self.async_step_user()
 
     # --- OPTIONS FLOW CHO QUẠT (FAN) ---
@@ -612,3 +673,47 @@ class SmartFanManagerOptionsFlow(config_entries.OptionsFlow):
         })
 
         return self.async_show_form(step_id="purifier_advanced", data_schema=vol.Schema(schema))
+
+    # --- OPTIONS FLOW CHO QUẠT THÔNG GIÓ (VENTILATOR) ---
+    async def async_step_vent_setup(self, user_input=None):
+        """Bước 1/2 (Options Quạt thông gió): Thiết lập cơ bản."""
+        if user_input is not None:
+            self._options.update(user_input)
+            return await self.async_step_vent_advanced()
+
+        defaults = self._current_config
+        schema = {
+            vol.Required(CONF_VENT_NAME, default=defaults.get(CONF_VENT_NAME, "Quạt thông gió")): str,
+        }
+        
+        entity = defaults.get(CONF_VENT_ENTITY)
+        schema[vol.Required(CONF_VENT_ENTITY, default=entity)] = get_entity_selector("fan")
+
+        bathroom = defaults.get(CONF_BATHROOM_SENSOR)
+        if bathroom:
+            schema[vol.Optional(CONF_BATHROOM_SENSOR, default=bathroom)] = get_entity_selector("binary_sensor", "motion")
+        else:
+            schema[vol.Optional(CONF_BATHROOM_SENSOR)] = get_entity_selector("binary_sensor", "motion")
+
+        humidity = defaults.get(CONF_VENT_HUMIDITY_SENSOR)
+        if humidity:
+            schema[vol.Optional(CONF_VENT_HUMIDITY_SENSOR, default=humidity)] = get_entity_selector("sensor", "humidity")
+        else:
+            schema[vol.Optional(CONF_VENT_HUMIDITY_SENSOR)] = get_entity_selector("sensor", "humidity")
+
+        return self.async_show_form(step_id="vent_setup", data_schema=vol.Schema(schema))
+
+    async def async_step_vent_advanced(self, user_input=None):
+        """Bước 2/2 (Options Quạt thông gió): Tính năng thông minh."""
+        if user_input is not None:
+            self._options.update(user_input)
+            return self.async_create_entry(title="", data=self._options)
+
+        defaults = self._current_config
+        schema = {
+            vol.Optional(CONF_ODOR_CONTROL_ENABLED, default=defaults.get(CONF_ODOR_CONTROL_ENABLED, True)): selector.BooleanSelector(),
+            vol.Optional(CONF_VENT_AUTO_DRY_ENABLED, default=defaults.get(CONF_VENT_AUTO_DRY_ENABLED, True)): selector.BooleanSelector(),
+            vol.Optional(CONF_ROUTINE_AIR_SYNC_ENABLED, default=defaults.get(CONF_ROUTINE_AIR_SYNC_ENABLED, False)): selector.BooleanSelector(),
+        }
+
+        return self.async_show_form(step_id="vent_advanced", data_schema=vol.Schema(schema))

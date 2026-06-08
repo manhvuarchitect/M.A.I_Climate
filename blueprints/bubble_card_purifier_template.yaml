@@ -1,0 +1,86 @@
+# ===========================================================================
+# BUBBLE CARD TEMPLATE — Máy lọc không khí (M.A.I Climate)
+# Thay ENTRY_ID bằng entry_id thực tế của máy lọc (xem Developer Tools > States)
+# Thay PURIFIER_ENTITY bằng entity_id máy lọc, ví dụ: fan.may_loc_khong_khi
+# ===========================================================================
+
+type: custom:bubble-card
+card_type: pop-up
+hash: "#popup_purifier_ENTRY_ID"
+entity: PURIFIER_ENTITY
+name: Máy lọc không khí
+button_type: state
+show_previous_button: true
+buttons_position: right
+sub_button:
+  - name: Tắt ngay
+    icon: mdi:power
+    tap_action:
+      action: call-service
+      service: fan.turn_off
+      data:
+        entity_id: PURIFIER_ENTITY
+cards:
+  - type: vertical-stack
+    cards:
+      # 1. Điều khiển tốc độ
+      - type: custom:mushroom-fan-card
+        entity: PURIFIER_ENTITY
+        show_percentage_control: true
+        show_oscillate_control: false
+        layout: horizontal
+
+      # 2. Chips trạng thái
+      - type: custom:mushroom-chips-card
+        alignment: center
+        chips:
+          # Trạng thái máy lọc
+          - type: template
+            content: >
+              {% if is_state('PURIFIER_ENTITY', 'off') %} Đã tắt {%
+              else %} Đang lọc {% endif %}
+            icon: mdi:air-purifier
+            icon_color: "{{ 'green' if not is_state('PURIFIER_ENTITY', 'off') else 'grey' }}"
+          
+          # Nồng độ PM2.5 (Nếu có cấu hình)
+          - type: entity
+            entity: sensor.pm25_sensor_entity_id_cua_ban
+            icon: mdi:molecule
+            icon_color: blue
+
+      # 3. Tính năng thông minh (Công tắc)
+      - type: grid
+        columns: 2
+        square: false
+        cards:
+          # Auto Boost
+          - type: custom:mushroom-entity-card
+            entity: switch.TÊN_MÁY_LỌC_auto_boost
+            name: Tăng tốc tự động
+            icon: mdi:air-filter
+            tap_action:
+              action: toggle
+
+          # Kitchen Sync
+          - type: custom:mushroom-entity-card
+            entity: switch.TÊN_MÁY_LỌC_kitchen_sync
+            name: Đồng bộ bếp
+            icon: mdi:pot-steam
+            tap_action:
+              action: toggle
+
+          # Strict Quiet Hours
+          - type: custom:mushroom-entity-card
+            entity: switch.TÊN_MÁY_LỌC_strict_quiet
+            name: Giờ yên tĩnh tuyệt đối
+            icon: mdi:volume-off
+            tap_action:
+              action: toggle
+
+styles: |
+  .bubble-icon-container {
+    animation: ${state !== 'off' ? 'spin 3s linear infinite' : 'none'} !important;
+  }
+  @keyframes spin {
+    100% { transform: rotate(360deg); }
+  }

@@ -35,6 +35,16 @@ CONF_WINDOW_GUARD_ENABLED = "window_guard_enabled"
 CONF_ECO_LEAVE_ENABLED = "eco_leave_enabled"
 CONF_AUTO_DRY_ENABLED = "auto_dry_enabled"
 
+# Purifier specific keys
+CONF_PURIFIER_NAME = "purifier_name"
+CONF_PURIFIER_ENTITY = "purifier_entity"
+CONF_PM25_SENSOR = "pm25_sensor"
+CONF_VOC_SENSOR = "voc_sensor"
+CONF_KITCHEN_SENSOR = "kitchen_sensor"
+CONF_AUTO_BOOST_ENABLED = "auto_boost_enabled"
+CONF_KITCHEN_SYNC_ENABLED = "kitchen_sync_enabled"
+CONF_STRICT_QUIET_HOURS_ENABLED = "strict_quiet_hours_enabled"
+
 # Default values
 DEFAULT_AUTO_ON_THRESHOLD = 38  # Chỉ số oi bức tự động bật quạt
 DEFAULT_AUTO_OFF_THRESHOLD = 37.0

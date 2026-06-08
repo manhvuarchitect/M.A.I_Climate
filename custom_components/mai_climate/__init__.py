@@ -12,7 +12,7 @@ from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryNotReady
 
-from .const import DOMAIN, CONF_DEVICE_TYPE, DEVICE_TYPE_FAN, DEVICE_TYPE_AC
+from .const import DOMAIN, CONF_DEVICE_TYPE, DEVICE_TYPE_FAN, DEVICE_TYPE_AC, DEVICE_TYPE_PURIFIER
 from .coordinator import SmartFanCoordinator
 from .services import async_setup_services, async_unload_services
 
@@ -60,6 +60,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     elif device_type == DEVICE_TYPE_AC:
         from .coordinator_ac import SmartACCoordinator
         coordinator = SmartACCoordinator(hass, entry)
+    elif device_type == DEVICE_TYPE_PURIFIER:
+        from .coordinator_purifier import SmartPurifierCoordinator
+        coordinator = SmartPurifierCoordinator(hass, entry)
     else:
         _LOGGER.error("Loại thiết bị không được hỗ trợ: %s", device_type)
         return False
@@ -114,7 +117,9 @@ async def async_update_options(hass: HomeAssistant, entry: ConfigEntry) -> None:
         
         core_keys = [
             "fan_entity", "temp_sensor", "humidity_sensor", 
-            "presence_sensor", "ac_entity"
+            "presence_sensor", "ac_entity",
+            "purifier_entity", "pm25_sensor", "voc_sensor", "kitchen_sensor",
+            "window_sensor"
         ]
         
         for key in core_keys:

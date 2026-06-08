@@ -162,16 +162,11 @@ class SmartFanManagerConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     @staticmethod
     @callback
     def async_get_options_flow(config_entry):
-        return SmartFanManagerOptionsFlow(config_entry)
+        return SmartFanManagerOptionsFlow()
 
 
 class SmartFanManagerOptionsFlow(config_entries.OptionsFlow):
     """Options Flow — chỉnh sửa cấu hình quạt đã thêm (4 bước)."""
-
-    def __init__(self, config_entry: config_entries.ConfigEntry) -> None:
-        self.config_entry = config_entry
-        self._options: dict[str, Any] = {}
-        self._current_config: dict[str, Any] = {}
 
     async def async_step_init(self, user_input=None):
         """Khởi động Options Flow, chuyển tới Bước 1."""

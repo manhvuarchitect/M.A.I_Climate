@@ -28,6 +28,7 @@ CONF_QUIET_HOURS_END = "quiet_hours_end"
 
 # Default values
 DEFAULT_AUTO_ON_THRESHOLD = 38  # Chỉ số oi bức tự động bật quạt
+DEFAULT_AUTO_OFF_THRESHOLD = 37.0
 DEFAULT_SCAN_INTERVAL = 30       # Giây
 
 # Timer presets (phút)

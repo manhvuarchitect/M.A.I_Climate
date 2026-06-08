@@ -1,0 +1,115 @@
+# ===========================================================================
+# BUBBLE CARD TEMPLATE — Điều hòa thông minh (M.A.I Climate)
+# Thay ENTRY_ID bằng entry_id thực tế của điều hòa (xem Developer Tools > States)
+# Thay AC_ENTITY bằng entity_id điều hòa, ví dụ: climate.dieu_hoa_phong_ngu
+# ===========================================================================
+#
+# Cách tìm ENTRY_ID:
+#   Settings > Devices & Services > M.A.I Climate > [Tên điều hòa] > Entry ID
+#
+# Cách dùng cho nhiều điều hòa:
+#   Copy toàn bộ block này, chỉ thay ENTRY_ID và AC_ENTITY
+
+type: custom:bubble-card
+card_type: pop-up
+hash: "#popup_ac_ENTRY_ID"
+entity: AC_ENTITY
+name: Quản lý Điều hòa
+button_type: state
+show_previous_button: true
+buttons_position: right
+sub_button:
+  - name: Tắt ngay
+    icon: mdi:power
+    tap_action:
+      action: call-service
+      service: climate.turn_off
+      data:
+        entity_id: AC_ENTITY
+cards:
+  - type: vertical-stack
+    cards:
+      # 1. Điều khiển nhiệt độ và chế độ cơ bản
+      - type: custom:mushroom-climate-card
+        entity: AC_ENTITY
+        show_temperature_control: true
+        collapsible_controls: false
+        hvac_modes:
+          - cool
+          - dry
+          - fan_only
+          - heat
+          - off
+        layout: horizontal
+
+      # 2. Chips trạng thái
+      - type: custom:mushroom-chips-card
+        alignment: center
+        chips:
+          # Trạng thái điều hòa
+          - type: template
+            content: >
+              {% if is_state('AC_ENTITY', 'off') %} Đã tắt {%
+              else %} Đang bật {% endif %}
+            icon: mdi:air-conditioner
+            icon_color: "{{ 'blue' if not is_state('AC_ENTITY', 'off') else 'grey' }}"
+          
+          # Nhiệt độ hiện tại
+          - type: entity
+            entity: AC_ENTITY
+            attribute: current_temperature
+            icon: mdi:thermometer
+            icon_color: red
+          
+          # Chế độ hiện tại
+          - type: template
+            content: "{{ states('AC_ENTITY') | title }}"
+            icon: mdi:hvac
+            icon_color: orange
+
+      # 3. Tính năng thông minh (Công tắc)
+      - type: grid
+        columns: 2
+        square: false
+        cards:
+          # Smart Sleep Curve
+          - type: custom:mushroom-entity-card
+            entity: switch.TÊN_ĐIỀU_HÒA_smart_sleep
+            name: Ngủ sâu
+            icon: mdi:bed-temperature
+            tap_action:
+              action: toggle
+
+          # Window Guard
+          - type: custom:mushroom-entity-card
+            entity: switch.TÊN_ĐIỀU_HÒA_window_guard
+            name: Chống thoát nhiệt
+            icon: mdi:window-open-variant
+            tap_action:
+              action: toggle
+
+          # Eco Leave
+          - type: custom:mushroom-entity-card
+            entity: switch.TÊN_ĐIỀU_HÒA_eco_leave
+            name: Vắng mặt tiết kiệm
+            icon: mdi:motion-sensor-off
+            tap_action:
+              action: toggle
+
+          # Auto Dry
+          - type: custom:mushroom-entity-card
+            entity: switch.TÊN_ĐIỀU_HÒA_auto_dry
+            name: Hút ẩm thông minh
+            icon: mdi:water-percent-alert
+            tap_action:
+              action: toggle
+
+styles: |
+  .bubble-icon-container {
+    animation: ${state !== 'off' ? 'pulse 2s infinite' : 'none'} !important;
+  }
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }

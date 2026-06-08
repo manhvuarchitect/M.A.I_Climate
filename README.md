@@ -10,14 +10,17 @@ Quản lý thiết bị khí hậu thông minh trong Home Assistant: hẹn giờ
 |-----------|-------|
 | 🌡️ Chỉ số oi bức | Tính Heat Index từ nhiệt độ + độ ẩm, hiển thị qua sensor |
 | ⏱️ Hẹn giờ thông minh | Preset 15/30/45/60/90/120 phút, chọn qua UI dropdown |
-| 🔄 Auto-on | Tự bật quạt khi chỉ số oi bức vượt ngưỡng tùy chỉnh |
+| 🔄 Auto-on | Tự bật thiết bị khi chỉ số oi bức vượt ngưỡng tùy chỉnh |
 | 🏃 Giải nhiệt vận động | Bật quạt 30 phút sau khi tập thể dục, tự tắt |
 | 🎛️ Tốc độ thông minh | Tự thay đổi % tốc độ quạt theo độ oi bức (>40°C: 100%, <35°C: 33%) |
-| 🌙 Chế độ ngủ | Tự động giảm tốc độ 10% mỗi giờ để tránh cảm lạnh ban đêm |
+| 🌙 Ngủ sâu (Điều hòa & Quạt) | Tự động tăng 1°C mỗi 2h hoặc giảm tốc độ quạt để tránh lạnh buốt ban đêm |
+| 🚪 Chống thoát nhiệt (AC) | Tự tắt điều hòa khi mở cửa sổ quá 3 phút |
+| 🏃‍♂️ Vắng mặt tiết kiệm (AC) | Tự tắt điều hòa khi không có người quá 15 phút |
+| 💧 Hút ẩm tự động (AC) | Tự động chuyển qua Dry khi độ ẩm > 80% |
 | 🍃 Gió tự nhiên | Tạo luồng gió ngẫu nhiên tốt cho sức khỏe |
 | 🤫 Khung giờ yên tĩnh | Quạt chỉ bật mức thấp nhất trong thời gian ngủ |
 | 📱 Custom Card | Có sẵn Lovelace card riêng biệt (`mai-climate-card`) cực đẹp |
-| 🔁 Nhân rộng | Thêm bao nhiêu quạt cũng được, không cần viết code |
+| 🔁 Nhân rộng | Thêm bao nhiêu quạt, điều hòa cũng được, không cần viết code |
 
 ---
 
@@ -93,11 +96,21 @@ entity: fan.ten_quat_cua_ban
 
 ## Sử dụng Bubble Card Template
 
+Hệ thống cung cấp sẵn các Template Bubble Card tuyệt đẹp để bạn dùng ngay:
+
+### Cho Quạt
 1. Mở file `blueprints/bubble_card_template.yaml`
 2. Thay thế các placeholder:
    - `ENTRY_ID` → entry_id thực tế *(Settings > Devices > M.A.I Climate > tên quạt > Entry ID)*
    - `FAN_ENTITY` → entity quạt, ví dụ `fan.modul_homelab_switch_3`
    - `TÊN_QUẠT` → prefix của entity, ví dụ `quạt_phòng_làm_việc`
+
+### Cho Điều hòa (AC)
+1. Mở file `blueprints/bubble_card_ac_template.yaml`
+2. Thay thế các placeholder:
+   - `ENTRY_ID` → entry_id thực tế
+   - `AC_ENTITY` → entity điều hòa, ví dụ `climate.dieu_hoa_phong_ngu`
+   - `TÊN_ĐIỀU_HÒA` → prefix của entity, ví dụ `dieu_hoa_phong_ngu`
 
 ---
 

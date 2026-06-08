@@ -16,8 +16,8 @@ from .const import (
     SUFFIX_SMART_SPEED_SWITCH,
     SUFFIX_SLEEP_MODE_SWITCH,
     SUFFIX_NATURAL_WIND_SWITCH,
-    SUFFIX_QUIET_HOURS_SWITCH,
     SUFFIX_AC_SYNC_SWITCH,
+    SUFFIX_AUTO_OFF_SWITCH,
 )
 from .coordinator import SmartFanCoordinator
 
@@ -35,7 +35,8 @@ async def async_setup_entry(
         SleepModeSwitch(coordinator, entry),
         NaturalWindSwitch(coordinator, entry),
         QuietHoursSwitch(coordinator, entry),
-        ACSyncSwitch(coordinator, entry)
+        ACSyncSwitch(coordinator, entry),
+        AutoOffSwitch(coordinator, entry)
     ])
 
 
@@ -123,6 +124,45 @@ class AutoOnSwitch(CoordinatorEntity, SwitchEntity):
     def extra_state_attributes(self) -> dict:
         return {
             "mô_tả": "Bật/Tắt chế độ tự động bật quạt khi quá nóng hoặc có người",
+        }
+
+class AutoOffSwitch(CoordinatorEntity, SwitchEntity):
+    """Switch bật/tắt tính năng tự động tắt quạt theo nhiệt độ."""
+
+    _attr_icon = "mdi:fan-off"
+
+    def __init__(self, coordinator: SmartFanCoordinator, entry: ConfigEntry) -> None:
+        super().__init__(coordinator)
+        self.entry = entry
+        self._attr_unique_id = f"{entry.entry_id}{SUFFIX_AUTO_OFF_SWITCH}"
+        self._attr_has_entity_name = True
+        self._attr_translation_key = "auto_off_enabled"
+        slug_name = slugify(entry.data.get("fan_name", "fan")).replace("_", "")
+        self.entity_id = f"switch.maic_{slug_name}_{self._attr_translation_key}"
+
+    @property
+    def device_info(self):
+        return {
+            "identifiers": {(DOMAIN, self.entry.entry_id)},
+            "name": self.entry.data.get("fan_name", "Smart Fan"),
+            "manufacturer": "Smart Fan Manager",
+            "model": "Fan Controller",
+        }
+
+    @property
+    def is_on(self) -> bool:
+        return self.coordinator.data.get("auto_off_enabled", False)
+
+    async def async_turn_on(self, **kwargs) -> None:
+        await self.coordinator.async_set_auto_off_enabled(True)
+
+    async def async_turn_off(self, **kwargs) -> None:
+        await self.coordinator.async_set_auto_off_enabled(False)
+
+    @property
+    def extra_state_attributes(self) -> dict:
+        return {
+            "mô_tả": "Tự động tắt quạt khi nhiệt độ giảm xuống thấp",
         }
 
 class SmartSpeedSwitch(CoordinatorEntity, SwitchEntity):

@@ -31,6 +31,10 @@ from .const import (
     CONF_QUIET_HOURS_END,
     CONF_AC_SYNC_ENABLED,
     CONF_AC_ENTITY,
+    CONF_AUTO_OFF_ENABLED,
+    CONF_AUTO_OFF_THRESHOLD,
+    CONF_AUTO_OFF_CONSTRAINT,
+    DEFAULT_AUTO_OFF_THRESHOLD,
 )
 
 # Helpers for schemas
@@ -91,10 +95,15 @@ class SmartFanManagerConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             vol.Required(CONF_TEMP_SENSOR): get_entity_selector("sensor", "temperature"),
             vol.Optional(CONF_HUMIDITY_SENSOR): get_entity_selector("sensor", "humidity"),
             vol.Optional(CONF_AUTO_ON_ENABLED, default=True): selector.BooleanSelector(),
-            vol.Optional(CONF_PRESENCE_SENSOR): get_entity_selector("binary_sensor"),
             vol.Optional(CONF_AUTO_ON_THRESHOLD, default=DEFAULT_AUTO_ON_THRESHOLD): selector.NumberSelector(
                 selector.NumberSelectorConfig(min=25, max=60, step=0.5, unit_of_measurement="°C (HI)")
             ),
+            vol.Optional(CONF_PRESENCE_SENSOR): get_entity_selector("binary_sensor"),
+            vol.Optional(CONF_AUTO_OFF_ENABLED, default=False): selector.BooleanSelector(),
+            vol.Optional(CONF_AUTO_OFF_THRESHOLD, default=DEFAULT_AUTO_OFF_THRESHOLD): selector.NumberSelector(
+                selector.NumberSelectorConfig(min=25, max=60, step=0.5, unit_of_measurement="°C (HI)")
+            ),
+            vol.Optional(CONF_AUTO_OFF_CONSTRAINT): get_entity_selector("binary_sensor"),
         }
 
         return self.async_show_form(
@@ -214,15 +223,27 @@ class SmartFanManagerOptionsFlow(config_entries.OptionsFlow):
 
         schema[vol.Optional(CONF_AUTO_ON_ENABLED, default=defaults.get(CONF_AUTO_ON_ENABLED, True))] = selector.BooleanSelector()
 
+        schema[vol.Optional(CONF_AUTO_ON_THRESHOLD, default=defaults.get(CONF_AUTO_ON_THRESHOLD, DEFAULT_AUTO_ON_THRESHOLD))] = selector.NumberSelector(
+            selector.NumberSelectorConfig(min=25, max=60, step=0.5, unit_of_measurement="°C (HI)")
+        )
+
         p_sensor = defaults.get(CONF_PRESENCE_SENSOR)
         if p_sensor:
             schema[vol.Optional(CONF_PRESENCE_SENSOR, default=p_sensor)] = get_entity_selector("binary_sensor")
         else:
             schema[vol.Optional(CONF_PRESENCE_SENSOR)] = get_entity_selector("binary_sensor")
 
-        schema[vol.Optional(CONF_AUTO_ON_THRESHOLD, default=defaults.get(CONF_AUTO_ON_THRESHOLD, DEFAULT_AUTO_ON_THRESHOLD))] = selector.NumberSelector(
+        schema[vol.Optional(CONF_AUTO_OFF_ENABLED, default=defaults.get(CONF_AUTO_OFF_ENABLED, False))] = selector.BooleanSelector()
+
+        schema[vol.Optional(CONF_AUTO_OFF_THRESHOLD, default=defaults.get(CONF_AUTO_OFF_THRESHOLD, DEFAULT_AUTO_OFF_THRESHOLD))] = selector.NumberSelector(
             selector.NumberSelectorConfig(min=25, max=60, step=0.5, unit_of_measurement="°C (HI)")
         )
+
+        off_constraint = defaults.get(CONF_AUTO_OFF_CONSTRAINT)
+        if off_constraint:
+            schema[vol.Optional(CONF_AUTO_OFF_CONSTRAINT, default=off_constraint)] = get_entity_selector("binary_sensor")
+        else:
+            schema[vol.Optional(CONF_AUTO_OFF_CONSTRAINT)] = get_entity_selector("binary_sensor")
 
         return self.async_show_form(step_id="auto_on", data_schema=vol.Schema(schema))
 

@@ -20,13 +20,16 @@
       },
       "auto_on": {
         "title": "Bước 2/4: Tự động theo nhiệt độ",
-        "description": "Tự động bật/tắt quạt dựa trên chỉ số oi bức (Heat Index).",
+        "description": "1/ Tự động bật/tắt quạt dựa trên chỉ số oi bức (Heat Index).",
         "data": {
           "temp_sensor": "Chọn cảm biến nhiệt độ",
           "humidity_sensor": "Chọn cảm biến độ ẩm (tùy chọn)",
-          "presence_sensor": "Chọn cảm biến hiện diện/chuyển động (tùy chọn)",
+          "auto_on_enabled": "2/ Tự động bật theo nhiệt độ",
           "auto_on_threshold": "Ngưỡng chỉ số oi bức tự động bật (°C Heat Index)",
-          "auto_on_enabled": "Tự động bật theo nhiệt độ"
+          "presence_sensor": "Chọn cảm biến hiện diện/chuyển động (tùy chọn)",
+          "auto_off_enabled": "3/ Nút tự động tắt theo ngưỡng nhiệt độ",
+          "auto_off_threshold": "Ngưỡng chỉ số oi bức tự động tắt (°C Heat Index)",
+          "auto_off_constraint": "Chọn cảm biến / đối tượng ràng buộc"
         },
         "data_description": {
           "humidity_sensor": "Để tính chỉ số oi bức chính xác hơn. Nếu bỏ trống sẽ dùng 70% mặc định.",
@@ -89,9 +92,12 @@
         "data": {
           "temp_sensor": "Chọn cảm biến nhiệt độ",
           "humidity_sensor": "Chọn cảm biến độ ẩm (tùy chọn)",
+          "auto_on_enabled": "2/ Tự động bật theo nhiệt độ",
+          "auto_on_threshold": "Ngưỡng chỉ số oi bức tự động bật (°C Heat Index)",
           "presence_sensor": "Chọn cảm biến hiện diện/chuyển động (tùy chọn)",
-          "auto_on_threshold": "Ngưỡng tự động bật (°C HI)",
-          "auto_on_enabled": "Tự động bật theo nhiệt độ"
+          "auto_off_enabled": "3/ Nút tự động tắt theo ngưỡng nhiệt độ",
+          "auto_off_threshold": "Ngưỡng chỉ số oi bức tự động tắt (°C Heat Index)",
+          "auto_off_constraint": "Chọn cảm biến / đối tượng ràng buộc"
         }
       },
       "advanced": {
@@ -129,6 +135,9 @@
       },
       "auto_on_enabled": {
         "name": "Tự động bật quạt"
+      },
+      "auto_off_enabled": {
+        "name": "Tự động tắt quạt"
       },
       "ac_sync_enabled": {
         "name": "Đồng bộ điều hòa"

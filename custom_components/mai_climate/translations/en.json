@@ -23,9 +23,12 @@
         "data": {
           "temp_sensor": "Select temperature sensor",
           "humidity_sensor": "Select humidity sensor (optional)",
-          "presence_sensor": "Select presence/motion sensor (optional)",
+          "auto_on_enabled": "Enable auto-on by temperature",
           "auto_on_threshold": "Auto-on heat index threshold (°C HI)",
-          "auto_on_enabled": "Enable auto-on by temperature"
+          "presence_sensor": "Select presence/motion sensor (optional)",
+          "auto_off_enabled": "Enable auto-off by temperature",
+          "auto_off_threshold": "Auto-off heat index threshold (°C HI)",
+          "auto_off_constraint": "Select constraint sensor (optional)"
         },
         "data_description": {
           "humidity_sensor": "Used for accurate heat index calculation. Defaults to 70% if not set.",
@@ -88,9 +91,12 @@
         "data": {
           "temp_sensor": "Select temperature sensor",
           "humidity_sensor": "Select humidity sensor (optional)",
-          "presence_sensor": "Select presence/motion sensor (optional)",
+          "auto_on_enabled": "Enable auto-on by temperature",
           "auto_on_threshold": "Auto-on threshold (°C HI)",
-          "auto_on_enabled": "Enable auto-on by temperature"
+          "presence_sensor": "Select presence/motion sensor (optional)",
+          "auto_off_enabled": "Enable auto-off by temperature",
+          "auto_off_threshold": "Auto-off threshold (°C HI)",
+          "auto_off_constraint": "Select constraint sensor (optional)"
         }
       },
       "advanced": {
@@ -120,7 +126,12 @@
     },
     "switch": {
       "cooldown_mode": { "name": "Cooldown mode" },
-      "auto_on_enabled": { "name": "Auto-on Fan" },
+      "auto_on_enabled": {
+        "name": "Auto-on Fan"
+      },
+      "auto_off_enabled": {
+        "name": "Auto-off Fan"
+      },
       "ac_sync_enabled": { "name": "AC Sync" }
     },
     "number": {

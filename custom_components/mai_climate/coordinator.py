@@ -102,9 +102,12 @@ class SmartFanCoordinator(DataUpdateCoordinator):
 
     async def _async_update_data(self) -> dict[str, Any]:
         """Cập nhật dữ liệu định kỳ."""
-        self._calculate_muggy_index()
-        await self._check_auto_on()
-        await self._apply_advanced_modes()
+        try:
+            self._calculate_muggy_index()
+            await self._check_auto_on()
+            await self._apply_advanced_modes()
+        except Exception as e:
+            _LOGGER.error("Lỗi khi cập nhật dữ liệu coordinator: %s", e)
         return self._build_state()
 
     def _calculate_muggy_index(self) -> None:
@@ -432,10 +435,13 @@ class SmartFanCoordinator(DataUpdateCoordinator):
             )
         else:
             # Nếu không gán nút, gọi fan.set_percentage
-            await self.hass.services.async_call(
-                "fan", "set_percentage", 
-                {"entity_id": self.fan_entity, "percentage": percentage}
-            )
+            try:
+                await self.hass.services.async_call(
+                    "fan", "set_percentage", 
+                    {"entity_id": self.fan_entity, "percentage": percentage}
+                )
+            except Exception as e:
+                _LOGGER.warning("Không thể set_percentage cho %s (quạt có thể không hỗ trợ): %s", self.fan_entity, e)
 
     async def async_set_ac_sync_enabled(self, enabled: bool) -> None:
         """Bật/tắt tính năng đồng bộ điều hòa."""

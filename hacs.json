@@ -2,5 +2,7 @@
   "name": "M.A.I Climate",
   "content_in_root": false,
   "render_readme": true,
-  "filename": "mai_climate"
+  "filename": "mai_climate",
+  "icon": "https://raw.githubusercontent.com/manhvuarchitect/M.A.I-Climate/main/icon.png",
+  "logo": "https://raw.githubusercontent.com/manhvuarchitect/M.A.I-Climate/main/logo.png"
 }

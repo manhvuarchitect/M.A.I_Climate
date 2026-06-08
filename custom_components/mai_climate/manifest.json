@@ -1,9 +1,9 @@
 {
   "domain": "mai_climate",
   "name": "M.A.I Climate",
-  "version": "1.5.5",
-  "documentation": "https://github.com/manhvuarchitect/M.A.I-Climate",
-  "issue_tracker": "https://github.com/manhvuarchitect/M.A.I-Climate/issues",
+  "version": "1.5.6",
+  "documentation": "https://github.com/manhvuarchitect/M.A.I_Climate",
+  "issue_tracker": "https://github.com/manhvuarchitect/M.A.I_Climate/issues",
   "requirements": [],
   "dependencies": [],
   "codeowners": ["@manhvuarchitect"],

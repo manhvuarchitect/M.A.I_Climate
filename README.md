@@ -26,7 +26,7 @@ Quản lý quạt thông minh trong Home Assistant: hẹn giờ, chỉ số oi b
 ### Bước 1: Thêm repository vào HACS
 
 1. Mở HACS → **Integrations** → dấu **⋮** → **Custom repositories**
-2. Nhập URL: `https://github.com/manhvuarchitect/M.A.I-Climate`
+2. Nhập URL: `https://github.com/manhvuarchitect/M.A.I_Climate`
 3. Category: **Integration** → **Add**
 
 ### Bước 2: Cài đặt integration
@@ -192,5 +192,5 @@ Nếu không có cảm biến độ ẩm, mặc định RH = 70%.
 
 ## Đóng góp & Báo lỗi
 
-- Issues: https://github.com/manhvuarchitect/M.A.I-Climate/issues
-- Discussions: https://github.com/manhvuarchitect/M.A.I-Climate/discussions
+- Issues: https://github.com/manhvuarchitect/M.A.I_Climate/issues
+- Discussions: https://github.com/manhvuarchitect/M.A.I_Climate/discussions

@@ -100,6 +100,30 @@ class SmartFanCoordinator(DataUpdateCoordinator):
         self._unsub_listeners: list = []
         self._sleep_mode_start_time = None
 
+    def update_options(self, options: dict[str, Any]) -> None:
+        """Cập nhật các tùy chọn mới từ UI hoặc Config Flow mà không reload."""
+        self.fan_entity = options.get(CONF_FAN_ENTITY, self.fan_entity)
+        self.temp_sensor = options.get(CONF_TEMP_SENSOR, self.temp_sensor)
+        self.humidity_sensor = options.get(CONF_HUMIDITY_SENSOR, self.humidity_sensor)
+        self.ac_entity = options.get(CONF_AC_ENTITY, self.ac_entity)
+        self.presence_sensor = options.get(CONF_PRESENCE_SENSOR, self.presence_sensor)
+        self.ac_sync_enabled = options.get(CONF_AC_SYNC_ENABLED, self.ac_sync_enabled)
+        self.auto_on_enabled = options.get(CONF_AUTO_ON_ENABLED, self.auto_on_enabled)
+        self.auto_on_threshold = options.get(CONF_AUTO_ON_THRESHOLD, self.auto_on_threshold)
+        self.smart_speed_enabled = options.get(CONF_SMART_SPEED_ENABLED, self.smart_speed_enabled)
+        self.sleep_mode_enabled = options.get(CONF_SLEEP_MODE_ENABLED, self.sleep_mode_enabled)
+        self.natural_wind_enabled = options.get(CONF_NATURAL_WIND_ENABLED, self.natural_wind_enabled)
+        self.quiet_hours_enabled = options.get(CONF_QUIET_HOURS_ENABLED, self.quiet_hours_enabled)
+        self.quiet_hours_start = options.get(CONF_QUIET_HOURS_START, self.quiet_hours_start)
+        self.quiet_hours_end = options.get(CONF_QUIET_HOURS_END, self.quiet_hours_end)
+        self.speed_1_entity = options.get(CONF_SPEED_1_ENTITY, self.speed_1_entity)
+        self.speed_2_entity = options.get(CONF_SPEED_2_ENTITY, self.speed_2_entity)
+        self.speed_3_entity = options.get(CONF_SPEED_3_ENTITY, self.speed_3_entity)
+        self.speed_4_entity = options.get(CONF_SPEED_4_ENTITY, self.speed_4_entity)
+        self.auto_off_enabled = options.get(CONF_AUTO_OFF_ENABLED, self.auto_off_enabled)
+        self.auto_off_threshold = options.get(CONF_AUTO_OFF_THRESHOLD, self.auto_off_threshold)
+        self.auto_off_constraint = options.get(CONF_AUTO_OFF_CONSTRAINT, self.auto_off_constraint)
+
     async def _async_update_data(self) -> dict[str, Any]:
         """Cập nhật dữ liệu định kỳ."""
         try:

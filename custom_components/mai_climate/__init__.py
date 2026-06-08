@@ -69,8 +69,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     if len(hass.data[DOMAIN]) == 1:
         await async_setup_services(hass)
 
-    # Lắng nghe thay đổi options
-    entry.async_on_unload(entry.add_update_listener(async_reload_entry))
+    # Lắng nghe thay đổi options (không reload, chỉ cập nhật biến trong bộ nhớ)
+    entry.async_on_unload(entry.add_update_listener(async_update_options))
 
     _LOGGER.info("M.A.I Climate đã khởi tạo cho: %s", entry.data.get("fan_name"))
     return True
@@ -93,7 +93,31 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     return unload_ok
 
 
-async def async_reload_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
-    """Reload entry khi options thay đổi."""
-    await async_unload_entry(hass, entry)
-    await async_setup_entry(hass, entry)
+async def async_update_options(hass: HomeAssistant, entry: ConfigEntry) -> None:
+    """Cập nhật options vào coordinator mà không reload toàn bộ integration nếu chỉ bật/tắt tính năng."""
+    coordinator: SmartFanCoordinator = hass.data[DOMAIN].get(entry.entry_id)
+    if coordinator:
+        # Kiểm tra xem có thay đổi các entity lõi cần reload lại listeners không
+        needs_reload = False
+        old_options = coordinator.entry.options
+        new_options = entry.options
+        
+        core_keys = [
+            "fan_entity", "temp_sensor", "humidity_sensor", 
+            "presence_sensor", "ac_entity"
+        ]
+        
+        for key in core_keys:
+            if old_options.get(key) != new_options.get(key):
+                needs_reload = True
+                break
+                
+        if needs_reload:
+            _LOGGER.info("Cấu hình thiết bị thay đổi, đang tải lại integration...")
+            await hass.config_entries.async_reload(entry.entry_id)
+        else:
+            _LOGGER.debug("Chỉ cập nhật tính năng thông minh, không cần reload")
+            # Cập nhật entry.options cho coordinator
+            coordinator.entry = entry
+            coordinator.update_options(entry.options)
+            await coordinator.async_refresh()

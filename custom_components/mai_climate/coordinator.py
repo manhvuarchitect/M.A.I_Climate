@@ -179,6 +179,19 @@ class SmartFanCoordinator(DataUpdateCoordinator):
                 await self.hass.services.async_call(
                     "fan", "turn_off", {"entity_id": self.fan_entity}
                 )
+        elif self.muggy_index <= self.auto_on_threshold - 1.0:
+            if is_fan_on:
+                _LOGGER.info(
+                    "Auto-off: Nhiệt độ %.1f <= %.1f -> Tắt %s",
+                    self.muggy_index,
+                    self.auto_on_threshold - 1.0,
+                    self.fan_entity
+                )
+                # Xoá timer nếu có
+                await self.async_cancel_timer()
+                await self.hass.services.async_call(
+                    "fan", "turn_off", {"entity_id": self.fan_entity}
+                )
 
     def _build_state(self) -> dict[str, Any]:
         """Tổng hợp state hiện tại."""

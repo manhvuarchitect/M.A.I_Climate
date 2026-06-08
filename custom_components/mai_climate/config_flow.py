@@ -38,8 +38,10 @@ from .const import (
 )
 
 # Helpers for schemas
-def get_entity_selector(domain: str | list[str], device_class: str | None = None) -> selector.EntitySelector:
-    config = {"domain": domain}
+def get_entity_selector(domain: str | None = None, device_class: str | None = None) -> selector.EntitySelector:
+    config = {}
+    if domain:
+        config["domain"] = domain
     if device_class:
         config["device_class"] = device_class
     return selector.EntitySelector(selector.EntitySelectorConfig(**config))
@@ -71,10 +73,10 @@ class SmartFanManagerConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         schema = {
             vol.Required(CONF_FAN_NAME, default="Quạt phòng làm việc"): str,
             vol.Required(CONF_FAN_ENTITY): get_entity_selector("fan"),
-            vol.Optional(CONF_SPEED_1_ENTITY): get_entity_selector(["button", "switch", "script", "scene", "input_boolean"]),
-            vol.Optional(CONF_SPEED_2_ENTITY): get_entity_selector(["button", "switch", "script", "scene", "input_boolean"]),
-            vol.Optional(CONF_SPEED_3_ENTITY): get_entity_selector(["button", "switch", "script", "scene", "input_boolean"]),
-            vol.Optional(CONF_SPEED_4_ENTITY): get_entity_selector(["button", "switch", "script", "scene", "input_boolean"]),
+            vol.Optional(CONF_SPEED_1_ENTITY): get_entity_selector(),
+            vol.Optional(CONF_SPEED_2_ENTITY): get_entity_selector(),
+            vol.Optional(CONF_SPEED_3_ENTITY): get_entity_selector(),
+            vol.Optional(CONF_SPEED_4_ENTITY): get_entity_selector(),
         }
 
         return self.async_show_form(
@@ -194,9 +196,9 @@ class SmartFanManagerOptionsFlow(config_entries.OptionsFlow):
         for speed_conf in [CONF_SPEED_1_ENTITY, CONF_SPEED_2_ENTITY, CONF_SPEED_3_ENTITY, CONF_SPEED_4_ENTITY]:
             val = defaults.get(speed_conf)
             if val:
-                schema[vol.Optional(speed_conf, default=val)] = get_entity_selector(["button", "switch", "script", "scene", "input_boolean"])
+                schema[vol.Optional(speed_conf, default=val)] = get_entity_selector()
             else:
-                schema[vol.Optional(speed_conf)] = get_entity_selector(["button", "switch", "script", "scene", "input_boolean"])
+                schema[vol.Optional(speed_conf)] = get_entity_selector()
 
         return self.async_show_form(step_id="user", data_schema=vol.Schema(schema))
 

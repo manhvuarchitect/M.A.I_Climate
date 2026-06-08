@@ -8,21 +8,38 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.util import slugify
 
-from .const import DOMAIN, ICON_THRESHOLD, SUFFIX_THRESHOLD_NUMBER, SUFFIX_AUTO_OFF_THRESHOLD_NUMBER
+from .const import (
+    DOMAIN,
+    CONF_DEVICE_TYPE,
+    DEVICE_TYPE_FAN,
+    DEVICE_TYPE_AC,
+    ICON_THRESHOLD,
+    SUFFIX_THRESHOLD_NUMBER,
+    SUFFIX_AUTO_OFF_THRESHOLD_NUMBER,
+)
 from .coordinator import SmartFanCoordinator
+from .coordinator_ac import SmartACCoordinator
 
 
 async def async_setup_entry(
-    hass: HomeAssistant,
-    entry: ConfigEntry,
-    async_add_entities: AddEntitiesCallback,
+    hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
-    """Tạo number entity ngưỡng auto-on."""
-    coordinator: SmartFanCoordinator = hass.data[DOMAIN][entry.entry_id]
-    async_add_entities([
-        AutoOnThresholdNumber(coordinator, entry),
-        AutoOffThresholdNumber(coordinator, entry)
-    ])
+    """Thiết lập platform number."""
+    coordinator = hass.data[DOMAIN][entry.entry_id]
+    device_type = entry.data.get(CONF_DEVICE_TYPE, DEVICE_TYPE_FAN)
+
+    numbers = []
+
+    if device_type == DEVICE_TYPE_FAN:
+        numbers.extend([
+            AutoOnThresholdNumber(coordinator, entry),
+            AutoOffThresholdNumber(coordinator, entry)
+        ])
+    elif device_type == DEVICE_TYPE_AC:
+        pass
+
+    if numbers:
+        async_add_entities(numbers)
 
 
 class AutoOnThresholdNumber(CoordinatorEntity, NumberEntity):

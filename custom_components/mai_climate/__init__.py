@@ -12,7 +12,7 @@ from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryNotReady
 
-from .const import DOMAIN
+from .const import DOMAIN, CONF_DEVICE_TYPE, DEVICE_TYPE_FAN, DEVICE_TYPE_AC
 from .coordinator import SmartFanCoordinator
 from .services import async_setup_services, async_unload_services
 
@@ -52,7 +52,17 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         except Exception as e:
             _LOGGER.debug("Path đã được đăng ký hoặc lỗi: %s", e)
 
-    coordinator = SmartFanCoordinator(hass, entry)
+    device_type = entry.data.get(CONF_DEVICE_TYPE, DEVICE_TYPE_FAN)
+
+    if device_type == DEVICE_TYPE_FAN:
+        from .coordinator import SmartFanCoordinator
+        coordinator = SmartFanCoordinator(hass, entry)
+    elif device_type == DEVICE_TYPE_AC:
+        from .coordinator_ac import SmartACCoordinator
+        coordinator = SmartACCoordinator(hass, entry)
+    else:
+        _LOGGER.error("Loại thiết bị không được hỗ trợ: %s", device_type)
+        return False
 
     try:
         await coordinator.async_setup()

@@ -3,6 +3,7 @@
 DOMAIN = "mai_climate"
 
 # Config entry keys
+CONF_DEVICE_TYPE = "device_type"
 CONF_FAN_ENTITY = "fan_entity"
 CONF_TEMP_SENSOR = "temp_sensor"
 CONF_HUMIDITY_SENSOR = "humidity_sensor"
@@ -26,10 +27,24 @@ CONF_QUIET_HOURS_ENABLED = "quiet_hours_enabled"
 CONF_QUIET_HOURS_START = "quiet_hours_start"
 CONF_QUIET_HOURS_END = "quiet_hours_end"
 
+# AC specific keys
+CONF_AC_NAME = "ac_name"
+CONF_WINDOW_SENSOR = "window_sensor"
+CONF_SMART_SLEEP_ENABLED = "smart_sleep_enabled"
+CONF_WINDOW_GUARD_ENABLED = "window_guard_enabled"
+CONF_ECO_LEAVE_ENABLED = "eco_leave_enabled"
+CONF_AUTO_DRY_ENABLED = "auto_dry_enabled"
+
 # Default values
 DEFAULT_AUTO_ON_THRESHOLD = 38  # Chỉ số oi bức tự động bật quạt
 DEFAULT_AUTO_OFF_THRESHOLD = 37.0
 DEFAULT_SCAN_INTERVAL = 30       # Giây
+
+# Device Types
+DEVICE_TYPE_FAN = "fan"
+DEVICE_TYPE_AC = "ac"
+DEVICE_TYPE_PURIFIER = "purifier"
+DEVICE_TYPE_VENTILATOR = "ventilator"
 
 # Timer presets (phút)
 TIMER_PRESETS = {

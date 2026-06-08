@@ -10,6 +10,9 @@ from homeassistant.util import slugify
 
 from .const import (
     DOMAIN,
+    CONF_DEVICE_TYPE,
+    DEVICE_TYPE_FAN,
+    DEVICE_TYPE_AC,
     ICON_MUGGY,
     ICON_TIMER,
     MUGGY_LOW,
@@ -19,20 +22,28 @@ from .const import (
     SUFFIX_TIMER_SENSOR,
 )
 from .coordinator import SmartFanCoordinator
+from .coordinator_ac import SmartACCoordinator
 
 
 async def async_setup_entry(
-    hass: HomeAssistant,
-    entry: ConfigEntry,
-    async_add_entities: AddEntitiesCallback,
+    hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
-    """Tạo sensor entities cho entry này."""
-    coordinator: SmartFanCoordinator = hass.data[DOMAIN][entry.entry_id]
+    """Thiết lập platform sensor."""
+    coordinator = hass.data[DOMAIN][entry.entry_id]
+    device_type = entry.data.get(CONF_DEVICE_TYPE, DEVICE_TYPE_FAN)
 
-    async_add_entities([
-        MuggyIndexSensor(coordinator, entry),
-        TimerRemainingSensor(coordinator, entry),
-    ])
+    sensors = []
+
+    if device_type == DEVICE_TYPE_FAN:
+        sensors.extend([
+            MuggyIndexSensor(coordinator, entry),
+            TimerRemainingSensor(coordinator, entry),
+        ])
+    elif device_type == DEVICE_TYPE_AC:
+        pass
+
+    if sensors:
+        async_add_entities(sensors)
 
 
 class SmartFanSensorBase(CoordinatorEntity, SensorEntity):

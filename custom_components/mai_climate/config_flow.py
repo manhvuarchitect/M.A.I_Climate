@@ -35,6 +35,15 @@ from .const import (
     CONF_AUTO_OFF_THRESHOLD,
     CONF_AUTO_OFF_CONSTRAINT,
     DEFAULT_AUTO_OFF_THRESHOLD,
+    CONF_AC_NAME,
+    CONF_WINDOW_SENSOR,
+    CONF_SMART_SLEEP_ENABLED,
+    CONF_WINDOW_GUARD_ENABLED,
+    CONF_ECO_LEAVE_ENABLED,
+    CONF_AUTO_DRY_ENABLED,
+    DEVICE_TYPE_FAN,
+    DEVICE_TYPE_AC,
+    CONF_DEVICE_TYPE,
 )
 
 # Helpers for schemas
@@ -55,7 +64,47 @@ class SmartFanManagerConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         self._setup_data: dict[str, Any] = {}
 
     async def async_step_user(self, user_input=None):
-        """Bước 1/4: Thiết lập quạt, tên, gán entity quạt và các nút tốc độ."""
+        """Bước 0: Chọn loại thiết bị để thiết lập."""
+        from .const import DEVICE_TYPE_FAN, DEVICE_TYPE_AC, DEVICE_TYPE_PURIFIER, DEVICE_TYPE_VENTILATOR, CONF_DEVICE_TYPE
+
+        errors = {}
+        if user_input is not None:
+            self._setup_data[CONF_DEVICE_TYPE] = user_input[CONF_DEVICE_TYPE]
+            
+            if user_input[CONF_DEVICE_TYPE] == DEVICE_TYPE_FAN:
+                return await self.async_step_fan_setup()
+            elif user_input[CONF_DEVICE_TYPE] == DEVICE_TYPE_AC:
+                return await self.async_step_ac_setup()
+            # Tạm thời chuyển các thiết bị chưa hỗ trợ về chung AC hoặc Fan để phát triển sau
+            # Ở đây ta sẽ xử lý cho AC và Fan trước
+            elif user_input[CONF_DEVICE_TYPE] in [DEVICE_TYPE_PURIFIER, DEVICE_TYPE_VENTILATOR]:
+                errors["base"] = "not_implemented_yet"
+
+            if not errors:
+                return await self.async_step_fan_setup()
+
+        schema = {
+            vol.Required(CONF_DEVICE_TYPE, default=DEVICE_TYPE_FAN): selector.SelectSelector(
+                selector.SelectSelectorConfig(
+                    options=[
+                        {"value": DEVICE_TYPE_FAN, "label": "Quạt thông minh"},
+                        {"value": DEVICE_TYPE_AC, "label": "Điều hòa nhiệt độ"},
+                        {"value": DEVICE_TYPE_PURIFIER, "label": "Máy lọc không khí"},
+                        {"value": DEVICE_TYPE_VENTILATOR, "label": "Quạt thông gió"},
+                    ],
+                    mode=selector.SelectSelectorMode.DROPDOWN,
+                )
+            )
+        }
+
+        return self.async_show_form(
+            step_id="user",
+            data_schema=vol.Schema(schema),
+            errors=errors,
+        )
+
+    async def async_step_fan_setup(self, user_input=None):
+        """Bước 1/4 (Quạt): Thiết lập quạt, tên, gán entity quạt và các nút tốc độ."""
         errors = {}
 
         if user_input is not None:
@@ -159,6 +208,85 @@ class SmartFanManagerConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             errors=errors,
         )
 
+    async def async_step_ac_setup(self, user_input=None):
+        """Bước 1/3 (Điều hòa): Chọn thiết bị và Đặt tên."""
+        errors = {}
+
+        if user_input is not None:
+            ac_state = self.hass.states.get(user_input[CONF_AC_ENTITY])
+            if ac_state is None:
+                errors[CONF_AC_ENTITY] = "entity_not_found"
+            else:
+                await self.async_set_unique_id(user_input[CONF_AC_ENTITY])
+                self._abort_if_unique_id_configured()
+
+                self._setup_data.update(user_input)
+                return await self.async_step_ac_auto_on()
+
+        schema = {
+            vol.Required(CONF_AC_NAME, default="Điều hòa phòng khách"): str,
+            vol.Required(CONF_AC_ENTITY): get_entity_selector("climate"),
+        }
+
+        return self.async_show_form(
+            step_id="ac_setup",
+            data_schema=vol.Schema(schema),
+            errors=errors,
+        )
+
+    async def async_step_ac_auto_on(self, user_input=None):
+        """Bước 2/3 (Điều hòa): Tự động bật/tắt."""
+        errors = {}
+
+        if user_input is not None:
+            self._setup_data.update(user_input)
+            return await self.async_step_ac_advanced()
+
+        schema = {
+            vol.Required(CONF_TEMP_SENSOR): get_entity_selector("sensor", "temperature"),
+            vol.Optional(CONF_HUMIDITY_SENSOR): get_entity_selector("sensor", "humidity"),
+            vol.Optional(CONF_PRESENCE_SENSOR): get_entity_selector("binary_sensor", "occupancy"),
+            vol.Optional(CONF_AUTO_ON_ENABLED, default=False): selector.BooleanSelector(),
+            vol.Optional(CONF_AUTO_ON_THRESHOLD, default=32.0): selector.NumberSelector(
+                selector.NumberSelectorConfig(min=20, max=40, step=0.5, unit_of_measurement="°C")
+            ),
+            vol.Optional(CONF_AUTO_OFF_ENABLED, default=False): selector.BooleanSelector(),
+            vol.Optional(CONF_AUTO_OFF_THRESHOLD, default=25.0): selector.NumberSelector(
+                selector.NumberSelectorConfig(min=16, max=30, step=0.5, unit_of_measurement="°C")
+            ),
+        }
+
+        return self.async_show_form(
+            step_id="ac_auto_on",
+            data_schema=vol.Schema(schema),
+            errors=errors,
+        )
+
+    async def async_step_ac_advanced(self, user_input=None):
+        """Bước 3/3 (Điều hòa): Tính năng thông minh."""
+        errors = {}
+
+        if user_input is not None:
+            self._setup_data.update(user_input)
+            return self.async_create_entry(
+                title=self._setup_data[CONF_AC_NAME],
+                data=self._setup_data,
+            )
+
+        schema = {
+            vol.Optional(CONF_SMART_SLEEP_ENABLED, default=True): selector.BooleanSelector(),
+            vol.Optional(CONF_ECO_LEAVE_ENABLED, default=True): selector.BooleanSelector(),
+            vol.Optional(CONF_AUTO_DRY_ENABLED, default=False): selector.BooleanSelector(),
+            vol.Optional(CONF_WINDOW_GUARD_ENABLED, default=False): selector.BooleanSelector(),
+            vol.Optional(CONF_WINDOW_SENSOR): get_entity_selector("binary_sensor", "window"),
+        }
+
+        return self.async_show_form(
+            step_id="ac_advanced",
+            data_schema=vol.Schema(schema),
+            errors=errors,
+        )
+
     @staticmethod
     @callback
     def async_get_options_flow(config_entry):
@@ -169,11 +297,16 @@ class SmartFanManagerOptionsFlow(config_entries.OptionsFlow):
     """Options Flow — chỉnh sửa cấu hình quạt đã thêm (4 bước)."""
 
     async def async_step_init(self, user_input=None):
-        """Khởi động Options Flow, chuyển tới Bước 1."""
+        """Khởi động Options Flow, chuyển tới Bước 1 tương ứng thiết bị."""
         self._options = dict(self.config_entry.options)
         self._current_config = {**self.config_entry.data, **self.config_entry.options}
+        
+        device_type = self._current_config.get(CONF_DEVICE_TYPE, DEVICE_TYPE_FAN)
+        if device_type == DEVICE_TYPE_AC:
+            return await self.async_step_ac_setup()
         return await self.async_step_user()
 
+    # --- OPTIONS FLOW CHO QUẠT (FAN) ---
     async def async_step_user(self, user_input=None):
         """Bước 1/4 (Options): Thiết lập quạt."""
         if user_input is not None:
@@ -280,3 +413,80 @@ class SmartFanManagerOptionsFlow(config_entries.OptionsFlow):
             schema[vol.Optional(CONF_AC_ENTITY)] = get_entity_selector("climate")
 
         return self.async_show_form(step_id="ac_sync", data_schema=vol.Schema(schema))
+
+    # --- OPTIONS FLOW CHO ĐIỀU HÒA (AC) ---
+    async def async_step_ac_setup(self, user_input=None):
+        """Bước 1/3 (Options AC): Thiết lập cơ bản."""
+        if user_input is not None:
+            self._options.update(user_input)
+            return await self.async_step_ac_auto_on()
+
+        defaults = self._current_config
+        schema = {
+            vol.Required(CONF_AC_NAME, default=defaults.get(CONF_AC_NAME, "Điều hòa phòng khách")): str,
+        }
+
+        ac_entity = defaults.get(CONF_AC_ENTITY)
+        schema[vol.Required(CONF_AC_ENTITY, default=ac_entity)] = get_entity_selector("climate")
+
+        return self.async_show_form(step_id="ac_setup", data_schema=vol.Schema(schema))
+
+    async def async_step_ac_auto_on(self, user_input=None):
+        """Bước 2/3 (Options AC): Tự động bật/tắt."""
+        if user_input is not None:
+            self._options.update(user_input)
+            return await self.async_step_ac_advanced()
+
+        defaults = self._current_config
+        schema = {}
+
+        temp_sensor = defaults.get(CONF_TEMP_SENSOR)
+        if temp_sensor:
+            schema[vol.Required(CONF_TEMP_SENSOR, default=temp_sensor)] = get_entity_selector("sensor", "temperature")
+        else:
+            schema[vol.Required(CONF_TEMP_SENSOR)] = get_entity_selector("sensor", "temperature")
+
+        hum_sensor = defaults.get(CONF_HUMIDITY_SENSOR)
+        if hum_sensor:
+            schema[vol.Optional(CONF_HUMIDITY_SENSOR, default=hum_sensor)] = get_entity_selector("sensor", "humidity")
+        else:
+            schema[vol.Optional(CONF_HUMIDITY_SENSOR)] = get_entity_selector("sensor", "humidity")
+
+        p_sensor = defaults.get(CONF_PRESENCE_SENSOR)
+        if p_sensor:
+            schema[vol.Optional(CONF_PRESENCE_SENSOR, default=p_sensor)] = get_entity_selector("binary_sensor", "occupancy")
+        else:
+            schema[vol.Optional(CONF_PRESENCE_SENSOR)] = get_entity_selector("binary_sensor", "occupancy")
+
+        schema[vol.Optional(CONF_AUTO_ON_ENABLED, default=defaults.get(CONF_AUTO_ON_ENABLED, False))] = selector.BooleanSelector()
+        schema[vol.Optional(CONF_AUTO_ON_THRESHOLD, default=defaults.get(CONF_AUTO_ON_THRESHOLD, 32.0))] = selector.NumberSelector(
+            selector.NumberSelectorConfig(min=20, max=40, step=0.5, unit_of_measurement="°C")
+        )
+        schema[vol.Optional(CONF_AUTO_OFF_ENABLED, default=defaults.get(CONF_AUTO_OFF_ENABLED, False))] = selector.BooleanSelector()
+        schema[vol.Optional(CONF_AUTO_OFF_THRESHOLD, default=defaults.get(CONF_AUTO_OFF_THRESHOLD, 25.0))] = selector.NumberSelector(
+            selector.NumberSelectorConfig(min=16, max=30, step=0.5, unit_of_measurement="°C")
+        )
+
+        return self.async_show_form(step_id="ac_auto_on", data_schema=vol.Schema(schema))
+
+    async def async_step_ac_advanced(self, user_input=None):
+        """Bước 3/3 (Options AC): Tính năng thông minh."""
+        if user_input is not None:
+            self._options.update(user_input)
+            return self.async_create_entry(title="", data=self._options)
+
+        defaults = self._current_config
+        schema = {
+            vol.Optional(CONF_SMART_SLEEP_ENABLED, default=defaults.get(CONF_SMART_SLEEP_ENABLED, True)): selector.BooleanSelector(),
+            vol.Optional(CONF_ECO_LEAVE_ENABLED, default=defaults.get(CONF_ECO_LEAVE_ENABLED, True)): selector.BooleanSelector(),
+            vol.Optional(CONF_AUTO_DRY_ENABLED, default=defaults.get(CONF_AUTO_DRY_ENABLED, False)): selector.BooleanSelector(),
+            vol.Optional(CONF_WINDOW_GUARD_ENABLED, default=defaults.get(CONF_WINDOW_GUARD_ENABLED, False)): selector.BooleanSelector(),
+        }
+
+        w_sensor = defaults.get(CONF_WINDOW_SENSOR)
+        if w_sensor:
+            schema[vol.Optional(CONF_WINDOW_SENSOR, default=w_sensor)] = get_entity_selector("binary_sensor", "window")
+        else:
+            schema[vol.Optional(CONF_WINDOW_SENSOR)] = get_entity_selector("binary_sensor", "window")
+
+        return self.async_show_form(step_id="ac_advanced", data_schema=vol.Schema(schema))

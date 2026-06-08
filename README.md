@@ -1,6 +1,6 @@
 # 🌀 M.A.I Climate — HACS Integration
 
-Quản lý quạt thông minh trong Home Assistant: hẹn giờ, chỉ số oi bức, tự động bật, giải nhiệt vận động. Hỗ trợ **nhiều quạt độc lập** — mỗi quạt một lần cài đặt qua UI.
+Quản lý thiết bị khí hậu thông minh trong Home Assistant: hẹn giờ, chỉ số oi bức, tự động bật/tắt, giải nhiệt vận động. Hỗ trợ **quạt, điều hòa, máy lọc không khí, quạt thông gió** — mỗi thiết bị cài đặt độc lập chỉ với một lần cấu hình qua UI.
 
 ---
 

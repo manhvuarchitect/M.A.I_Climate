@@ -1,7 +1,7 @@
 """M.A.I Climate — HACS Custom Integration.
 
-Quản lý quạt thông minh: timer, chỉ số oi bức, auto-on, giải nhiệt vận động.
-Hỗ trợ nhiều quạt độc lập qua Config Flow.
+Quản lý thiết bị khí hậu thông minh (quạt, điều hòa, máy lọc khí, quạt thông phòng): hẹn giờ, chỉ số oi bức, auto-on/off, giải nhiệt vận động.
+Hỗ trợ quản lý nhiều thiết bị độc lập qua Config Flow.
 """
 from __future__ import annotations
 

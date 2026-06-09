@@ -2,67 +2,428 @@
   "config": {
     "step": {
       "user": {
-        "title": "Add Fan",
-        "description": "Configure M.A.I Climate for your fan. Each fan is an independent device you can manage separately.",
+        "title": "Bắt đầu: Chọn loại thiết bị",
+        "description": "Bạn muốn cài đặt M.A.I Climate cho thiết bị nào?",
         "data": {
-          "fan_name": "Fan name",
-          "fan_entity": "Fan entity (fan.*)",
-          "temp_sensor": "Temperature sensor",
-          "humidity_sensor": "Humidity sensor (optional)",
-          "ac_entity": "Air Conditioner (optional)",
-          "auto_on_threshold": "Auto-on heat index threshold (°C HI)"
+          "device_type": "Loại thiết bị"
+        }
+      },
+      "fan_setup": {
+        "title": "Bước 1/4 (Quạt): Cấu hình cơ bản",
+        "description": "Cấu hình M.A.I Climate cho quạt của bạn. Gán các nút tốc độ nếu quạt điều khiển bằng hồng ngoại.",
+        "data": {
+          "fan_name": "Nhập tên cho quạt (Ví dụ: Quạt làm việc)",
+          "fan_entity": "Chọn quạt",
+          "speed_1_entity": "Chọn Nút Số 1 (tùy chọn)",
+          "speed_2_entity": "Chọn Nút Số 2 (tùy chọn)",
+          "speed_3_entity": "Chọn Nút Số 3 (tùy chọn)",
+          "speed_4_entity": "Chọn Nút Số 4 (tùy chọn)"
         },
         "data_description": {
-          "fan_name": "Display name, e.g. Work desk fan",
-          "humidity_sensor": "Used for accurate heat index calculation. Defaults to 70% if not set.",
-          "ac_entity": "Link an AC to this fan for smart climate synergy features.",
-          "auto_on_threshold": "Fan turns on automatically when heat index exceeds this value. Default: 38°C"
+          "fan_name": "Tên hiển thị, ví dụ: Quạt phòng làm việc",
+          "speed_1_entity": "Sẽ tự động kích hoạt nút này khi tính năng thông minh giảm tốc độ xuống mức thấp.",
+          "speed_3_entity": "Sẽ kích hoạt nút này khi trời oi bức cần mức gió mạnh nhất."
+        }
+      },
+      "auto_on": {
+        "title": "Bước 2/4: Tự động theo nhiệt độ",
+        "description": "1/ Tự động bật/tắt quạt dựa trên chỉ số oi bức (Heat Index).",
+        "data": {
+          "temp_sensor": "Chọn cảm biến nhiệt độ",
+          "humidity_sensor": "Chọn cảm biến độ ẩm (tùy chọn)",
+          "auto_on_enabled": "2/ Tự động bật theo nhiệt độ",
+          "auto_on_threshold": "Ngưỡng chỉ số oi bức tự động bật (°C Heat Index)",
+          "presence_sensor": "Chọn cảm biến hiện diện/chuyển động (tùy chọn)",
+          "auto_off_enabled": "3/ Nút tự động tắt theo ngưỡng nhiệt độ",
+          "auto_off_threshold": "Ngưỡng chỉ số oi bức tự động tắt (°C Heat Index)",
+          "auto_off_constraint": "Chọn cảm biến / đối tượng ràng buộc"
+        },
+        "data_description": {
+          "humidity_sensor": "Để tính chỉ số oi bức chính xác hơn. Nếu bỏ trống sẽ dùng 70% mặc định.",
+          "presence_sensor": "Chỉ tự động bật quạt khi phát hiện có người ở nhà.",
+          "auto_on_threshold": "Khi chỉ số oi bức vượt ngưỡng này, quạt tự bật. Mặc định: 38°C"
+        }
+      },
+      "advanced": {
+        "title": "Bước 3/4: Tính năng thông minh",
+        "description": "Bật/Tắt các chế độ điều khiển gió thông minh.",
+        "data": {
+          "smart_speed_enabled": "Tốc độ thông minh",
+          "sleep_mode_enabled": "Chế độ ngủ",
+          "natural_wind_enabled": "Gió tự nhiên",
+          "quiet_hours_enabled": "Khung giờ yên tĩnh",
+          "quiet_hours_start": "Thời gian bắt đầu giờ yên tĩnh",
+          "quiet_hours_end": "Thời gian kết thúc giờ yên tĩnh"
+        },
+        "data_description": {
+          "smart_speed_enabled": "Tự động điều chỉnh tốc độ quạt (Số 1, 2, 3) theo độ oi bức.",
+          "sleep_mode_enabled": "Giảm dần tốc độ quạt (10% mỗi giờ) để tránh lạnh về đêm.",
+          "natural_wind_enabled": "Mô phỏng luồng gió tự nhiên bằng cách thay đổi tốc độ ngẫu nhiên.",
+          "quiet_hours_enabled": "Chạy quạt ở mức gió nhẹ nhất (Số 1) trong thời gian ngủ."
+        }
+      },
+      "ac_sync": {
+        "title": "Bước 4/4 (Quạt): Đồng bộ điều hòa",
+        "description": "Luân chuyển gió thông minh kết hợp với điều hòa.",
+        "data": {
+          "ac_sync_enabled": "Đồng bộ điều hòa",
+          "ac_entity": "Chọn điều hòa (tùy chọn)"
+        },
+        "data_description": {
+          "ac_entity": "Liên kết điều hòa để quạt tự luân chuyển gió khi tắt/bật điều hòa."
+        }
+      },
+      "ac_setup": {
+        "title": "Bước 1/3 (Điều hòa): Cấu hình cơ bản",
+        "data": {
+          "ac_name": "Tên điều hòa",
+          "ac_entity": "Chọn thực thể điều hòa"
+        },
+        "data_description": {
+          "ac_name": "Tên hiển thị, ví dụ: Điều hòa phòng khách",
+          "ac_entity": "Thực thể điều hòa chính để điều khiển"
+        }
+      },
+      "ac_auto_on": {
+        "title": "Bước 2/3 (Điều hòa): Tự động bật tắt",
+        "data": {
+          "temp_sensor": "Cảm biến nhiệt độ",
+          "humidity_sensor": "Cảm biến độ ẩm (tùy chọn)",
+          "presence_sensor": "Cảm biến hiện diện (tùy chọn)",
+          "auto_on_enabled": "Tự động bật",
+          "auto_on_threshold": "Ngưỡng nhiệt độ bật (°C)",
+          "auto_off_enabled": "Tự động tắt",
+          "auto_off_threshold": "Ngưỡng nhiệt độ tắt (°C)"
+        },
+        "data_description": {
+          "temp_sensor": "Dùng để đo nhiệt độ phòng hiện tại",
+          "auto_on_threshold": "Tự động bật điều hòa khi nhiệt độ vượt ngưỡng này",
+          "auto_off_threshold": "Tự động tắt điều hòa khi nhiệt độ xuống thấp hơn ngưỡng này"
+        }
+      },
+      "ac_advanced": {
+        "title": "Bước 3/3 (Điều hòa): Tính năng thông minh",
+        "data": {
+          "smart_sleep_enabled": "Ngủ sâu thông minh (Smart Sleep)",
+          "eco_leave_enabled": "Vắng mặt tiết kiệm (Eco Leave)",
+          "auto_dry_enabled": "Hút ẩm tự động (Auto Dry)",
+          "window_guard_enabled": "Chống thoát nhiệt (Window Guard)",
+          "window_sensor": "Cảm biến cửa sổ (Window Guard)"
+        },
+        "data_description": {
+          "smart_sleep_enabled": "Tự động tăng 1 độ mỗi 2 tiếng khi ngủ để tránh quá lạnh",
+          "eco_leave_enabled": "Tăng nhiệt độ lên 28 độ khi không có ai trong phòng để tiết kiệm điện",
+          "window_guard_enabled": "Tự động tắt điều hòa nếu phát hiện mở cửa sổ quá 3 phút"
+        }
+      },
+      "purifier_setup": {
+        "title": "Bước 1/2 (Máy lọc): Thiết lập cơ bản",
+        "data": {
+          "purifier_name": "Tên máy lọc",
+          "purifier_entity": "Chọn máy lọc",
+          "pm25_sensor": "Cảm biến bụi mịn PM2.5 (tùy chọn)",
+          "voc_sensor": "Cảm biến VOC (tùy chọn)"
+        },
+        "data_description": {
+          "purifier_name": "Tên hiển thị, ví dụ: Máy lọc phòng ngủ"
+        }
+      },
+      "purifier_advanced": {
+        "title": "Bước 2/2 (Máy lọc): Tính năng thông minh",
+        "data": {
+          "auto_boost_enabled": "Tăng tốc tự động (Auto Boost)",
+          "kitchen_sync_enabled": "Đồng bộ phòng bếp (Kitchen Sync)",
+          "kitchen_sensor": "Cảm biến / Công tắc bếp",
+          "strict_quiet_hours_enabled": "Giờ yên tĩnh tuyệt đối",
+          "quiet_hours_start": "Bắt đầu giờ yên tĩnh",
+          "quiet_hours_end": "Kết thúc giờ yên tĩnh"
+        },
+        "data_description": {
+          "auto_boost_enabled": "Bật tốc độ tối đa nếu phát hiện bụi PM2.5 vượt ngưỡng",
+          "kitchen_sync_enabled": "Tự động hút mùi khi phát hiện đang nấu ăn trong bếp",
+          "strict_quiet_hours_enabled": "Đảm bảo máy lọc chạy cực êm trong khung giờ ngủ"
+        }
+      },
+      "vent_setup": {
+        "title": "Bước 1/2 (Quạt thông gió): Cấu hình cơ bản",
+        "data": {
+          "vent_name": "Tên quạt thông gió",
+          "vent_entity": "Chọn quạt thông gió",
+          "bathroom_sensor": "Cảm biến phòng tắm (Khử mùi)",
+          "vent_humidity_sensor": "Cảm biến độ ẩm (Hút ẩm)"
+        },
+        "data_description": {
+          "vent_name": "Tên hiển thị, ví dụ: Quạt hút phòng tắm",
+          "bathroom_sensor": "Cảm biến phát hiện có người để tự động khử mùi",
+          "vent_humidity_sensor": "Cảm biến độ ẩm để quạt tự động hút ẩm phòng tắm"
+        }
+      },
+      "vent_advanced": {
+        "title": "Bước 2/2 (Quạt thông gió): Tính năng thông minh",
+        "data": {
+          "odor_control_enabled": "Khử mùi phòng tắm (Odor Control)",
+          "vent_auto_dry_enabled": "Hút ẩm tự động (Auto Dry)",
+          "routine_air_sync_enabled": "Lưu thông khí định kỳ (Routine Sync)"
+        },
+        "data_description": {
+          "odor_control_enabled": "Quạt tự động chạy 10 phút sau khi có người dùng phòng tắm",
+          "vent_auto_dry_enabled": "Quạt tự động chạy khi độ ẩm vượt 80% (ví dụ sau khi tắm nước nóng)",
+          "routine_air_sync_enabled": "Mỗi 4 tiếng quạt sẽ tự chạy 15 phút để lưu thông không khí phòng"
         }
       }
     },
     "error": {
-      "entity_not_found": "Fan entity not found in your system"
+      "entity_not_found": "Không tìm thấy entity quạt trong hệ thống"
     },
     "abort": {
-      "already_configured": "This fan is already managed by M.A.I Climate"
+      "already_configured": "Quạt này đã được thêm vào M.A.I Climate"
     }
   },
   "options": {
     "step": {
-      "init": {
-        "title": "Edit fan settings",
+      "fan_setup": {
+        "title": "Bước 1/4 (Quạt): Thiết lập quạt",
         "data": {
-          "fan_name": "Fan name",
-          "fan_entity": "Fan entity",
-          "temp_sensor": "Temperature sensor",
-          "humidity_sensor": "Humidity sensor",
-          "ac_entity": "Air Conditioner",
-          "auto_on_threshold": "Auto-on threshold"
+          "fan_name": "Nhập tên cho quạt (Ví dụ: Quạt làm việc)",
+          "fan_entity": "Chọn quạt",
+          "speed_1_entity": "Chọn Nút Số 1 (tùy chọn)",
+          "speed_2_entity": "Chọn Nút Số 2 (tùy chọn)",
+          "speed_3_entity": "Chọn Nút Số 3 (tùy chọn)",
+          "speed_4_entity": "Chọn Nút Số 4 (tùy chọn)"
+        }
+      },
+      "auto_on": {
+        "title": "Bước 2/4: Tự động theo nhiệt độ",
+        "data": {
+          "temp_sensor": "Chọn cảm biến nhiệt độ",
+          "humidity_sensor": "Chọn cảm biến độ ẩm (tùy chọn)",
+          "auto_on_enabled": "2/ Tự động bật theo nhiệt độ",
+          "auto_on_threshold": "Ngưỡng chỉ số oi bức tự động bật (°C Heat Index)",
+          "presence_sensor": "Chọn cảm biến hiện diện/chuyển động (tùy chọn)",
+          "auto_off_enabled": "3/ Nút tự động tắt theo ngưỡng nhiệt độ",
+          "auto_off_threshold": "Ngưỡng chỉ số oi bức tự động tắt (°C Heat Index)",
+          "auto_off_constraint": "Chọn cảm biến / đối tượng ràng buộc"
+        }
+      },
+      "advanced": {
+        "title": "Bước 3/4: Tính năng thông minh",
+        "data": {
+          "smart_speed_enabled": "Tốc độ thông minh",
+          "sleep_mode_enabled": "Chế độ ngủ",
+          "natural_wind_enabled": "Gió tự nhiên",
+          "quiet_hours_enabled": "Khung giờ yên tĩnh",
+          "quiet_hours_start": "Thời gian bắt đầu giờ yên tĩnh",
+          "quiet_hours_end": "Thời gian kết thúc giờ yên tĩnh"
+        }
+      },
+      "ac_sync": {
+        "title": "Bước 4/4: Đồng bộ điều hòa",
+        "data": {
+          "ac_sync_enabled": "Đồng bộ điều hòa",
+          "ac_entity": "Chọn điều hòa (tùy chọn)"
+        }
+      },
+      "ac_setup": {
+        "title": "Bước 1/3 (Điều hòa): Cấu hình cơ bản",
+        "data": {
+          "ac_name": "Tên điều hòa",
+          "ac_entity": "Chọn thực thể điều hòa"
+        },
+        "data_description": {
+          "ac_name": "Tên hiển thị, ví dụ: Điều hòa phòng khách",
+          "ac_entity": "Thực thể điều hòa chính để điều khiển"
+        }
+      },
+      "ac_auto_on": {
+        "title": "Bước 2/3 (Điều hòa): Tự động bật tắt",
+        "data": {
+          "temp_sensor": "Cảm biến nhiệt độ",
+          "humidity_sensor": "Cảm biến độ ẩm (tùy chọn)",
+          "presence_sensor": "Cảm biến hiện diện (tùy chọn)",
+          "auto_on_enabled": "Tự động bật",
+          "auto_on_threshold": "Ngưỡng nhiệt độ bật (°C)",
+          "auto_off_enabled": "Tự động tắt",
+          "auto_off_threshold": "Ngưỡng nhiệt độ tắt (°C)"
+        },
+        "data_description": {
+          "temp_sensor": "Dùng để đo nhiệt độ phòng hiện tại",
+          "auto_on_threshold": "Tự động bật điều hòa khi nhiệt độ vượt ngưỡng này",
+          "auto_off_threshold": "Tự động tắt điều hòa khi nhiệt độ xuống thấp hơn ngưỡng này"
+        }
+      },
+      "ac_advanced": {
+        "title": "Bước 3/3 (Điều hòa): Tính năng thông minh",
+        "data": {
+          "smart_sleep_enabled": "Ngủ sâu thông minh (Smart Sleep)",
+          "eco_leave_enabled": "Vắng mặt tiết kiệm (Eco Leave)",
+          "auto_dry_enabled": "Hút ẩm tự động (Auto Dry)",
+          "window_guard_enabled": "Chống thoát nhiệt (Window Guard)",
+          "window_sensor": "Cảm biến cửa sổ (Window Guard)"
+        },
+        "data_description": {
+          "smart_sleep_enabled": "Tự động tăng 1 độ mỗi 2 tiếng khi ngủ để tránh quá lạnh",
+          "eco_leave_enabled": "Tăng nhiệt độ lên 28 độ khi không có ai trong phòng để tiết kiệm điện",
+          "window_guard_enabled": "Tự động tắt điều hòa nếu phát hiện mở cửa sổ quá 3 phút"
+        }
+      },
+      "purifier_setup": {
+        "title": "Bước 1/2 (Máy lọc): Thiết lập cơ bản",
+        "data": {
+          "purifier_name": "Tên máy lọc",
+          "purifier_entity": "Chọn máy lọc",
+          "pm25_sensor": "Cảm biến bụi mịn PM2.5 (tùy chọn)",
+          "voc_sensor": "Cảm biến VOC (tùy chọn)"
+        },
+        "data_description": {
+          "purifier_name": "Tên hiển thị, ví dụ: Máy lọc phòng ngủ"
+        }
+      },
+      "purifier_advanced": {
+        "title": "Bước 2/2 (Máy lọc): Tính năng thông minh",
+        "data": {
+          "auto_boost_enabled": "Tăng tốc tự động (Auto Boost)",
+          "kitchen_sync_enabled": "Đồng bộ phòng bếp (Kitchen Sync)",
+          "kitchen_sensor": "Cảm biến / Công tắc bếp",
+          "strict_quiet_hours_enabled": "Giờ yên tĩnh tuyệt đối",
+          "quiet_hours_start": "Bắt đầu giờ yên tĩnh",
+          "quiet_hours_end": "Kết thúc giờ yên tĩnh"
+        },
+        "data_description": {
+          "auto_boost_enabled": "Bật tốc độ tối đa nếu phát hiện bụi PM2.5 vượt ngưỡng",
+          "kitchen_sync_enabled": "Tự động hút mùi khi phát hiện đang nấu ăn trong bếp",
+          "strict_quiet_hours_enabled": "Đảm bảo máy lọc chạy cực êm trong khung giờ ngủ"
+        }
+      },
+      "vent_setup": {
+        "title": "Bước 1/2 (Quạt thông gió): Cấu hình cơ bản",
+        "data": {
+          "vent_name": "Tên quạt thông gió",
+          "vent_entity": "Chọn quạt thông gió",
+          "bathroom_sensor": "Cảm biến phòng tắm (Khử mùi)",
+          "vent_humidity_sensor": "Cảm biến độ ẩm (Hút ẩm)"
+        },
+        "data_description": {
+          "vent_name": "Tên hiển thị, ví dụ: Quạt hút phòng tắm",
+          "bathroom_sensor": "Cảm biến phát hiện có người để tự động khử mùi",
+          "vent_humidity_sensor": "Cảm biến độ ẩm để quạt tự động hút ẩm phòng tắm"
+        }
+      },
+      "vent_advanced": {
+        "title": "Bước 2/2 (Quạt thông gió): Tính năng thông minh",
+        "data": {
+          "odor_control_enabled": "Khử mùi phòng tắm (Odor Control)",
+          "vent_auto_dry_enabled": "Hút ẩm tự động (Auto Dry)",
+          "routine_air_sync_enabled": "Lưu thông khí định kỳ (Routine Sync)"
+        },
+        "data_description": {
+          "odor_control_enabled": "Quạt tự động chạy 10 phút sau khi có người dùng phòng tắm",
+          "vent_auto_dry_enabled": "Quạt tự động chạy khi độ ẩm vượt 80% (ví dụ sau khi tắm nước nóng)",
+          "routine_air_sync_enabled": "Mỗi 4 tiếng quạt sẽ tự chạy 15 phút để lưu thông không khí phòng"
         }
       }
     }
   },
   "entity": {
     "sensor": {
-      "muggy_index": { "name": "Heat index" },
-      "timer_remaining": { "name": "Timer remaining" }
+      "muggy_index": {
+        "name": "Chỉ số oi bức"
+      },
+      "timer_remaining": {
+        "name": "Timer còn lại"
+      }
     },
     "switch": {
-      "cooldown_mode": { "name": "Cooldown mode" }
+      "cooldown_mode": {
+        "name": "Giải nhiệt vận động"
+      },
+      "auto_on_by_temp_enabled": {
+        "name": "Tự động bật theo nhiệt độ"
+      },
+      "auto_off_by_temp_enabled": {
+        "name": "Tự động tắt theo nhiệt độ"
+      },
+      "smart_speed_enabled": {
+        "name": "Tốc độ thông minh"
+      },
+      "sleep_mode_enabled": {
+        "name": "Chế độ ngủ"
+      },
+      "natural_wind_enabled": {
+        "name": "Gió tự nhiên"
+      },
+      "quiet_hours_enabled": {
+        "name": "Khung giờ yên tĩnh"
+      },
+      "ac_sync_enabled": {
+        "name": "Đồng bộ điều hòa"
+      }
     },
     "number": {
-      "auto_on_threshold": { "name": "Auto-on threshold" }
+      "auto_on_threshold": {
+        "name": "Ngưỡng tự động bật"
+      },
+      "auto_off_threshold": {
+        "name": "Ngưỡng tự động tắt"
+      }
     },
     "select": {
       "timer_preset": {
-        "name": "Shutdown timer",
+        "name": "Hẹn giờ tắt",
         "state": {
-          "15 phút": "15 minutes",
-          "30 phút": "30 minutes",
-          "45 phút": "45 minutes",
-          "60 phút": "60 minutes",
-          "90 phút": "90 minutes",
-          "120 phút": "120 minutes"
+          "15 minutes": "15 phút",
+          "30 minutes": "30 phút",
+          "45 minutes": "45 phút",
+          "60 minutes": "60 phút",
+          "90 minutes": "90 phút",
+          "120 minutes": "120 phút"
+        }
+      }
+    }
+  },
+  "services": {
+    "set_timer": {
+      "name": "Đặt hẹn giờ tắt quạt",
+      "description": "Bật quạt và đặt timer tắt sau N phút",
+      "fields": {
+        "entry_id": {
+          "name": "ID cấu hình quạt",
+          "description": "entry_id của quạt cần điều khiển"
+        },
+        "minutes": {
+          "name": "Số phút",
+          "description": "Quạt sẽ tắt sau số phút này (1-480)"
+        },
+        "mode": {
+          "name": "Chế độ",
+          "description": "timer = hẹn giờ thường, cooldown = giải nhiệt vận động"
+        }
+      }
+    },
+    "cancel_timer": {
+      "name": "Hủy hẹn giờ",
+      "description": "Hủy timer đang chạy (quạt vẫn bật)",
+      "fields": {
+        "entry_id": {
+          "name": "ID cấu hình quạt",
+          "description": "entry_id của quạt cần hủy timer"
+        }
+      }
+    },
+    "set_mode": {
+      "name": "Đặt chế độ hoạt động",
+      "description": "Chuyển chế độ và bật quạt",
+      "fields": {
+        "entry_id": {
+          "name": "ID cấu hình quạt",
+          "description": "entry_id của quạt"
+        },
+        "mode": {
+          "name": "Chế độ",
+          "description": "cooldown = giải nhiệt 30 phút, timer = hẹn giờ tùy chỉnh"
+        },
+        "minutes": {
+          "name": "Số phút (cho chế độ timer)",
+          "description": "Chỉ dùng khi mode = timer"
         }
       }
     }

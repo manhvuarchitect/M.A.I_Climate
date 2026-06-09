@@ -146,7 +146,7 @@ class SmartFanManagerConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         }
 
         return self.async_show_form(
-            step_id="user",
+            step_id="fan_setup",
             data_schema=vol.Schema(schema),
             errors=errors,
         )
@@ -456,7 +456,7 @@ class SmartFanManagerOptionsFlow(config_entries.OptionsFlow):
             else:
                 schema[vol.Optional(speed_conf)] = get_entity_selector()
 
-        return self.async_show_form(step_id="user", data_schema=vol.Schema(schema))
+        return self.async_show_form(step_id="fan_setup", data_schema=vol.Schema(schema))
 
     async def async_step_auto_on(self, user_input=None):
         """Bước 2/4 (Options): Tự động theo nhiệt độ."""

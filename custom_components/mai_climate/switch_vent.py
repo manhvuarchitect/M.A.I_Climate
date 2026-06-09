@@ -2,6 +2,7 @@
 from homeassistant.components.switch import SwitchEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
+from homeassistant.util import slugify
 
 from .const import DOMAIN
 from .coordinator_vent import SmartVentCoordinator
@@ -11,6 +12,8 @@ class OdorControlSwitch(CoordinatorEntity, SwitchEntity):
         super().__init__(coordinator)
         self._attr_name = "Khử mùi phòng tắm (Odor Control)"
         self._attr_unique_id = f"{entry.entry_id}_vent_odor_control"
+        slug_name = slugify(entry.data.get("vent_name", "vent")).replace("_", "")
+        self.entity_id = f"switch.maic_{slug_name}_vent_odor_control"
         self._attr_icon = "mdi:air-purifier"
 
     @property
@@ -29,6 +32,8 @@ class VentAutoDrySwitch(CoordinatorEntity, SwitchEntity):
         super().__init__(coordinator)
         self._attr_name = "Hút ẩm tự động (Auto Dry)"
         self._attr_unique_id = f"{entry.entry_id}_vent_auto_dry"
+        slug_name = slugify(entry.data.get("vent_name", "vent")).replace("_", "")
+        self.entity_id = f"switch.maic_{slug_name}_vent_auto_dry"
         self._attr_icon = "mdi:water-percent"
 
     @property
@@ -47,6 +52,8 @@ class RoutineAirSyncSwitch(CoordinatorEntity, SwitchEntity):
         super().__init__(coordinator)
         self._attr_name = "Lưu thông khí định kỳ (Routine Sync)"
         self._attr_unique_id = f"{entry.entry_id}_vent_routine_sync"
+        slug_name = slugify(entry.data.get("vent_name", "vent")).replace("_", "")
+        self.entity_id = f"switch.maic_{slug_name}_vent_routine_sync"
         self._attr_icon = "mdi:clock-outline"
 
     @property

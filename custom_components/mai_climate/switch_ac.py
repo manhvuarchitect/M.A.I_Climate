@@ -2,6 +2,7 @@
 from homeassistant.components.switch import SwitchEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
+from homeassistant.util import slugify
 
 from .const import DOMAIN
 from .coordinator_ac import SmartACCoordinator
@@ -11,6 +12,8 @@ class SmartSleepSwitch(CoordinatorEntity, SwitchEntity):
         super().__init__(coordinator)
         self._attr_name = "Ngủ sâu thông minh (Smart Sleep)"
         self._attr_unique_id = f"{entry.entry_id}_ac_smart_sleep"
+        slug_name = slugify(entry.data.get("ac_name", "ac")).replace("_", "")
+        self.entity_id = f"switch.maic_{slug_name}_ac_smart_sleep"
         self._attr_icon = "mdi:bed-temperature"
 
     @property
@@ -29,6 +32,8 @@ class WindowGuardSwitch(CoordinatorEntity, SwitchEntity):
         super().__init__(coordinator)
         self._attr_name = "Chống thoát nhiệt (Window Guard)"
         self._attr_unique_id = f"{entry.entry_id}_ac_window_guard"
+        slug_name = slugify(entry.data.get("ac_name", "ac")).replace("_", "")
+        self.entity_id = f"switch.maic_{slug_name}_ac_window_guard"
         self._attr_icon = "mdi:window-open-variant"
 
     @property
@@ -47,6 +52,8 @@ class EcoLeaveSwitch(CoordinatorEntity, SwitchEntity):
         super().__init__(coordinator)
         self._attr_name = "Vắng mặt tiết kiệm điện (Eco Leave)"
         self._attr_unique_id = f"{entry.entry_id}_ac_eco_leave"
+        slug_name = slugify(entry.data.get("ac_name", "ac")).replace("_", "")
+        self.entity_id = f"switch.maic_{slug_name}_ac_eco_leave"
         self._attr_icon = "mdi:motion-sensor-off"
 
     @property
@@ -65,6 +72,8 @@ class AutoDrySwitch(CoordinatorEntity, SwitchEntity):
         super().__init__(coordinator)
         self._attr_name = "Hút ẩm thông minh (Auto Dry)"
         self._attr_unique_id = f"{entry.entry_id}_ac_auto_dry"
+        slug_name = slugify(entry.data.get("ac_name", "ac")).replace("_", "")
+        self.entity_id = f"switch.maic_{slug_name}_ac_auto_dry"
         self._attr_icon = "mdi:water-percent-alert"
 
     @property

@@ -336,11 +336,23 @@
       "cooldown_mode": {
         "name": "Giải nhiệt vận động"
       },
-      "auto_on_enabled": {
-        "name": "Tự động bật quạt"
+      "auto_on_by_temp_enabled": {
+        "name": "Tự động bật theo nhiệt độ"
       },
-      "auto_off_enabled": {
-        "name": "Tự động tắt quạt"
+      "auto_off_by_temp_enabled": {
+        "name": "Tự động tắt theo nhiệt độ"
+      },
+      "smart_speed_enabled": {
+        "name": "Tốc độ thông minh"
+      },
+      "sleep_mode_enabled": {
+        "name": "Chế độ ngủ"
+      },
+      "natural_wind_enabled": {
+        "name": "Gió tự nhiên"
+      },
+      "quiet_hours_enabled": {
+        "name": "Khung giờ yên tĩnh"
       },
       "ac_sync_enabled": {
         "name": "Đồng bộ điều hòa"
@@ -349,6 +361,9 @@
     "number": {
       "auto_on_threshold": {
         "name": "Ngưỡng tự động bật"
+      },
+      "auto_off_threshold": {
+        "name": "Ngưỡng tự động tắt"
       }
     },
     "select": {

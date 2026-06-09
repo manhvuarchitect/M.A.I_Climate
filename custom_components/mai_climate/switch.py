@@ -149,7 +149,7 @@ class AutoOnSwitch(CoordinatorEntity, SwitchEntity):
         self.entry = entry
         self._attr_unique_id = f"{entry.entry_id}{SUFFIX_AUTO_ON_SWITCH}"
         self._attr_has_entity_name = True
-        self._attr_translation_key = "auto_on_enabled"
+        self._attr_translation_key = "auto_on_by_temp_enabled"
         slug_name = slugify(entry.data.get("fan_name", "fan")).replace("_", "")
         self.entity_id = f"switch.maic_{slug_name}_{self._attr_translation_key}"
 
@@ -191,7 +191,7 @@ class AutoOffSwitch(CoordinatorEntity, SwitchEntity):
         self.entry = entry
         self._attr_unique_id = f"{entry.entry_id}{SUFFIX_AUTO_OFF_SWITCH}"
         self._attr_has_entity_name = True
-        self._attr_translation_key = "auto_off_enabled"
+        self._attr_translation_key = "auto_off_by_temp_enabled"
         slug_name = slugify(entry.data.get("fan_name", "fan")).replace("_", "")
         self.entity_id = f"switch.maic_{slug_name}_{self._attr_translation_key}"
 

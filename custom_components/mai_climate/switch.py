@@ -9,7 +9,17 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.util import slugify
 
 from .const import (
-    DOMAIN, 
+    DOMAIN,
+    CONF_SPEED_1_ENTITY,
+    CONF_SPEED_2_ENTITY,
+    CONF_SPEED_3_ENTITY,
+    CONF_SPEED_4_ENTITY,
+    CONF_AC_ENTITY,
+    CONF_DEVICE_TYPE,
+    DEVICE_TYPE_FAN,
+    DEVICE_TYPE_AC,
+    DEVICE_TYPE_PURIFIER,
+    DEVICE_TYPE_VENTILATOR,
     ICON_COOLDOWN, 
     SUFFIX_COOLDOWN_SWITCH, 
     SUFFIX_AUTO_ON_SWITCH,
@@ -21,24 +31,68 @@ from .const import (
     SUFFIX_AUTO_OFF_SWITCH,
 )
 from .coordinator import SmartFanCoordinator
+from .coordinator_ac import SmartACCoordinator
 
 
 async def async_setup_entry(
-    hass: HomeAssistant,
-    entry: ConfigEntry,
-    async_add_entities: AddEntitiesCallback,
+    hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
-    coordinator: SmartFanCoordinator = hass.data[DOMAIN][entry.entry_id]
-    async_add_entities([
-        CooldownModeSwitch(coordinator, entry),
-        AutoOnSwitch(coordinator, entry),
-        SmartSpeedSwitch(coordinator, entry),
-        SleepModeSwitch(coordinator, entry),
-        NaturalWindSwitch(coordinator, entry),
-        QuietHoursSwitch(coordinator, entry),
-        ACSyncSwitch(coordinator, entry),
-        AutoOffSwitch(coordinator, entry)
-    ])
+    """Thiết lập platform switch."""
+    coordinator = hass.data[DOMAIN][entry.entry_id]
+    device_type = entry.data.get(CONF_DEVICE_TYPE, DEVICE_TYPE_FAN)
+
+    switches = []
+
+    if device_type == DEVICE_TYPE_FAN:
+        switches.extend([
+            CooldownModeSwitch(coordinator, entry),
+            AutoOnSwitch(coordinator, entry),
+            SmartSpeedSwitch(coordinator, entry),
+            SleepModeSwitch(coordinator, entry),
+            NaturalWindSwitch(coordinator, entry),
+            QuietHoursSwitch(coordinator, entry),
+            AutoOffSwitch(coordinator, entry),
+        ])
+        if entry.data.get(CONF_AC_ENTITY) or entry.options.get(CONF_AC_ENTITY):
+            switches.append(ACSyncSwitch(coordinator, entry))
+    elif device_type == DEVICE_TYPE_AC:
+        from .switch_ac import (
+            SmartSleepSwitch,
+            WindowGuardSwitch,
+            EcoLeaveSwitch,
+            AutoDrySwitch,
+        )
+        switches.extend([
+            SmartSleepSwitch(coordinator, entry),
+            WindowGuardSwitch(coordinator, entry),
+            EcoLeaveSwitch(coordinator, entry),
+            AutoDrySwitch(coordinator, entry),
+        ])
+    elif device_type == DEVICE_TYPE_PURIFIER:
+        from .switch_purifier import (
+            AutoBoostSwitch,
+            KitchenSyncSwitch,
+            StrictQuietHoursSwitch,
+        )
+        switches.extend([
+            AutoBoostSwitch(coordinator, entry),
+            KitchenSyncSwitch(coordinator, entry),
+            StrictQuietHoursSwitch(coordinator, entry),
+        ])
+    elif device_type == DEVICE_TYPE_VENTILATOR:
+        from .switch_vent import (
+            OdorControlSwitch,
+            VentAutoDrySwitch,
+            RoutineAirSyncSwitch,
+        )
+        switches.extend([
+            OdorControlSwitch(coordinator, entry),
+            VentAutoDrySwitch(coordinator, entry),
+            RoutineAirSyncSwitch(coordinator, entry),
+        ])
+
+    if switches:
+        async_add_entities(switches)
 
 
 class CooldownModeSwitch(CoordinatorEntity, SwitchEntity):

@@ -2,7 +2,14 @@
   "config": {
     "step": {
       "user": {
-        "title": "Step 1/4: Basic Setup",
+        "title": "Start: Select Device Type",
+        "description": "Which device would you like to configure?",
+        "data": {
+          "device_type": "Device Type"
+        }
+      },
+      "fan_setup": {
+        "title": "Step 1/4 (Fan): Basic Setup",
         "description": "Configure M.A.I Climate for your fan. Assign discrete speed buttons if your fan uses IR/RF.",
         "data": {
           "fan_name": "Enter fan name (e.g. Work desk fan)",
@@ -55,7 +62,7 @@
         }
       },
       "ac_sync": {
-        "title": "Step 4/4: AC Sync",
+        "title": "Step 4/4 (Fan): AC Sync",
         "description": "Smart air circulation synergy with your air conditioner.",
         "data": {
           "ac_sync_enabled": "—— ENABLE AC SYNC ——",
@@ -63,6 +70,72 @@
         },
         "data_description": {
           "ac_entity": "Link an AC to this fan for smart climate synergy features."
+        }
+      },
+      "ac_setup": {
+        "title": "Step 1/3 (AC): Basic Setup",
+        "data": {
+          "ac_name": "AC Name",
+          "ac_entity": "Select AC Entity"
+        }
+      },
+      "ac_auto_on": {
+        "title": "Step 2/3 (AC): Auto-On/Off",
+        "data": {
+          "temp_sensor": "Temperature Sensor",
+          "humidity_sensor": "Humidity Sensor",
+          "presence_sensor": "Presence Sensor",
+          "auto_on_enabled": "Enable Auto-On",
+          "auto_on_threshold": "Auto-on Threshold (°C)",
+          "auto_off_enabled": "Enable Auto-Off",
+          "auto_off_threshold": "Auto-off Threshold (°C)"
+        }
+      },
+      "ac_advanced": {
+        "title": "Step 3/3 (AC): Smart Features",
+        "data": {
+          "smart_sleep_enabled": "Enable Smart Sleep",
+          "eco_leave_enabled": "Enable Eco Leave",
+          "auto_dry_enabled": "Enable Auto Dry",
+          "window_guard_enabled": "Enable Window Guard",
+          "window_sensor": "Window Sensor (for Window Guard)"
+        }
+      },
+      "purifier_setup": {
+        "title": "Step 1/2 (Purifier): Basic Setup",
+        "data": {
+          "purifier_name": "Purifier Name",
+          "purifier_entity": "Select Purifier",
+          "pm25_sensor": "PM2.5 Sensor",
+          "voc_sensor": "VOC Sensor"
+        }
+      },
+      "purifier_advanced": {
+        "title": "Step 2/2 (Purifier): Smart Features",
+        "data": {
+          "auto_boost_enabled": "Enable Auto Boost",
+          "kitchen_sync_enabled": "Enable Kitchen Sync",
+          "kitchen_sensor": "Kitchen Sensor / Switch",
+          "strict_quiet_hours_enabled": "Enable Strict Quiet Hours",
+          "quiet_hours_start": "Quiet Hours Start",
+          "quiet_hours_end": "Quiet Hours End"
+        }
+      },
+      "vent_setup": {
+        "title": "Step 1/2 (Vent): Basic Setup",
+        "data": {
+          "vent_name": "Ventilation Fan Name",
+          "vent_entity": "Select Vent Fan",
+          "bathroom_sensor": "Bathroom Presence Sensor",
+          "vent_humidity_sensor": "Vent Humidity Sensor"
+        }
+      },
+      "vent_advanced": {
+        "title": "Step 2/2 (Vent): Smart Features",
+        "data": {
+          "odor_control_enabled": "Enable Odor Control",
+          "vent_auto_dry_enabled": "Enable Vent Auto Dry",
+          "routine_air_sync_enabled": "Enable Routine Air Sync"
         }
       }
     },
@@ -75,8 +148,8 @@
   },
   "options": {
     "step": {
-      "user": {
-        "title": "Step 1/4: Basic Setup",
+      "fan_setup": {
+        "title": "Step 1/4 (Fan): Basic Setup",
         "data": {
           "fan_name": "Fan Name",
           "fan_entity": "Fan Entity (fan.*)",
@@ -115,6 +188,72 @@
         "data": {
           "ac_sync_enabled": "—— ENABLE AC SYNC ——",
           "ac_entity": "Air conditioner (optional)"
+        }
+      },
+      "ac_setup": {
+        "title": "Step 1/3 (AC): Basic Setup",
+        "data": {
+          "ac_name": "AC Name",
+          "ac_entity": "Select AC Entity"
+        }
+      },
+      "ac_auto_on": {
+        "title": "Step 2/3 (AC): Auto-On/Off",
+        "data": {
+          "temp_sensor": "Temperature Sensor",
+          "humidity_sensor": "Humidity Sensor",
+          "presence_sensor": "Presence Sensor",
+          "auto_on_enabled": "Enable Auto-On",
+          "auto_on_threshold": "Auto-on Threshold (°C)",
+          "auto_off_enabled": "Enable Auto-Off",
+          "auto_off_threshold": "Auto-off Threshold (°C)"
+        }
+      },
+      "ac_advanced": {
+        "title": "Step 3/3 (AC): Smart Features",
+        "data": {
+          "smart_sleep_enabled": "Enable Smart Sleep",
+          "eco_leave_enabled": "Enable Eco Leave",
+          "auto_dry_enabled": "Enable Auto Dry",
+          "window_guard_enabled": "Enable Window Guard",
+          "window_sensor": "Window Sensor (for Window Guard)"
+        }
+      },
+      "purifier_setup": {
+        "title": "Step 1/2 (Purifier): Basic Setup",
+        "data": {
+          "purifier_name": "Purifier Name",
+          "purifier_entity": "Select Purifier",
+          "pm25_sensor": "PM2.5 Sensor",
+          "voc_sensor": "VOC Sensor"
+        }
+      },
+      "purifier_advanced": {
+        "title": "Step 2/2 (Purifier): Smart Features",
+        "data": {
+          "auto_boost_enabled": "Enable Auto Boost",
+          "kitchen_sync_enabled": "Enable Kitchen Sync",
+          "kitchen_sensor": "Kitchen Sensor / Switch",
+          "strict_quiet_hours_enabled": "Enable Strict Quiet Hours",
+          "quiet_hours_start": "Quiet Hours Start",
+          "quiet_hours_end": "Quiet Hours End"
+        }
+      },
+      "vent_setup": {
+        "title": "Step 1/2 (Vent): Basic Setup",
+        "data": {
+          "vent_name": "Ventilation Fan Name",
+          "vent_entity": "Select Vent Fan",
+          "bathroom_sensor": "Bathroom Presence Sensor",
+          "vent_humidity_sensor": "Vent Humidity Sensor"
+        }
+      },
+      "vent_advanced": {
+        "title": "Step 2/2 (Vent): Smart Features",
+        "data": {
+          "odor_control_enabled": "Enable Odor Control",
+          "vent_auto_dry_enabled": "Enable Vent Auto Dry",
+          "routine_air_sync_enabled": "Enable Routine Air Sync"
         }
       }
     }

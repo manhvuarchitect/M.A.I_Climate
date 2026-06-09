@@ -8,20 +8,37 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.util import slugify
 
-from .const import DOMAIN, ICON_TIMER, SUFFIX_TIMER_SELECT, TIMER_PRESETS
+from .const import (
+    DOMAIN,
+    CONF_DEVICE_TYPE,
+    DEVICE_TYPE_FAN,
+    DEVICE_TYPE_AC,
+    TIMER_PRESETS,
+    ICON_TIMER,
+    SUFFIX_TIMER_SELECT,
+)
 from .coordinator import SmartFanCoordinator
+from .coordinator_ac import SmartACCoordinator
 
 OPTION_NONE = "— Chọn thời gian —"
 
 
 async def async_setup_entry(
-    hass: HomeAssistant,
-    entry: ConfigEntry,
-    async_add_entities: AddEntitiesCallback,
+    hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
-    """Tạo select entity chọn timer preset."""
-    coordinator: SmartFanCoordinator = hass.data[DOMAIN][entry.entry_id]
-    async_add_entities([TimerPresetSelect(coordinator, entry)])
+    """Thiết lập platform select."""
+    coordinator = hass.data[DOMAIN][entry.entry_id]
+    device_type = entry.data.get(CONF_DEVICE_TYPE, DEVICE_TYPE_FAN)
+
+    selects = []
+
+    if device_type == DEVICE_TYPE_FAN:
+        selects.append(TimerPresetSelect(coordinator, entry))
+    elif device_type == DEVICE_TYPE_AC:
+        pass
+
+    if selects:
+        async_add_entities(selects)
 
 
 class TimerPresetSelect(CoordinatorEntity, SelectEntity):

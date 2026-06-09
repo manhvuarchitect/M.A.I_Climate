@@ -2,7 +2,14 @@
   "config": {
     "step": {
       "user": {
-        "title": "Bước 1/4: Cấu hình cơ bản",
+        "title": "Bắt đầu: Chọn loại thiết bị",
+        "description": "Bạn muốn cài đặt M.A.I Climate cho thiết bị nào?",
+        "data": {
+          "device_type": "Loại thiết bị"
+        }
+      },
+      "fan_setup": {
+        "title": "Bước 1/4 (Quạt): Cấu hình cơ bản",
         "description": "Cấu hình M.A.I Climate cho quạt của bạn. Gán các nút tốc độ nếu quạt điều khiển bằng hồng ngoại.",
         "data": {
           "fan_name": "Nhập tên cho quạt (Ví dụ: Quạt làm việc)",
@@ -56,7 +63,7 @@
         }
       },
       "ac_sync": {
-        "title": "Bước 4/4: Đồng bộ điều hòa",
+        "title": "Bước 4/4 (Quạt): Đồng bộ điều hòa",
         "description": "Luân chuyển gió thông minh kết hợp với điều hòa.",
         "data": {
           "ac_sync_enabled": "Đồng bộ điều hòa",
@@ -64,6 +71,72 @@
         },
         "data_description": {
           "ac_entity": "Liên kết điều hòa để quạt tự luân chuyển gió khi tắt/bật điều hòa."
+        }
+      },
+      "ac_setup": {
+        "title": "Bước 1/3 (Điều hòa): Cấu hình cơ bản",
+        "data": {
+          "ac_name": "Tên điều hòa",
+          "ac_entity": "Chọn thực thể điều hòa"
+        }
+      },
+      "ac_auto_on": {
+        "title": "Bước 2/3 (Điều hòa): Tự động bật tắt",
+        "data": {
+          "temp_sensor": "Cảm biến nhiệt độ",
+          "humidity_sensor": "Cảm biến độ ẩm",
+          "presence_sensor": "Cảm biến hiện diện",
+          "auto_on_enabled": "Tự động bật",
+          "auto_on_threshold": "Ngưỡng nhiệt độ bật (°C)",
+          "auto_off_enabled": "Tự động tắt",
+          "auto_off_threshold": "Ngưỡng nhiệt độ tắt (°C)"
+        }
+      },
+      "ac_advanced": {
+        "title": "Bước 3/3 (Điều hòa): Tính năng thông minh",
+        "data": {
+          "smart_sleep_enabled": "Ngủ sâu thông minh (Smart Sleep)",
+          "eco_leave_enabled": "Vắng mặt tiết kiệm (Eco Leave)",
+          "auto_dry_enabled": "Hút ẩm tự động (Auto Dry)",
+          "window_guard_enabled": "Chống thoát nhiệt (Window Guard)",
+          "window_sensor": "Cảm biến cửa sổ (Window Guard)"
+        }
+      },
+      "purifier_setup": {
+        "title": "Bước 1/2 (Máy lọc): Thiết lập cơ bản",
+        "data": {
+          "purifier_name": "Tên máy lọc",
+          "purifier_entity": "Chọn máy lọc",
+          "pm25_sensor": "Cảm biến PM2.5",
+          "voc_sensor": "Cảm biến VOC"
+        }
+      },
+      "purifier_advanced": {
+        "title": "Bước 2/2 (Máy lọc): Tính năng thông minh",
+        "data": {
+          "auto_boost_enabled": "Tăng tốc tự động (Auto Boost)",
+          "kitchen_sync_enabled": "Đồng bộ Bếp (Kitchen Sync)",
+          "kitchen_sensor": "Cảm biến / Công tắc bếp",
+          "strict_quiet_hours_enabled": "Giờ yên tĩnh tuyệt đối",
+          "quiet_hours_start": "Bắt đầu giờ yên tĩnh",
+          "quiet_hours_end": "Kết thúc giờ yên tĩnh"
+        }
+      },
+      "vent_setup": {
+        "title": "Bước 1/2 (Quạt thông gió): Cấu hình cơ bản",
+        "data": {
+          "vent_name": "Tên quạt thông gió",
+          "vent_entity": "Chọn quạt thông gió",
+          "bathroom_sensor": "Cảm biến phòng tắm (Khử mùi)",
+          "vent_humidity_sensor": "Cảm biến độ ẩm (Hút ẩm)"
+        }
+      },
+      "vent_advanced": {
+        "title": "Bước 2/2 (Quạt thông gió): Tính năng thông minh",
+        "data": {
+          "odor_control_enabled": "Khử mùi phòng tắm (Odor Control)",
+          "vent_auto_dry_enabled": "Hút ẩm tự động (Auto Dry)",
+          "routine_air_sync_enabled": "Lưu thông khí định kỳ (Routine Sync)"
         }
       }
     },
@@ -76,8 +149,8 @@
   },
   "options": {
     "step": {
-      "user": {
-        "title": "Bước 1/4: Thiết lập quạt",
+      "fan_setup": {
+        "title": "Bước 1/4 (Quạt): Thiết lập quạt",
         "data": {
           "fan_name": "Nhập tên cho quạt (Ví dụ: Quạt làm việc)",
           "fan_entity": "Chọn quạt",
@@ -116,6 +189,72 @@
         "data": {
           "ac_sync_enabled": "Đồng bộ điều hòa",
           "ac_entity": "Chọn điều hòa (tùy chọn)"
+        }
+      },
+      "ac_setup": {
+        "title": "Bước 1/3 (Điều hòa): Cấu hình cơ bản",
+        "data": {
+          "ac_name": "Tên điều hòa",
+          "ac_entity": "Chọn thực thể điều hòa"
+        }
+      },
+      "ac_auto_on": {
+        "title": "Bước 2/3 (Điều hòa): Tự động bật tắt",
+        "data": {
+          "temp_sensor": "Cảm biến nhiệt độ",
+          "humidity_sensor": "Cảm biến độ ẩm",
+          "presence_sensor": "Cảm biến hiện diện",
+          "auto_on_enabled": "Tự động bật",
+          "auto_on_threshold": "Ngưỡng nhiệt độ bật (°C)",
+          "auto_off_enabled": "Tự động tắt",
+          "auto_off_threshold": "Ngưỡng nhiệt độ tắt (°C)"
+        }
+      },
+      "ac_advanced": {
+        "title": "Bước 3/3 (Điều hòa): Tính năng thông minh",
+        "data": {
+          "smart_sleep_enabled": "Ngủ sâu thông minh (Smart Sleep)",
+          "eco_leave_enabled": "Vắng mặt tiết kiệm (Eco Leave)",
+          "auto_dry_enabled": "Hút ẩm tự động (Auto Dry)",
+          "window_guard_enabled": "Chống thoát nhiệt (Window Guard)",
+          "window_sensor": "Cảm biến cửa sổ (Window Guard)"
+        }
+      },
+      "purifier_setup": {
+        "title": "Bước 1/2 (Máy lọc): Thiết lập cơ bản",
+        "data": {
+          "purifier_name": "Tên máy lọc",
+          "purifier_entity": "Chọn máy lọc",
+          "pm25_sensor": "Cảm biến PM2.5",
+          "voc_sensor": "Cảm biến VOC"
+        }
+      },
+      "purifier_advanced": {
+        "title": "Bước 2/2 (Máy lọc): Tính năng thông minh",
+        "data": {
+          "auto_boost_enabled": "Tăng tốc tự động (Auto Boost)",
+          "kitchen_sync_enabled": "Đồng bộ Bếp (Kitchen Sync)",
+          "kitchen_sensor": "Cảm biến / Công tắc bếp",
+          "strict_quiet_hours_enabled": "Giờ yên tĩnh tuyệt đối",
+          "quiet_hours_start": "Bắt đầu giờ yên tĩnh",
+          "quiet_hours_end": "Kết thúc giờ yên tĩnh"
+        }
+      },
+      "vent_setup": {
+        "title": "Bước 1/2 (Quạt thông gió): Cấu hình cơ bản",
+        "data": {
+          "vent_name": "Tên quạt thông gió",
+          "vent_entity": "Chọn quạt thông gió",
+          "bathroom_sensor": "Cảm biến phòng tắm (Khử mùi)",
+          "vent_humidity_sensor": "Cảm biến độ ẩm (Hút ẩm)"
+        }
+      },
+      "vent_advanced": {
+        "title": "Bước 2/2 (Quạt thông gió): Tính năng thông minh",
+        "data": {
+          "odor_control_enabled": "Khử mùi phòng tắm (Odor Control)",
+          "vent_auto_dry_enabled": "Hút ẩm tự động (Auto Dry)",
+          "routine_air_sync_enabled": "Lưu thông khí định kỳ (Routine Sync)"
         }
       }
     }

@@ -3,6 +3,7 @@
 DOMAIN = "mai_climate"
 
 # Config entry keys
+CONF_DEVICE_TYPE = "device_type"
 CONF_FAN_ENTITY = "fan_entity"
 CONF_TEMP_SENSOR = "temp_sensor"
 CONF_HUMIDITY_SENSOR = "humidity_sensor"
@@ -26,10 +27,43 @@ CONF_QUIET_HOURS_ENABLED = "quiet_hours_enabled"
 CONF_QUIET_HOURS_START = "quiet_hours_start"
 CONF_QUIET_HOURS_END = "quiet_hours_end"
 
+# AC specific keys
+CONF_AC_NAME = "ac_name"
+CONF_WINDOW_SENSOR = "window_sensor"
+CONF_SMART_SLEEP_ENABLED = "smart_sleep_enabled"
+CONF_WINDOW_GUARD_ENABLED = "window_guard_enabled"
+CONF_ECO_LEAVE_ENABLED = "eco_leave_enabled"
+CONF_AUTO_DRY_ENABLED = "auto_dry_enabled"
+
+# Purifier specific keys
+CONF_PURIFIER_NAME = "purifier_name"
+CONF_PURIFIER_ENTITY = "purifier_entity"
+CONF_PM25_SENSOR = "pm25_sensor"
+CONF_VOC_SENSOR = "voc_sensor"
+CONF_KITCHEN_SENSOR = "kitchen_sensor"
+CONF_AUTO_BOOST_ENABLED = "auto_boost_enabled"
+CONF_KITCHEN_SYNC_ENABLED = "kitchen_sync_enabled"
+CONF_STRICT_QUIET_HOURS_ENABLED = "strict_quiet_hours_enabled"
+
+# Ventilator specific keys
+CONF_VENT_NAME = "vent_name"
+CONF_VENT_ENTITY = "vent_entity"
+CONF_BATHROOM_SENSOR = "bathroom_sensor"
+CONF_VENT_HUMIDITY_SENSOR = "vent_humidity_sensor"
+CONF_ODOR_CONTROL_ENABLED = "odor_control_enabled"
+CONF_VENT_AUTO_DRY_ENABLED = "vent_auto_dry_enabled"
+CONF_ROUTINE_AIR_SYNC_ENABLED = "routine_air_sync_enabled"
+
 # Default values
 DEFAULT_AUTO_ON_THRESHOLD = 38  # Chỉ số oi bức tự động bật quạt
 DEFAULT_AUTO_OFF_THRESHOLD = 37.0
 DEFAULT_SCAN_INTERVAL = 30       # Giây
+
+# Device Types
+DEVICE_TYPE_FAN = "fan"
+DEVICE_TYPE_AC = "ac"
+DEVICE_TYPE_PURIFIER = "purifier"
+DEVICE_TYPE_VENTILATOR = "ventilator"
 
 # Timer presets (phút)
 TIMER_PRESETS = {

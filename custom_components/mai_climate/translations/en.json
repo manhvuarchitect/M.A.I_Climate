@@ -77,6 +77,10 @@
         "data": {
           "ac_name": "AC Name",
           "ac_entity": "Select AC Entity"
+        },
+        "data_description": {
+          "ac_name": "Display name, e.g. Living room AC",
+          "ac_entity": "The main air conditioner entity"
         }
       },
       "ac_auto_on": {
@@ -89,6 +93,11 @@
           "auto_on_threshold": "Auto-on Threshold (°C)",
           "auto_off_enabled": "Enable Auto-Off",
           "auto_off_threshold": "Auto-off Threshold (°C)"
+        },
+        "data_description": {
+          "temp_sensor": "Used to monitor room temperature",
+          "auto_on_threshold": "Turn on AC when temperature exceeds this value",
+          "auto_off_threshold": "Turn off AC when temperature drops below this value"
         }
       },
       "ac_advanced": {
@@ -99,6 +108,11 @@
           "auto_dry_enabled": "Enable Auto Dry",
           "window_guard_enabled": "Enable Window Guard",
           "window_sensor": "Window Sensor (for Window Guard)"
+        },
+        "data_description": {
+          "smart_sleep_enabled": "Automatically increase temperature by 1°C every 2 hours to prevent overcooling",
+          "eco_leave_enabled": "Set temperature to 28°C when room is empty to save energy",
+          "window_guard_enabled": "Automatically turn off AC if window is open for more than 3 minutes"
         }
       },
       "purifier_setup": {
@@ -108,6 +122,9 @@
           "purifier_entity": "Select Purifier",
           "pm25_sensor": "PM2.5 Sensor",
           "voc_sensor": "VOC Sensor"
+        },
+        "data_description": {
+          "purifier_name": "Display name, e.g. Bedroom Purifier"
         }
       },
       "purifier_advanced": {
@@ -119,6 +136,11 @@
           "strict_quiet_hours_enabled": "Enable Strict Quiet Hours",
           "quiet_hours_start": "Quiet Hours Start",
           "quiet_hours_end": "Quiet Hours End"
+        },
+        "data_description": {
+          "auto_boost_enabled": "Run at maximum speed if PM2.5 level is too high",
+          "kitchen_sync_enabled": "Automatically eliminate odors when cooking is detected",
+          "strict_quiet_hours_enabled": "Ensure the purifier runs quietly during sleep hours"
         }
       },
       "vent_setup": {
@@ -128,6 +150,11 @@
           "vent_entity": "Select Vent Fan",
           "bathroom_sensor": "Bathroom Presence Sensor",
           "vent_humidity_sensor": "Vent Humidity Sensor"
+        },
+        "data_description": {
+          "vent_name": "Display name, e.g. Bathroom exhaust fan",
+          "bathroom_sensor": "Presence sensor to trigger odor control",
+          "vent_humidity_sensor": "Humidity sensor to trigger auto dry"
         }
       },
       "vent_advanced": {
@@ -136,6 +163,11 @@
           "odor_control_enabled": "Enable Odor Control",
           "vent_auto_dry_enabled": "Enable Vent Auto Dry",
           "routine_air_sync_enabled": "Enable Routine Air Sync"
+        },
+        "data_description": {
+          "odor_control_enabled": "Automatically run for 10 minutes after someone uses the bathroom",
+          "vent_auto_dry_enabled": "Automatically run when humidity exceeds 80%",
+          "routine_air_sync_enabled": "Automatically run for 15 minutes every 4 hours for air circulation"
         }
       }
     },
@@ -195,6 +227,10 @@
         "data": {
           "ac_name": "AC Name",
           "ac_entity": "Select AC Entity"
+        },
+        "data_description": {
+          "ac_name": "Display name, e.g. Living room AC",
+          "ac_entity": "The main air conditioner entity"
         }
       },
       "ac_auto_on": {
@@ -207,6 +243,11 @@
           "auto_on_threshold": "Auto-on Threshold (°C)",
           "auto_off_enabled": "Enable Auto-Off",
           "auto_off_threshold": "Auto-off Threshold (°C)"
+        },
+        "data_description": {
+          "temp_sensor": "Used to monitor room temperature",
+          "auto_on_threshold": "Turn on AC when temperature exceeds this value",
+          "auto_off_threshold": "Turn off AC when temperature drops below this value"
         }
       },
       "ac_advanced": {
@@ -217,6 +258,11 @@
           "auto_dry_enabled": "Enable Auto Dry",
           "window_guard_enabled": "Enable Window Guard",
           "window_sensor": "Window Sensor (for Window Guard)"
+        },
+        "data_description": {
+          "smart_sleep_enabled": "Automatically increase temperature by 1°C every 2 hours to prevent overcooling",
+          "eco_leave_enabled": "Set temperature to 28°C when room is empty to save energy",
+          "window_guard_enabled": "Automatically turn off AC if window is open for more than 3 minutes"
         }
       },
       "purifier_setup": {
@@ -226,6 +272,9 @@
           "purifier_entity": "Select Purifier",
           "pm25_sensor": "PM2.5 Sensor",
           "voc_sensor": "VOC Sensor"
+        },
+        "data_description": {
+          "purifier_name": "Display name, e.g. Bedroom Purifier"
         }
       },
       "purifier_advanced": {
@@ -237,6 +286,11 @@
           "strict_quiet_hours_enabled": "Enable Strict Quiet Hours",
           "quiet_hours_start": "Quiet Hours Start",
           "quiet_hours_end": "Quiet Hours End"
+        },
+        "data_description": {
+          "auto_boost_enabled": "Run at maximum speed if PM2.5 level is too high",
+          "kitchen_sync_enabled": "Automatically eliminate odors when cooking is detected",
+          "strict_quiet_hours_enabled": "Ensure the purifier runs quietly during sleep hours"
         }
       },
       "vent_setup": {
@@ -246,6 +300,11 @@
           "vent_entity": "Select Vent Fan",
           "bathroom_sensor": "Bathroom Presence Sensor",
           "vent_humidity_sensor": "Vent Humidity Sensor"
+        },
+        "data_description": {
+          "vent_name": "Display name, e.g. Bathroom exhaust fan",
+          "bathroom_sensor": "Presence sensor to trigger odor control",
+          "vent_humidity_sensor": "Humidity sensor to trigger auto dry"
         }
       },
       "vent_advanced": {
@@ -254,6 +313,11 @@
           "odor_control_enabled": "Enable Odor Control",
           "vent_auto_dry_enabled": "Enable Vent Auto Dry",
           "routine_air_sync_enabled": "Enable Routine Air Sync"
+        },
+        "data_description": {
+          "odor_control_enabled": "Automatically run for 10 minutes after someone uses the bathroom",
+          "vent_auto_dry_enabled": "Automatically run when humidity exceeds 80%",
+          "routine_air_sync_enabled": "Automatically run for 15 minutes every 4 hours for air circulation"
         }
       }
     }

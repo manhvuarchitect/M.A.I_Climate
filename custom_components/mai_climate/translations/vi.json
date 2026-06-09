@@ -78,18 +78,27 @@
         "data": {
           "ac_name": "Tên điều hòa",
           "ac_entity": "Chọn thực thể điều hòa"
+        },
+        "data_description": {
+          "ac_name": "Tên hiển thị, ví dụ: Điều hòa phòng khách",
+          "ac_entity": "Thực thể điều hòa chính để điều khiển"
         }
       },
       "ac_auto_on": {
         "title": "Bước 2/3 (Điều hòa): Tự động bật tắt",
         "data": {
           "temp_sensor": "Cảm biến nhiệt độ",
-          "humidity_sensor": "Cảm biến độ ẩm",
-          "presence_sensor": "Cảm biến hiện diện",
+          "humidity_sensor": "Cảm biến độ ẩm (tùy chọn)",
+          "presence_sensor": "Cảm biến hiện diện (tùy chọn)",
           "auto_on_enabled": "Tự động bật",
           "auto_on_threshold": "Ngưỡng nhiệt độ bật (°C)",
           "auto_off_enabled": "Tự động tắt",
           "auto_off_threshold": "Ngưỡng nhiệt độ tắt (°C)"
+        },
+        "data_description": {
+          "temp_sensor": "Dùng để đo nhiệt độ phòng hiện tại",
+          "auto_on_threshold": "Tự động bật điều hòa khi nhiệt độ vượt ngưỡng này",
+          "auto_off_threshold": "Tự động tắt điều hòa khi nhiệt độ xuống thấp hơn ngưỡng này"
         }
       },
       "ac_advanced": {
@@ -100,6 +109,11 @@
           "auto_dry_enabled": "Hút ẩm tự động (Auto Dry)",
           "window_guard_enabled": "Chống thoát nhiệt (Window Guard)",
           "window_sensor": "Cảm biến cửa sổ (Window Guard)"
+        },
+        "data_description": {
+          "smart_sleep_enabled": "Tự động tăng 1 độ mỗi 2 tiếng khi ngủ để tránh quá lạnh",
+          "eco_leave_enabled": "Tăng nhiệt độ lên 28 độ khi không có ai trong phòng để tiết kiệm điện",
+          "window_guard_enabled": "Tự động tắt điều hòa nếu phát hiện mở cửa sổ quá 3 phút"
         }
       },
       "purifier_setup": {
@@ -107,19 +121,27 @@
         "data": {
           "purifier_name": "Tên máy lọc",
           "purifier_entity": "Chọn máy lọc",
-          "pm25_sensor": "Cảm biến PM2.5",
-          "voc_sensor": "Cảm biến VOC"
+          "pm25_sensor": "Cảm biến bụi mịn PM2.5 (tùy chọn)",
+          "voc_sensor": "Cảm biến VOC (tùy chọn)"
+        },
+        "data_description": {
+          "purifier_name": "Tên hiển thị, ví dụ: Máy lọc phòng ngủ"
         }
       },
       "purifier_advanced": {
         "title": "Bước 2/2 (Máy lọc): Tính năng thông minh",
         "data": {
           "auto_boost_enabled": "Tăng tốc tự động (Auto Boost)",
-          "kitchen_sync_enabled": "Đồng bộ Bếp (Kitchen Sync)",
+          "kitchen_sync_enabled": "Đồng bộ phòng bếp (Kitchen Sync)",
           "kitchen_sensor": "Cảm biến / Công tắc bếp",
           "strict_quiet_hours_enabled": "Giờ yên tĩnh tuyệt đối",
           "quiet_hours_start": "Bắt đầu giờ yên tĩnh",
           "quiet_hours_end": "Kết thúc giờ yên tĩnh"
+        },
+        "data_description": {
+          "auto_boost_enabled": "Bật tốc độ tối đa nếu phát hiện bụi PM2.5 vượt ngưỡng",
+          "kitchen_sync_enabled": "Tự động hút mùi khi phát hiện đang nấu ăn trong bếp",
+          "strict_quiet_hours_enabled": "Đảm bảo máy lọc chạy cực êm trong khung giờ ngủ"
         }
       },
       "vent_setup": {
@@ -129,6 +151,11 @@
           "vent_entity": "Chọn quạt thông gió",
           "bathroom_sensor": "Cảm biến phòng tắm (Khử mùi)",
           "vent_humidity_sensor": "Cảm biến độ ẩm (Hút ẩm)"
+        },
+        "data_description": {
+          "vent_name": "Tên hiển thị, ví dụ: Quạt hút phòng tắm",
+          "bathroom_sensor": "Cảm biến phát hiện có người để tự động khử mùi",
+          "vent_humidity_sensor": "Cảm biến độ ẩm để quạt tự động hút ẩm phòng tắm"
         }
       },
       "vent_advanced": {
@@ -137,6 +164,11 @@
           "odor_control_enabled": "Khử mùi phòng tắm (Odor Control)",
           "vent_auto_dry_enabled": "Hút ẩm tự động (Auto Dry)",
           "routine_air_sync_enabled": "Lưu thông khí định kỳ (Routine Sync)"
+        },
+        "data_description": {
+          "odor_control_enabled": "Quạt tự động chạy 10 phút sau khi có người dùng phòng tắm",
+          "vent_auto_dry_enabled": "Quạt tự động chạy khi độ ẩm vượt 80% (ví dụ sau khi tắm nước nóng)",
+          "routine_air_sync_enabled": "Mỗi 4 tiếng quạt sẽ tự chạy 15 phút để lưu thông không khí phòng"
         }
       }
     },
@@ -196,18 +228,27 @@
         "data": {
           "ac_name": "Tên điều hòa",
           "ac_entity": "Chọn thực thể điều hòa"
+        },
+        "data_description": {
+          "ac_name": "Tên hiển thị, ví dụ: Điều hòa phòng khách",
+          "ac_entity": "Thực thể điều hòa chính để điều khiển"
         }
       },
       "ac_auto_on": {
         "title": "Bước 2/3 (Điều hòa): Tự động bật tắt",
         "data": {
           "temp_sensor": "Cảm biến nhiệt độ",
-          "humidity_sensor": "Cảm biến độ ẩm",
-          "presence_sensor": "Cảm biến hiện diện",
+          "humidity_sensor": "Cảm biến độ ẩm (tùy chọn)",
+          "presence_sensor": "Cảm biến hiện diện (tùy chọn)",
           "auto_on_enabled": "Tự động bật",
           "auto_on_threshold": "Ngưỡng nhiệt độ bật (°C)",
           "auto_off_enabled": "Tự động tắt",
           "auto_off_threshold": "Ngưỡng nhiệt độ tắt (°C)"
+        },
+        "data_description": {
+          "temp_sensor": "Dùng để đo nhiệt độ phòng hiện tại",
+          "auto_on_threshold": "Tự động bật điều hòa khi nhiệt độ vượt ngưỡng này",
+          "auto_off_threshold": "Tự động tắt điều hòa khi nhiệt độ xuống thấp hơn ngưỡng này"
         }
       },
       "ac_advanced": {
@@ -218,6 +259,11 @@
           "auto_dry_enabled": "Hút ẩm tự động (Auto Dry)",
           "window_guard_enabled": "Chống thoát nhiệt (Window Guard)",
           "window_sensor": "Cảm biến cửa sổ (Window Guard)"
+        },
+        "data_description": {
+          "smart_sleep_enabled": "Tự động tăng 1 độ mỗi 2 tiếng khi ngủ để tránh quá lạnh",
+          "eco_leave_enabled": "Tăng nhiệt độ lên 28 độ khi không có ai trong phòng để tiết kiệm điện",
+          "window_guard_enabled": "Tự động tắt điều hòa nếu phát hiện mở cửa sổ quá 3 phút"
         }
       },
       "purifier_setup": {
@@ -225,19 +271,27 @@
         "data": {
           "purifier_name": "Tên máy lọc",
           "purifier_entity": "Chọn máy lọc",
-          "pm25_sensor": "Cảm biến PM2.5",
-          "voc_sensor": "Cảm biến VOC"
+          "pm25_sensor": "Cảm biến bụi mịn PM2.5 (tùy chọn)",
+          "voc_sensor": "Cảm biến VOC (tùy chọn)"
+        },
+        "data_description": {
+          "purifier_name": "Tên hiển thị, ví dụ: Máy lọc phòng ngủ"
         }
       },
       "purifier_advanced": {
         "title": "Bước 2/2 (Máy lọc): Tính năng thông minh",
         "data": {
           "auto_boost_enabled": "Tăng tốc tự động (Auto Boost)",
-          "kitchen_sync_enabled": "Đồng bộ Bếp (Kitchen Sync)",
+          "kitchen_sync_enabled": "Đồng bộ phòng bếp (Kitchen Sync)",
           "kitchen_sensor": "Cảm biến / Công tắc bếp",
           "strict_quiet_hours_enabled": "Giờ yên tĩnh tuyệt đối",
           "quiet_hours_start": "Bắt đầu giờ yên tĩnh",
           "quiet_hours_end": "Kết thúc giờ yên tĩnh"
+        },
+        "data_description": {
+          "auto_boost_enabled": "Bật tốc độ tối đa nếu phát hiện bụi PM2.5 vượt ngưỡng",
+          "kitchen_sync_enabled": "Tự động hút mùi khi phát hiện đang nấu ăn trong bếp",
+          "strict_quiet_hours_enabled": "Đảm bảo máy lọc chạy cực êm trong khung giờ ngủ"
         }
       },
       "vent_setup": {
@@ -247,6 +301,11 @@
           "vent_entity": "Chọn quạt thông gió",
           "bathroom_sensor": "Cảm biến phòng tắm (Khử mùi)",
           "vent_humidity_sensor": "Cảm biến độ ẩm (Hút ẩm)"
+        },
+        "data_description": {
+          "vent_name": "Tên hiển thị, ví dụ: Quạt hút phòng tắm",
+          "bathroom_sensor": "Cảm biến phát hiện có người để tự động khử mùi",
+          "vent_humidity_sensor": "Cảm biến độ ẩm để quạt tự động hút ẩm phòng tắm"
         }
       },
       "vent_advanced": {
@@ -255,6 +314,11 @@
           "odor_control_enabled": "Khử mùi phòng tắm (Odor Control)",
           "vent_auto_dry_enabled": "Hút ẩm tự động (Auto Dry)",
           "routine_air_sync_enabled": "Lưu thông khí định kỳ (Routine Sync)"
+        },
+        "data_description": {
+          "odor_control_enabled": "Quạt tự động chạy 10 phút sau khi có người dùng phòng tắm",
+          "vent_auto_dry_enabled": "Quạt tự động chạy khi độ ẩm vượt 80% (ví dụ sau khi tắm nước nóng)",
+          "routine_air_sync_enabled": "Mỗi 4 tiếng quạt sẽ tự chạy 15 phút để lưu thông không khí phòng"
         }
       }
     }
